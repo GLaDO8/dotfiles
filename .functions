@@ -1,0 +1,6 @@
+#My functions
+
+#function to make a directory and enter it
+function mkd() {
+	mkdir -p "$@" && cd "$_";
+}
