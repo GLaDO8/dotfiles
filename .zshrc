@@ -65,7 +65,6 @@ plugins=(
 )
 source .aliases
 source .functions
-source .exports
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
