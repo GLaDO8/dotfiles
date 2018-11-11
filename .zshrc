@@ -32,7 +32,7 @@ ZSH_THEME="spaceship"
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
-# Uncomment the following line to disable auto-setting terminal title.
+# keep this uncommented if you want tab titles to work with oh-my-zsh
 DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
