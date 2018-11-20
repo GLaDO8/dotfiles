@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+echo "Setting up your Mac..."
 
 # Check for Homebrew and install if we don't have it
 if test ! $(which brew); then
@@ -12,6 +13,7 @@ brew update
 brew upgrade
 
 # Install all our dependencies with bundle (See Brewfile)
+echo "Installing brew packages and brew cask apps..."
 brew tap homebrew/bundle
 brew bundle
 
@@ -19,9 +21,11 @@ brew bundle
 BREW_PREFIX=$(brew --prefix)
 
 # Make ZSH the default shell environment
+echo "Making zsh as the default shell environment..."
 chsh -s $(which zsh)
 
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
+echo "Creating symlinks for dotfiles..."
 rm -rf $HOME/.zshrc
 ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
 
@@ -42,4 +46,5 @@ cask_args appdir: '/Applications'
 
 # Set macOS preferences
 # We will run this last because this will reload the shell
+echo "Settings macOS preferences..."
 source .macos
