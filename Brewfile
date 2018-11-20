@@ -6,7 +6,7 @@ tap 'caskroom/versions'
 tap 'homebrew/bundle'
 
 #brew package installation
-brew gcc@8
+brew 'gcc@8'
 brew 'gdb'
 brew 'python'
 brew 'python3'
@@ -14,21 +14,24 @@ brew 'thefuck'
 brew 'zsh'
 brew 'zsh-completions'
 brew 'wget'
-brew 'git'
+brew 'git', link: false
 brew 'git-lfs'
 brew 'gnuplot'
 brew 'htop'
 brew 'tree'
 brew 'mas'
-brew 'git'
+brew "gnuplot", args: ["with-aquaterm"]
 
 #cask installations
+cask_args appdir: "/Applications"
+
 cask 'xquartz'
 cask 'android-platform-tools'
 cask 'google-chrome'
 cask 'visual-studio-code'
 cask 'vlc'
 cask 'java'
+cask 'hyper'
 
 #Mac App store apps
 mas 'Hacker News YC' id: 1039600682
