@@ -39,23 +39,42 @@ brew_setup(){
 	finish
 }
 
-dotfile_setup(){
-	# Make ZSH the default shell environment
+zsh_setup(){
+	# Make ZSH the default shell environment (zsh comes preinstalled on macOS)
 	echo "Making zsh as the default shell environment..."
 	chsh -s $(which zsh)
 
-	echo "setting up personal dotfiles..."
-	cd ~
-	git clone https://github.com/GLaDOS-root/dotfiles.git
+	#install zsh themes
+	echo "setting spaceship prompt as default..."
+	git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
 
-	# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
-	echo "Creating symlinks for dotfiles..."
-	rm -rf $HOME/.zshrc
-	ln -s $HOME/dotfiles/.zshrc $HOME/.zshrc
+	#install zsh plugins
+	echo "installing zsh-syntax-highlighting package..."
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+	echo "installing zsh-auto-suggestions package..."
+	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
 	finish
 }
 
+dotfile_setup(){
+	echo "setting up personal dotfiles..."
+	cd ~
+	git clone https://github.com/GLaDOS-root/dotfiles.git
+
+	# create symlinks for dotfiles in home directory
+	echo "Creating symlinks for dotfiles..."
+	rm -rf $HOME/.zshrc
+	ln -sv $HOME/dotfiles/.zshrc $HOME/.zshrc
+	ln -sv $HOME/dotfiles/.aliases $HOME/.aliases
+	ln -sv $HOME/dotfiles/.hyper.js $HOME/.hyper.js
+	ln -sv $HOME/dotfiles/.functions $HOME/.functions
+	ln -sv $HOME/dotfiles/.bash_profile $HOME/.bash_profile
+
+	finish
+}
 
 xcode_cl_tools(){
 	echo "installing xcode command line tools..."
