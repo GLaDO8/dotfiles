@@ -59,6 +59,12 @@ zsh_setup(){
 	finish
 }
 
+hyper_setup(){
+	hyper i hyperocean
+	hyper i hyper-tabs-enhanced
+	hyper i statusline
+}
+
 dotfile_setup(){
 	echo "setting up personal dotfiles..."
 	cd ~
@@ -93,7 +99,7 @@ xcode_cl_tools(){
 	finish
 }
 
-macos_defaultss_setup(){
+macos_defaults_setup(){
 	# Set macOS preferences
 	# We will run this last because this will reload the shell
 	echo "Settings macOS preferences..."
@@ -101,3 +107,10 @@ macos_defaultss_setup(){
 
 	finish
 }
+
+brew_setup
+zsh_setup
+hyper_setup
+dotfile_setup
+xcode_cl_tools
+macos_defaults_setup
