@@ -75,6 +75,9 @@ source $ZSH/oh-my-zsh.sh
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
+#anaconda3
+export PATH=/Users/glados/anaconda3/bin:$PATH
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -99,10 +102,10 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-#anaconda 
-export PATH="/Users/glados/anaconda3/bin:$PATH"
+
 export PATH=$PATH:~/.nexustools
 export PATH=$PATH:~/.nexustools
+export PATH=/usr/local/bin:$PATH
 
 eval $(thefuck --alias)
 
@@ -131,3 +134,4 @@ preexec() {
 }
 
 precmd
+

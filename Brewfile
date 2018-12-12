@@ -21,10 +21,9 @@ brew 'htop'
 brew 'tree'
 brew 'mas'
 brew "gnuplot", args: ["with-aquaterm"]
+brew 'antigen'
 
 #cask installations
-cask_args appdir: "/Applications"
-
 cask 'xquartz'
 cask 'android-platform-tools'
 cask 'google-chrome'
