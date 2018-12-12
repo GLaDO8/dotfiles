@@ -7,10 +7,13 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ls='ls -a'
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
-
+alias ~="cd ~" # `cd` is probably faster to type though
+alias python=python3
 #Aliases for git
 alias gpom="git push origin master"
-alias cl="git clone"
+alias gcl="git clone"
+alias gpuom="git pull origin master"
+alias gcm="git commit -m"
 
 #Aliases for updating packages
 alias update="brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; conda update -n root conda; conda update --all;"
