@@ -31,6 +31,7 @@ cask 'visual-studio-code'
 cask 'vlc'
 cask 'java'
 cask 'hyper'
+cask 'spotmenu'
 
 #Mac App store apps
 mas 'Hacker News YC' id: 1039600682
