@@ -11,7 +11,7 @@ export LANGUAGE=en_US.UTF-8
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="spaceship"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -107,13 +107,8 @@ SPACESHIP_PROMPT_ORDER=(
   char          # Prompt character
 )
 
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
 #anaconda3
-export PATH=/Users/glados/anaconda3/bin:$PATH
+export PATH="$HOME/miniconda3/bin:$PATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8

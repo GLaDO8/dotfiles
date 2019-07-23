@@ -22,6 +22,8 @@ brew 'tree'
 brew 'mas'
 brew "gnuplot", args: ["with-aquaterm"]
 brew 'antigen'
+brew 'curl'
+brew 'node'
 
 #cask installations
 cask 'xquartz'
@@ -31,19 +33,20 @@ cask 'visual-studio-code'
 cask 'vlc'
 cask 'java'
 cask 'hyper'
+cask 'spotify'
 cask 'spotmenu'
 
 #Mac App store apps
-mas 'Hacker News YC' id: 1039600682
-mas 'The Unarchiver' id: 425424353 
-mas 'Evernote' id: 406056744 
-mas 'Houseparty' id: 1381523962 
-mas 'Adblock Plus' id: 1432731683 
-mas 'Betternet VPN' id: 1028905953 
-mas 'Slack' id: 803453959 
-mas 'WhatsApp' id: 1147396723 
-mas 'Bear' id: 1091189122 
-mas 'Spark' id: 1176895641 
-mas 'Amphetamine' id: 937984704 
-mas 'Transmit' id: 1436522307 
-mas 'Shazam' id: 897118787 
+mas 'Hacker News YC', id: 1039600682
+mas 'The Unarchiver', id: 425424353 
+mas 'Evernote', id: 406056744 
+mas 'Houseparty', id: 1381523962 
+mas 'Adblock Plus', id: 1432731683 
+mas 'Betternet VPN', id: 1028905953 
+mas 'Slack', id: 803453959 
+mas 'WhatsApp', id: 1147396723 
+mas 'Bear', id: 1091189122 
+mas 'Spark', id: 1176895641 
+mas 'Amphetamine', id: 937984704 
+mas 'Transmit', id: 1436522307 
+mas 'Shazam', id: 897118787 
