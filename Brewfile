@@ -35,6 +35,7 @@ cask 'java'
 cask 'hyper'
 cask 'spotify'
 cask 'spotmenu'
+cask 'java'
 
 #Mac App store apps
 mas 'Hacker News YC', id: 1039600682

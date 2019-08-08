@@ -41,7 +41,7 @@ brew_setup(){
 
 zsh_setup(){
 	#install oh-my-zsh
-	sudo sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+	sudo -i sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 	# Make ZSH the default shell environment (zsh comes preinstalled on macOS)
 	echo "Making zsh as the default shell environment..."
@@ -92,6 +92,10 @@ dotfile_setup(){
 	finish
 }
 
+gatsby_setup(){
+	sudo -i npm install -g gatsby-cli
+}
+
 xcode_cl_tools(){
 	echo "installing xcode command line tools..."
 
@@ -110,7 +114,7 @@ xcode_cl_tools(){
 }
 
 conda_setup(){
-	sudo sh -c $("wget https://repo.continuum.io/miniconda/Miniconda3-3.7.0-Linux-x86_64.sh -O ~/miniconda.sh")
+	sudo -i  sh -c $("wget https://repo.continuum.io/miniconda/Miniconda3-3.7.0-Linux-x86_64.sh -O ~/miniconda.sh")
 	bash ~/miniconda.sh -b -p $HOME/miniconda
 	export PATH="$HOME/miniconda3/bin:$PATH"
 }
