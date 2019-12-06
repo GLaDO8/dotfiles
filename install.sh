@@ -73,7 +73,7 @@ dotfile_setup(){
 	# create symlinks for dotfiles in home directory
 	echo "Creating symlinks for dotfiles..."
 	rm -rf $HOME/.zshrc
-	ln -sv $HOME/dotfiles/.zshrc $HOME/.zshrc
+	ln -sv $HOME/dotfiles/zsh/.zshrc $HOME/.zshrc
 	ln -sv $HOME/dotfiles/.aliases $HOME/.aliases
 	ln -sv $HOME/dotfiles/.hyper.js $HOME/.hyper.js
 	ln -sv $HOME/dotfiles/.functions $HOME/.functions
