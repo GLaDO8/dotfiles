@@ -139,3 +139,4 @@ module.exports = {
     // 'window:devtools': 'cmd+alt+o',
   },
 };
+
