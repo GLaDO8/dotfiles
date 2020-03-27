@@ -130,7 +130,7 @@ macos_defaults_setup(){
 
 brew_setup
 zsh_setup
-hyper_setup
+# hyper_setup
 dotfile_setup
 xcode_cl_tools
 macos_defaults_setup
