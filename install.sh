@@ -117,6 +117,16 @@ conda_setup(){
 	sudo -i  sh -c $("wget https://repo.continuum.io/miniconda/Miniconda3-3.7.0-Linux-x86_64.sh -O ~/miniconda.sh")
 	bash ~/miniconda.sh -b -p $HOME/miniconda
 	export PATH="$HOME/miniconda3/bin:$PATH"
+
+	conda --version
+
+	# Update conda
+	echo "Updating conda..."
+	conda update conda -y
+
+	# Make conda handle python and r environments
+	echo "Installing env conda packages..."
+	conda create -n dsenv --file conda-package-list.txt
 }
 
 macos_defaults_setup(){
