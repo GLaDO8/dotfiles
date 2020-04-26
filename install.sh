@@ -45,7 +45,7 @@ zsh_setup(){
 
 	# Make ZSH the default shell environment (zsh comes preinstalled on macOS)
 	echo "Making zsh as the default shell environment..."
-	chsh -s $(which zsh)
+	sudo chsh -s $(which zsh)
 
 	#install powerline font 
 	git clone https://github.com/powerline/fonts.git --depth=1
@@ -137,10 +137,8 @@ macos_defaults_setup(){
 
 	finish
 }
-
-brew_setup
 zsh_setup
-# hyper_setup
+brew_setup
 dotfile_setup
 npm_setup
 conda_setup
