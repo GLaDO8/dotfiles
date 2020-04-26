@@ -1,9 +1,6 @@
 #taps
-tap 'caskroom/cask'
-tap 'caskroom/eid'
-tap 'caskroom/fonts'
-tap 'caskroom/versions'
-tap 'homebrew/bundle'
+tap 'homebrew/cask-fonts'
+tap 'homebrew/cask-versions'
 
 #brew package installation
 brew 'gcc@8'
@@ -23,7 +20,6 @@ brew 'mas'
 brew "gnuplot", args: ["with-aquaterm"]
 brew 'curl'
 brew 'node'
-brew 'swiftlint'
 brew 'vim'
 brew 'cmake'
 brew 'curl'
