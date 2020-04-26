@@ -117,5 +117,5 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 export PATH="/usr/local/opt/bison/bin:$PATH"
-
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications --fontdir=/Library/Fonts"
 alias python='python3'
