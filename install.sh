@@ -114,7 +114,7 @@ xcode_cl_tools(){
 }
 
 conda_setup(){
-	sudo -i sh -c $("wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh")
+	wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
 	zsh ~/miniconda.sh -b -p $HOME/miniconda
 	export PATH="$HOME/miniconda3/bin:$PATH"
 	source $HOME/miniconda/bin/activate
@@ -137,10 +137,10 @@ macos_defaults_setup(){
 
 	finish
 }
-zsh_setup
-brew_setup
-dotfile_setup
-npm_setup
+# zsh_setup
+# brew_setup
+# dotfile_setup
+# npm_setup
 conda_setup
-xcode_cl_tools
+# xcode_cl_tools
 macos_defaults_setup
