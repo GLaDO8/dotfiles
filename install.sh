@@ -92,8 +92,8 @@ dotfile_setup(){
 	finish
 }
 
-gatsby_setup(){
-	sudo -i npm install -g gatsby-cli
+npm_setup(){
+	sudo -i npm i -g gatsby-cli speedtest-net
 }
 
 xcode_cl_tools(){
@@ -114,11 +114,11 @@ xcode_cl_tools(){
 }
 
 conda_setup(){
-	sudo -i  sh -c $("wget https://repo.continuum.io/miniconda/Miniconda3-3.7.0-Linux-x86_64.sh -O ~/miniconda.sh")
-	bash ~/miniconda.sh -b -p $HOME/miniconda
+	sudo -i sh -c $("wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh")
+	zsh ~/miniconda.sh -b -p $HOME/miniconda
 	export PATH="$HOME/miniconda3/bin:$PATH"
-
-	conda --version
+	source $HOME/miniconda/bin/activate
+	conda init
 
 	# Update conda
 	echo "Updating conda..."
@@ -142,5 +142,7 @@ brew_setup
 zsh_setup
 # hyper_setup
 dotfile_setup
+npm_setup
+conda_setup
 xcode_cl_tools
 macos_defaults_setup
