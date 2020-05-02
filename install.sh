@@ -137,10 +137,10 @@ macos_defaults_setup(){
 
 	finish
 }
-# zsh_setup
-# brew_setup
-# dotfile_setup
-# npm_setup
+zsh_setup
+brew_setup
+dotfile_setup
+npm_setup
 conda_setup
-# xcode_cl_tools
+xcode_cl_tools
 macos_defaults_setup
