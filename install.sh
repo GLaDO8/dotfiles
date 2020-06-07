@@ -66,6 +66,9 @@ zsh_setup(){
 	echo "installing zsh-auto-suggestions package..."
 	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
+	echo "installing zsh-completions package"
+	git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
+
 	finish
 }
 
