@@ -34,12 +34,9 @@ brew 'sqlite'
 #cask installations
 cask 'xquartz'
 cask 'android-platform-tools'
-cask 'google-chrome'
-cask 'visual-studio-code'
 cask 'vlc'
 cask 'java'
 cask 'spotify'
-cask 'spotmenu'
 cask 'java'
 cask 'transmission'
 cask 'raindropio'
@@ -63,8 +60,9 @@ cask 'cron'
 cask 'raycast'
 cask 'zoom'
 cask 'clay'
-cask '1password
-'
+cask '1password'
+cask 'framer'
+
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
 mas 'Slack', id: 803453959 
