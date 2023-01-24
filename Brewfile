@@ -30,6 +30,9 @@ brew 'carthage'
 brew 'qt'
 brew 'ruby'
 brew 'sqlite'
+brew 'brotli'
+brew 'git'
+brew 'rust'
 
 #cask installations
 cask 'xquartz'
