@@ -62,7 +62,6 @@ cask 'notion'
 cask 'cron'
 cask 'raycast'
 cask 'zoom'
-cask 'clay'
 cask '1password'
 cask 'framer'
 cask 'logi-options-plus'
@@ -75,6 +74,10 @@ cask 'android-studio'
 cask 'blender'
 cask 'opal-composer'
 cask 'origami-studio'
+cask 'rive'
+cask 'spline'
+cask 'postman'
+cask 'google-chrome'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
@@ -104,3 +107,5 @@ mas 'Bear Markdown Notes', id:1091189122
 
 #things to add
 # Sleeve
+# obinskit
+# aseprite
