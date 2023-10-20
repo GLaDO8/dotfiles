@@ -69,6 +69,12 @@ cask 'logi-options-plus'
 cask 'arc'
 cask 'screen-studio'
 cask 'keyclu'
+cask 'bike'
+cask 'typeface'
+cask 'android-studio'
+cask 'blender'
+cask 'opal-composer'
+cask 'origami-studio'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
