@@ -65,6 +65,10 @@ cask 'zoom'
 cask 'clay'
 cask '1password'
 cask 'framer'
+cask 'logi-options-plus'
+cask 'arc'
+cask 'screen-studio'
+cask 'keyclu'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
@@ -89,10 +93,8 @@ mas 'wipr', id:1320666476
 mas 'plug', id:1514182074
 mas 'unsplash', id:1284863847
 mas 'testflight', id:899247664
+mas 'Bear Markdown Notes', id:1091189122
 
 
 #things to add
-# screen studio
 # Sleeve
-# arc browser
-# logi options +
