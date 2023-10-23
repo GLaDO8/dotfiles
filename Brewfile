@@ -33,6 +33,7 @@ brew 'sqlite'
 brew 'brotli'
 brew 'git'
 brew 'rust'
+brew 'imageoptim-cli'
 
 #cask installations
 cask 'xquartz'
