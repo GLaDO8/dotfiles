@@ -18,23 +18,14 @@ brew_setup(){
 
 	# Install all our dependencies with bundle (See Brewfile)
 	echo "Installing brew packages and brew cask apps..."
-	brew tap homebrew/bundle
-	brew bundle
+	brew bundle install
 
 	# Save Homebrew’s installed location.
 	BREW_PREFIX=$(brew --prefix)
 	
-	# Install GNU core utilities (those that come with macOS are outdated).
 	# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
-	brew install coreutils
 	ln -s "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum"
 
-	# Install some other useful utilities like `sponge`.
-	brew install moreutils
-	# Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed.
-	brew install findutils
-	# Install GNU `sed`, overwriting the built-in `sed`.
-	brew install gnu-sed --with-default-names
 
 	finish
 }
@@ -95,10 +86,6 @@ dotfile_setup(){
 	finish
 }
 
-npm_setup(){
-	sudo -i npm i -g gatsby-cli speedtest-net
-}
-
 xcode_cl_tools(){
 	echo "installing xcode command line tools..."
 
@@ -116,34 +103,17 @@ xcode_cl_tools(){
 	finish
 }
 
-conda_setup(){
-	wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
-	zsh ~/miniconda.sh -b -p $HOME/miniconda
-	export PATH="$HOME/miniconda3/bin:$PATH"
-	source $HOME/miniconda/bin/activate
-	conda init
-
-	# Update conda
-	echo "Updating conda..."
-	conda update conda -y
-
-	# Make conda handle python and r environments
-	echo "Installing env conda packages..."
-	conda create -n dsenv --file conda-package-list.txt
-}
-
 macos_defaults_setup(){
 	# Set macOS preferences
 	# We will run this last because this will reload the shell
 	echo "Settings macOS preferences..."
 	source .macos
+	echo "Preferences set!"
 
 	finish
 }
-zsh_setup
+# zsh_setup
 brew_setup
 dotfile_setup
-npm_setup
-conda_setup
 xcode_cl_tools
-macos_defaults_setup
+# macos_defaults_setup
