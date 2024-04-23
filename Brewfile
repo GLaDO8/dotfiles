@@ -84,6 +84,7 @@ cask 'raspberry-pi-imager'
 cask 'cloudytabs'
 cask 'steam'
 cask 'itsycal'
+cask 'karabiner-elements'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
