@@ -1,2 +1,5 @@
 # dotfiles
-curated dotfiles for complete macos setup. complete guide coming soon!
+curated dotfiles for end-to-end macOS machine setup. 
+
+### Brewfiles
+Install brewfiles by running `brew bundle install`
