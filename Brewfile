@@ -35,6 +35,10 @@ brew 'brotli'
 brew 'git'
 brew 'rust'
 brew 'imageoptim-cli'
+brew 'coreutils'
+brew 'moreutils'
+brew 'findutils'
+brew 'gnu-sed', args: ["with-default-names"]
 
 #cask installations
 cask 'xquartz'
