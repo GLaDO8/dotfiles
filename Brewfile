@@ -3,8 +3,6 @@ tap 'homebrew/cask-fonts'
 tap 'homebrew/cask-versions'
 
 #brew package installation
-brew 'gcc@8'
-brew 'gdb'
 brew 'java'
 brew 'python'
 brew 'python3'
@@ -34,11 +32,11 @@ brew 'sqlite'
 brew 'brotli'
 brew 'git'
 brew 'rust'
+brew 'fx'
 brew 'imageoptim-cli'
 brew 'coreutils'
 brew 'moreutils'
 brew 'findutils'
-brew 'gnu-sed', args: ["with-default-names"]
 
 #cask installations
 cask 'xquartz'
@@ -89,6 +87,7 @@ cask 'cloudytabs'
 cask 'steam'
 cask 'itsycal'
 cask 'karabiner-elements'
+cask 'cleanshot'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
