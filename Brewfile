@@ -111,6 +111,7 @@ mas 'plug', id:1514182074
 mas 'unsplash', id:1284863847
 mas 'testflight', id:899247664
 mas 'Bear Markdown Notes', id:1091189122
+mas 'Perplexity', id:1875466942
 
 
 #things to add
