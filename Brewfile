@@ -88,6 +88,11 @@ cask 'steam'
 cask 'itsycal'
 cask 'karabiner-elements'
 cask 'cleanshot'
+cask 'whatsapp'
+cask 'plex-media-server'
+cask 'jdownloader'
+cask 'jordanbaird-ice'
+
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353 
@@ -98,9 +103,6 @@ mas 'Shazam', id: 897118787
 mas 'Unsplash Wallpapers', id: 1284863847
 mas 'Tot', id: 1491071483
 mas 'JSONPeep', id: 1458969831
-mas 'Microsoft Excel', id: 46205843
-mas 'Microsoft PowerPoint', id: 462062816
-mas 'Microsoft Word', id: 462054704
 mas 'iMovie', id: 408981434
 mas 'Xcode', id:497799835
 mas 'things-3', id:904280696
