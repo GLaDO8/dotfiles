@@ -22,7 +22,7 @@ brew_setup(){
 
 	# Save Homebrew’s installed location.
 	BREW_PREFIX=$(brew --prefix)
-	
+
 	# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 	ln -s "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum"
 
@@ -38,7 +38,7 @@ zsh_setup(){
 	echo "Making zsh as the default shell environment..."
 	sudo chsh -s $(which zsh)
 
-	#install powerline font 
+	#install powerline font
 	git clone https://github.com/powerline/fonts.git --depth=1
 	cd fonts
 	./install.sh
@@ -63,12 +63,6 @@ zsh_setup(){
 	finish
 }
 
-hyper_setup(){
-	hyper i hyperocean
-	hyper i hyper-tabs-enhanced
-	hyper i statusline
-}
-
 dotfile_setup(){
 	echo "setting up personal dotfiles..."
 	cd ~
@@ -79,7 +73,6 @@ dotfile_setup(){
 	rm -rf $HOME/.zshrc
 	ln -sv $HOME/dotfiles/zsh/.zshrc $HOME/.zshrc
 	ln -sv $HOME/dotfiles/.aliases $HOME/.aliases
-	ln -sv $HOME/dotfiles/.hyper.js $HOME/.hyper.js
 	ln -sv $HOME/dotfiles/.functions $HOME/.functions
 	ln -sv $HOME/dotfiles/.bash_profile $HOME/.bash_profile
 
