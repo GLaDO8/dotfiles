@@ -97,6 +97,8 @@ cask 'bambu-studio'
 cask 'plex-media-server'
 cask 'bezel'
 cask 'mullvadvpn'
+cask 'replacicon'
+cask 'zed'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353
@@ -116,6 +118,7 @@ mas 'unsplash', id:1284863847
 mas 'testflight', id:899247664
 mas 'Bear Markdown Notes', id:1091189122
 mas 'Perplexity', id:1875466942
+mas 'Gifski', id:1351639930
 
 
 #things to add
@@ -123,3 +126,8 @@ mas 'Perplexity', id:1875466942
 # obinskit
 # aseprite
 # homerow
+# plasticity
+# Alcove
+# cavalry
+# pinokio
+#
