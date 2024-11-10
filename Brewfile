@@ -93,7 +93,7 @@ cask 'plex-media-server'
 cask 'jdownloader'
 cask 'jordanbaird-ice'
 cask 'craft'
-
+cask 'bambu-studio'
 
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353
