@@ -95,7 +95,6 @@ mas 'Slack', id: 803453959
 mas 'Amphetamine', id: 937984704
 mas 'Shazam', id: 897118787
 mas 'Unsplash Wallpapers', id: 1284863847
-mas 'Tot', id: 1491071483
 mas 'JSONPeep', id: 1458969831
 mas 'iMovie', id: 408981434
 mas 'Xcode', id:497799835
