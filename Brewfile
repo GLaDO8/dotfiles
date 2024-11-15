@@ -92,7 +92,6 @@ cask 'screen-studio'
 #Mac App store apps
 mas 'The Unarchiver', id: 425424353
 mas 'Slack', id: 803453959
-mas 'Amphetamine', id: 937984704
 mas 'Shazam', id: 897118787
 mas 'Unsplash Wallpapers', id: 1284863847
 mas 'JSONPeep', id: 1458969831
