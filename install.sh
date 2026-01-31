@@ -87,16 +87,31 @@ claude_setup(){
 	rm -f $HOME/.claude/CLAUDE.md
 	rm -f $HOME/.claude/settings.json
 	rm -f $HOME/.claude/statusline-command.sh
-	rm -f $HOME/.claude/commands
+	rm -rf $HOME/.claude/commands  # Deprecated, skills are now in ~/.claude/skills/
 
 	# Create symlinks
 	echo "Creating Claude symlinks..."
 	ln -sv $HOME/dotfiles/claude/CLAUDE.md $HOME/.claude/CLAUDE.md
 	ln -sv $HOME/dotfiles/claude/settings.json $HOME/.claude/settings.json
 	ln -sv $HOME/dotfiles/claude/statusline-command.sh $HOME/.claude/statusline-command.sh
-	ln -sv $HOME/dotfiles/claude/skills $HOME/.claude/commands
+
+	# Personal skills: symlink dotfiles skills to ~/.claude/skills/
+	# Note: npx skills will also add community skills here as symlinks
+	echo "Setting up personal skills..."
+	mkdir -p $HOME/.claude/skills
+	for skill_dir in $HOME/dotfiles/claude/skills/*/; do
+		skill_name=$(basename "$skill_dir")
+		rm -f "$HOME/.claude/skills/$skill_name"
+		ln -sv "$skill_dir" "$HOME/.claude/skills/$skill_name"
+	done
 
 	chmod +x $HOME/dotfiles/claude/statusline-command.sh
+
+	# Install community skills
+	if command -v npx &> /dev/null; then
+		echo "Installing community skills..."
+		bash $HOME/dotfiles/claude/install-community-skills.sh
+	fi
 
 	# Create settings.local.json template if it doesn't exist
 	if [ ! -f "$HOME/.claude/settings.local.json" ]; then
