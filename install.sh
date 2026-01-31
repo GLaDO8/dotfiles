@@ -79,6 +79,40 @@ dotfile_setup(){
 	finish
 }
 
+claude_setup(){
+	echo "Setting up Claude Code configuration..."
+	mkdir -p $HOME/.claude
+
+	# Remove existing symlinks/files
+	rm -f $HOME/.claude/CLAUDE.md
+	rm -f $HOME/.claude/settings.json
+	rm -f $HOME/.claude/statusline-command.sh
+	rm -f $HOME/.claude/commands
+
+	# Create symlinks
+	echo "Creating Claude symlinks..."
+	ln -sv $HOME/dotfiles/claude/CLAUDE.md $HOME/.claude/CLAUDE.md
+	ln -sv $HOME/dotfiles/claude/settings.json $HOME/.claude/settings.json
+	ln -sv $HOME/dotfiles/claude/statusline-command.sh $HOME/.claude/statusline-command.sh
+	ln -sv $HOME/dotfiles/claude/skills $HOME/.claude/commands
+
+	chmod +x $HOME/dotfiles/claude/statusline-command.sh
+
+	# Create settings.local.json template if it doesn't exist
+	if [ ! -f "$HOME/.claude/settings.local.json" ]; then
+		echo "Creating settings.local.json template for secrets..."
+		cat > "$HOME/.claude/settings.local.json" << 'EOF'
+{
+  "env": {
+    "VERCEL_TOKEN": "<YOUR_VERCEL_TOKEN>"
+  }
+}
+EOF
+	fi
+
+	finish
+}
+
 xcode_cl_tools(){
 	echo "installing xcode command line tools..."
 
@@ -108,5 +142,6 @@ macos_defaults_setup(){
 # zsh_setup
 brew_setup
 dotfile_setup
+claude_setup
 xcode_cl_tools
 # macos_defaults_setup
