@@ -106,12 +106,11 @@ claude_setup(){
 	done
 
 	chmod +x $HOME/dotfiles/claude/statusline-command.sh
+	chmod +x $HOME/dotfiles/claude/sync-community-skills.sh
 
-	# Install community skills
-	if command -v npx &> /dev/null; then
-		echo "Installing community skills..."
-		bash $HOME/dotfiles/claude/install-community-skills.sh
-	fi
+	# Sync community skills from dotfiles to ~/.agents/skills/
+	echo "Setting up community skills..."
+	bash $HOME/dotfiles/claude/sync-community-skills.sh
 
 	# Create settings.local.json template if it doesn't exist
 	if [ ! -f "$HOME/.claude/settings.local.json" ]; then
