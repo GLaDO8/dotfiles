@@ -1,0 +1,68 @@
+# Ghostty Configuration
+
+# ===== FONTS =====
+font-family = TX-02
+font-size = 16
+
+# ===== CURSOR =====
+cursor-style = block
+cursor-style-blink = true
+mouse-hide-while-typing = true
+
+# ===== THEME (ayu-dark inlined) =====
+background = #0b0e14
+foreground = #bfbdb6
+selection-background = #1b3a5b
+selection-foreground = #bfbdb6
+cursor-color = #0B9E37
+cursor-text = #0b0e14
+palette = 0=#1e232b
+palette = 1=#ea6c73
+palette = 2=#7fd962
+palette = 3=#f9af4f
+palette = 4=#53bdfa
+palette = 5=#cda1fa
+palette = 6=#90e1c6
+palette = 7=#c7c7c7
+palette = 8=#686868
+palette = 9=#f07178
+palette = 10=#aad94c
+palette = 11=#ffb454
+palette = 12=#59c2ff
+palette = 13=#d2a6ff
+palette = 14=#95e6cb
+palette = 15=#ffffff
+
+# ===== WINDOW =====
+window-padding-x = 8
+window-padding-y = 8
+
+# ===== macOS =====
+macos-titlebar-style = native
+keybind = cmd+t=new_tab
+keybind = global:cmd+backquote=toggle_quick_terminal
+quick-terminal-size = 30%,300px
+link-previews = true
+clipboard-trim-trailing-spaces = true
+copy-on-select = true
+
+# ===== SHELL INTEGRATION =====
+shell-integration-features = no-cursor
+
+# ===== KEYBOARD TEXT SELECTION =====
+# Shift+Arrow: Character-by-character selection
+keybind = shift+left=adjust_selection:left
+keybind = shift+right=adjust_selection:right
+keybind = shift+up=adjust_selection:up
+keybind = shift+down=adjust_selection:down
+
+# Shift+Option+Arrow: Word-ish selection (to line boundaries)
+keybind = shift+alt+left=adjust_selection:beginning_of_line
+keybind = shift+alt+right=adjust_selection:end_of_line
+
+# Shift+Cmd+Arrow: Full document selection
+keybind = shift+super+up=adjust_selection:beginning
+keybind = shift+super+down=adjust_selection:end
+
+# Copy with Cmd+C only when text is selected (otherwise sends interrupt)
+keybind = performable:super+c=copy_to_clipboard
