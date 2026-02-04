@@ -1,0 +1,149 @@
+{
+  "workbench.startupEditor": "newUntitledFile",
+  "editor.tokenColorCustomizations": {
+    "[Celestial]": { "strings": "#61c061", "types": "#eca373" }
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/env": true,
+    "**/venv": true
+  },
+  "editor.fontSize": 16,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "editor.fontFamily": "Berkeley Mono Variable",
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.clearPreviousOutput": true,
+  "code-runner.ignoreSelection": true,
+  "code-runner.runInTerminal": true,
+  "code-runner.executorMap": {
+    "cpp": "g++ -std=c++11 $fullFileName && ./a.out"
+  },
+  "files.associations": {
+    "*.cpp": "cpp"
+  },
+  "[cpp]": {},
+  "editor.cursorSmoothCaretAnimation": "on",
+  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 2 }",
+  "editor.insertSpaces": false,
+  "sync.gist": "248aef59cd8b15ecf4ccc1ff35d4dcf2",
+  "git.autofetch": true,
+  "terminal.integrated.inheritEnv": false,
+  "python.showStartPage": false,
+  "dart.flutterSdkPath": "/Users/shreyasgupta/repositories/flutter",
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  "terminal.integrated.shell.osx": "/bin/zsh",
+  "css.validate": false,
+  "editor.fontLigatures": "'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'calt', 'dlig'",
+  "editor.codeActionsOnSave": null,
+  "files.trimTrailingWhitespace": false,
+  "explorer.confirmDelete": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "terminal.integrated.fontFamily": "Berkeley Mono Variable",
+  "jupyter.alwaysTrustNotebooks": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // "dart.openDevTools": "flutter",
+  "dart.showInspectorNotificationsForWidgetErrors": false,
+  "dart.debugExternalLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "dart.devToolsLogFile": null,
+  "python.languageServer": "Default",
+  "extensions.ignoreRecommendations": true,
+  "java.project.importHint": false,
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "vue-html": "html",
+    "vue": "html"
+  },
+  "[java]": {
+    "editor.suggest.snippetsPreventQuickSuggestions": false
+  },
+  "terminal.integrated.tabs.enabled": true,
+  "telemetry.telemetryLevel": "off",
+  "telemetry.enableCrashReporter": false,
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  "editor.inlineSuggest.enabled": true,
+  "editor.accessibilitySupport": "off",
+  "editor.wordWrapColumn": 100,
+  "explorer.confirmDragAndDrop": false,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorStyle": "block",
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "workbench.colorTheme": "Celestial",
+  "npm.keybindingsChangedWarningShown": true,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
+    "yaml": false
+  },
+  "editor.stickyScroll.enabled": true,
+  "vscode-pets.petSize": "medium",
+  "vscode-pets.position": "explorer",
+  "vscode-pets.petColor": "red",
+  "git.ignoreMissingGitWarning": true,
+  "files.autoGuessEncoding": true,
+  "editor.formatOnType": true,
+  "diffEditor.diffAlgorithm": "advanced",
+  "terminal.external.osxExec": "Warp.app",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.fontSize": 14,
+  "git.enableSmartCommit": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "git.confirmSync": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "playdate.sdkPath": "/Users/shreyasgupta/Developer/PlaydateSDK",
+  "workbench.settings.applyToAllProfiles": ["playdate.sdkPath"],
+  "editor.formatOnPaste": true,
+  "projectManager.git.baseFolders": ["/Users/shreyasgupta/Projects"]
+}
