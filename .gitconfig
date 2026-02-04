@@ -1,0 +1,14 @@
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
+[user]
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEwa/EkgO11I3RqkFrzJ/gfayi1vxabL8MAs3kGufgdT
+	name = GLaDO8
+	email = gshreyas@icloud.com
+[core]
+	sshCommand = ssh -i ~/.ssh/id_rsa
+[init]
+	defaultBranch = main
