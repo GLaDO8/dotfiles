@@ -158,11 +158,37 @@
       "Bash(true)",
       "Bash(false)",
       "Bash(test:*)",
-      "Bash([:*)"
-    ]
+      "Bash([:*)",
+      "Bash(~/.claude/CLAUDE.md)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(ghostty +show-config:*)",
+      "Bash(sqlite3:*)",
+      "Bash(osascript:*)",
+      "Bash(mdfind:*)",
+      "Bash(sw_vers:*)",
+      "Bash(sudo find:*)",
+      "Bash(defaults read:*)",
+      "Bash(sudo ls:*)",
+      "Bash(~/bin/iphone-tabs:*)",
+      "Bash(./backup.sh:*)"
+    ],
+    "defaultMode": "plan"
   },
   "model": "opus",
   "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are a security reviewer evaluating a permission request from Claude Code. Analyze this request: $ARGUMENTS\n\nEvaluate if this action is safe to auto-approve. Consider:\n- Is it a common, safe development operation?\n- Does it avoid destructive actions (rm -rf, force push, dropping databases)?\n- Does it avoid accessing sensitive files (.env, credentials, private keys)?\n- Is the scope reasonable and not overly broad?\n\nBe pragmatic: most dev operations (running tests, building, git operations, file edits) are safe.\n\nRespond with JSON only:\n- {\"ok\": true} to auto-approve\n- {\"ok\": false, \"reason\": \"brief explanation\"} to deny and require manual approval",
+            "timeout": 30,
+            "model": "opus"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
@@ -171,6 +197,17 @@
             "type": "command",
             "command": "~/.claude/hooks/lint-check.sh",
             "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/shreyasgupta/Documents/dotfiles/claude/backup.sh",
+            "timeout": 60
           }
         ]
       }
