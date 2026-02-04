@@ -1,0 +1,31 @@
+# aichat configuration
+# Docs: https://github.com/sigoden/aichat
+
+# Default model - uses Claude Sonnet for fast, high-quality responses
+model: claude:claude-sonnet-4-20250514
+
+# Clients configuration
+clients:
+  - type: claude
+    # API key: uses ANTHROPIC_API_KEY environment variable by default
+    # Uncomment below line to set explicitly:
+    # api_key: YOUR_ANTHROPIC_API_KEY
+
+# Shell integration settings
+keybindings: vi    # Use vim keybindings in aichat interface
+
+# Save conversation history
+save: true
+save_session: null
+
+# Wrap text at terminal width
+wrap: auto
+
+# Highlight code blocks
+highlight: true
+
+# Temperature for responses (0.0-1.0, lower = more deterministic)
+temperature: null  # Use model default
+
+# Compress long conversation history automatically
+compress_threshold: 4000
