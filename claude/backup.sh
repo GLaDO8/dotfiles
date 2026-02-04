@@ -17,6 +17,7 @@ echo "Backing up Claude Code configuration..."
 # Create backup directories
 mkdir -p "$BACKUP_DIR/skills"
 mkdir -p "$BACKUP_DIR/agents-skills"
+mkdir -p "$BACKUP_DIR/hooks"
 
 # Backup config files
 echo "  - CLAUDE.md"
@@ -27,6 +28,21 @@ cp ~/.claude/settings.json "$BACKUP_DIR/"
 
 echo "  - statusline-command.sh"
 cp ~/.claude/statusline-command.sh "$BACKUP_DIR/"
+
+# Backup hooks
+if [ -d ~/.claude/hooks ]; then
+    echo "  - Hooks from ~/.claude/hooks/"
+    for hook_file in ~/.claude/hooks/*; do
+        if [ -f "$hook_file" ]; then
+            hook_name=$(basename "$hook_file")
+            # Skip hidden files
+            if [[ "$hook_name" != .* ]]; then
+                echo "    - $hook_name"
+                cp "$hook_file" "$BACKUP_DIR/hooks/"
+            fi
+        fi
+    done
+fi
 
 # Backup personal skills (excluding symlinks to community skills)
 echo "  - Personal skills from ~/.claude/skills/"

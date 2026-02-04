@@ -182,9 +182,9 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "You are a security reviewer evaluating a permission request from Claude Code. Analyze this request: $ARGUMENTS\n\nEvaluate if this action is safe to auto-approve. Consider:\n- Is it a common, safe development operation?\n- Does it avoid destructive actions (rm -rf, force push, dropping databases)?\n- Does it avoid accessing sensitive files (.env, credentials, private keys)?\n- Is the scope reasonable and not overly broad?\n\nBe pragmatic: most dev operations (running tests, building, git operations, file edits) are safe.\n\nRespond with JSON only:\n- {\"ok\": true} to auto-approve\n- {\"ok\": false, \"reason\": \"brief explanation\"} to deny and require manual approval",
-            "timeout": 30,
-            "model": "opus"
+            "prompt": "Evaluate this permission request: $ARGUMENTS\n\nAuto-approve if it's a safe development operation. DENY only if it matches these dangerous patterns:\n- Destructive: rm -rf /, rm -rf ~, DROP DATABASE, TRUNCATE\n- Force operations: git push --force, git reset --hard\n- Piping to shell: curl|bash, wget|sh\n- Sensitive files: .env, credentials, id_rsa, .pem, api keys\n\nBe permissive - most dev operations (git, npm, file edits, builds, tests) are safe.\n\nRespond ONLY with JSON:\n{\"ok\": true} to approve\n{\"ok\": false, \"reason\": \"brief reason\"} to deny",
+            "timeout": 15,
+            "model": "haiku"
           }
         ]
       }
