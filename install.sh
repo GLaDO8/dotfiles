@@ -381,6 +381,13 @@ claude_setup() {
         fi
     done
 
+    # Copy plugins list
+    if [[ -f "$DOTFILES_DIR/claude/backup/plugins/installed_plugins.json" ]]; then
+        log_info "Copying installed_plugins.json..."
+        run mkdir -p "$HOME/.claude/plugins"
+        run cp "$DOTFILES_DIR/claude/backup/plugins/installed_plugins.json" "$HOME/.claude/plugins/"
+    fi
+
     # Create settings.local.json template if it doesn't exist
     if [[ ! -f "$HOME/.claude/settings.local.json" ]]; then
         log_info "Creating settings.local.json template..."

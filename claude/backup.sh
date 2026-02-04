@@ -18,6 +18,7 @@ echo "Backing up Claude Code configuration..."
 mkdir -p "$BACKUP_DIR/skills"
 mkdir -p "$BACKUP_DIR/agents-skills"
 mkdir -p "$BACKUP_DIR/hooks"
+mkdir -p "$BACKUP_DIR/plugins"
 
 # Backup config files
 echo "  - CLAUDE.md"
@@ -42,6 +43,12 @@ if [ -d ~/.claude/hooks ]; then
             fi
         fi
     done
+fi
+
+# Backup plugins list
+if [ -f ~/.claude/plugins/installed_plugins.json ]; then
+    echo "  - installed_plugins.json"
+    cp ~/.claude/plugins/installed_plugins.json "$BACKUP_DIR/plugins/"
 fi
 
 # Backup personal skills (excluding symlinks to community skills)

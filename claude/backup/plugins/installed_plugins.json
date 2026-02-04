@@ -1,0 +1,106 @@
+{
+  "version": 2,
+  "plugins": {
+    "context7@claude-plugins-official": [
+      {
+        "scope": "project",
+        "projectPath": "/Users/shreyasgupta/Documents/Projects/Rehoboam",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/context7/ee2f72662645",
+        "version": "ee2f72662645",
+        "installedAt": "2026-01-14T04:44:44.705Z",
+        "lastUpdated": "2026-01-15T10:11:37.265Z",
+        "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
+      }
+    ],
+    "supabase@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/supabase/27d2b86d72da",
+        "version": "27d2b86d72da",
+        "installedAt": "2026-01-14T04:49:34.790Z",
+        "lastUpdated": "2026-01-30T10:30:47.204Z",
+        "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
+      }
+    ],
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/frontend-design/27d2b86d72da",
+        "version": "27d2b86d72da",
+        "installedAt": "2026-01-14T04:50:57.326Z",
+        "lastUpdated": "2026-01-30T10:30:47.203Z",
+        "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
+      }
+    ],
+    "vercel@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/vercel/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-14T04:51:14.305Z",
+        "lastUpdated": "2026-01-14T04:51:14.305Z",
+        "gitCommitSha": "ae067751b4f42c97d13054211657275029ca8b6d"
+      }
+    ],
+    "figma@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/figma/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-14T06:43:46.627Z",
+        "lastUpdated": "2026-01-14T06:43:46.627Z",
+        "gitCommitSha": "20aca44ee6ba6092037e943c151c067896828360"
+      }
+    ],
+    "hookify@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/hookify/27d2b86d72da",
+        "version": "27d2b86d72da",
+        "installedAt": "2026-01-17T19:13:46.009Z",
+        "lastUpdated": "2026-01-30T10:30:47.204Z",
+        "gitCommitSha": "96276205880a60fd66bbae981f5ab568e70c4cbf"
+      }
+    ],
+    "compound-engineering@every-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/every-marketplace/compound-engineering/2.27.0",
+        "version": "2.27.0",
+        "installedAt": "2026-01-21T18:12:48.223Z",
+        "lastUpdated": "2026-01-21T18:12:48.223Z",
+        "gitCommitSha": "cb2485ff481cb6d556163003d339ce16d4dcffdb"
+      }
+    ],
+    "coding-tutor@every-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/every-marketplace/coding-tutor/1.2.1",
+        "version": "1.2.1",
+        "installedAt": "2026-01-25T12:17:10.062Z",
+        "lastUpdated": "2026-01-25T12:17:10.062Z",
+        "gitCommitSha": "cb2485ff481cb6d556163003d339ce16d4dcffdb"
+      }
+    ],
+    "rust-analyzer-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/rust-analyzer-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-26T08:24:33.455Z",
+        "lastUpdated": "2026-01-26T08:24:33.455Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "playground@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/playground/27d2b86d72da",
+        "version": "27d2b86d72da",
+        "installedAt": "2026-01-30T06:14:24.194Z",
+        "lastUpdated": "2026-01-30T06:14:24.194Z",
+        "gitCommitSha": "27d2b86d72da27c64585150857cee8472ad47abb"
+      }
+    ]
+  }
+}
