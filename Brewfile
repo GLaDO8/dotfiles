@@ -1,116 +1,171 @@
-#taps
-tap 'homebrew/cask-fonts'
-tap 'homebrew/cask-versions'
-
-#brew package installation
-brew 'java'
-brew 'thefuck'
-brew 'zsh-completions'
-brew 'wget'
-brew 'git-lfs'
-brew 'gnuplot'
-brew 'htop'
-brew 'tree'
-brew 'mas'
-brew "gnuplot", args: ["with-aquaterm"]
-brew 'curl'
-brew 'node'
-brew 'vim'
-brew 'cmake'
-brew 'curl'
-brew 'lua'
-brew 'ncurses'
-brew 'gh'
-brew 'qt'
-brew 'ruby'
-brew 'sqlite'
-brew 'brotli'
-brew 'rust'
-brew 'fx'
-brew 'imageoptim-cli'
-brew 'coreutils'
-brew 'moreutils'
-brew 'findutils'
-
-#cask installations
-cask 'figma'
-cask 'arc'
-cask '1password'
-cask 'lunar'
-cask 'raycast'
-cask 'contexts'
-cask 'warp'
-cask 'visual-studio-code'
-cask 'choosy'
-cask 'xquartz'
-cask 'android-platform-tools'
-cask 'vlc'
-cask 'spotify'
-cask 'transmission'
-cask 'raindropio'
-cask 'rocket'
-cask 'vnc-viewer'
-cask 'bettertouchtool'
-cask 'notion'
-cask 'cron'
-cask 'zoom'
-cask 'logi-options-plus'
-cask 'bike'
-cask 'android-studio'
-cask 'opal-composer'
-cask 'postman'
-cask 'google-chrome'
-cask 'bezel'
-cask 'lm-studio'
-cask 'sf-symbols'
-cask 'raspberry-pi-imager'
-cask 'cloudytabs'
-cask 'steam'
-cask 'itsycal'
-cask 'karabiner-elements'
-cask 'whatsapp'
-cask 'plex-media-server'
-cask 'jdownloader'
-cask 'jordanbaird-ice'
-cask 'craft'
-cask 'plex-media-server'
-cask 'bezel'
-cask 'mullvadvpn'
-cask 'replacicon'
-cask 'zed'
-cask 'origami-studio'
-cask 'rive'
-cask 'spline'
-cask 'framer'
-cask 'affinity-designer'
-cask 'ogdesign-eagle'
-cask 'bambu-studio'
-cask 'blender'
-cask 'typeface'
-cask 'screen-studio'
-
-#Mac App store apps
-mas 'The Unarchiver', id: 425424353
-mas 'Slack', id: 803453959
-mas 'Shazam', id: 897118787
-mas 'Unsplash Wallpapers', id: 1284863847
-mas 'JSONPeep', id: 1458969831
-mas 'iMovie', id: 408981434
-mas 'Xcode', id:497799835
-mas 'things-3', id:904280696
-mas 'plug', id:1514182074
-mas 'unsplash', id:1284863847
-mas 'testflight', id:899247664
-mas 'Bear Markdown Notes', id:1091189122
-mas 'Perplexity', id:1875466942
-mas 'Gifski', id:1351639930
-
-# things to add (not available on mas cli or brew casks)
-# Sleeve
-# obinskit
-# aseprite
-# homerow
-# plasticity
-# Alcove
-# cavalry
-# pinokio
+tap "homebrew/bundle"
+tap "jordond/tap"
+tap "nikitabobko/tap"
+tap "tw93/tap"
+brew "aichat"
+brew "antidote"
+brew "brotli"
+brew "astroterm"
+brew "carthage"
+brew "cloudflared"
+brew "cmake"
+brew "coreutils"
+brew "curl"
+brew "direnv"
+brew "displayplacer"
+brew "eza"
+brew "ffmpeg"
+brew "findutils"
+brew "flyctl"
+brew "fx"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "git-lfs"
+brew "glow"
+brew "lua"
+brew "qt"
+brew "gnuplot"
+brew "go"
+brew "htop"
+brew "mas"
+brew "mcfly"
+brew "moreutils"
+brew "navi"
+brew "node"
+brew "openjdk"
+brew "python@3.11"
+brew "python@3.12"
+brew "ruby"
+brew "subversion"
+brew "thefuck"
+brew "tldr", link: false
+brew "tlrc"
+brew "tmux"
+brew "tree"
+brew "vim"
+brew "wget"
+brew "yt-dlp"
+brew "zoxide"
+brew "zsh"
+brew "zsh-completions"
+brew "jordond/tap/jolt"
+brew "tw93/tap/mole"
+cask "1password"
+cask "1password-cli"
+cask "nikitabobko/tap/aerospace"
+cask "affinity-designer"
+cask "airbuddy"
+cask "android-platform-tools"
+cask "android-studio"
+cask "arc"
+cask "bartender"
+cask "bettertouchtool"
+cask "bezel"
+cask "bike"
+cask "blender"
+cask "choosy"
+cask "cleanshot"
+cask "cloudytabs"
+cask "contexts"
+cask "figma"
+cask "framer"
+cask "google-chrome"
+cask "itsycal"
+cask "karabiner-elements"
+cask "keyclu"
+cask "leader-key"
+cask "libreoffice"
+cask "lm-studio"
+cask "logi-options+"
+cask "lunar"
+cask "notion"
+cask "notion-calendar"
+cask "ogdesign-eagle"
+cask "opal-composer"
+cask "origami-studio"
+cask "playcover-community"
+cask "postman"
+cask "qlvideo"
+cask "raindropio"
+cask "raspberry-pi-imager"
+cask "raycast"
+cask "rive"
+cask "rocket"
+cask "screen-studio"
+cask "sf-symbols"
+cask "spline"
+cask "spotify"
+cask "steam"
+cask "transmission"
+cask "typeface"
+cask "visual-studio-code"
+cask "vlc"
+cask "vnc-viewer"
+cask "voiceink"
+cask "warp"
+cask "xquartz"
+cask "zoom"
+mas "Balatro", id: 6502451661
+mas "Bear", id: 1091189122
+mas "BrightIntosh", id: 6452471855
+mas "Flighty", id: 1358823008
+mas "Gifski", id: 1351639930
+mas "iMovie", id: 408981434
+mas "Infuse", id: 1136220934
+mas "JSONPeep", id: 1458969831
+mas "Klack", id: 6446206067
+mas "mymind", id: 1532801185
+mas "PDFgear", id: 6469021132
+mas "Pieoneer", id: 6739781207
+mas "Plug", id: 1514182074
+mas "Shazam", id: 897118787
+mas "Slack", id: 803453959
+mas "TestFlight", id: 899247664
+mas "The Unarchiver", id: 425424353
+mas "Things", id: 904280696
+mas "Unsplash Wallpapers", id: 1284863847
+mas "Wipr", id: 1662217862
+mas "Xcode", id: 497799835
+vscode "1password.op-vscode"
+vscode "alefragnani.project-manager"
+vscode "apvarun.celestial"
+vscode "astro-build.astro-vscode"
+vscode "atelierbram.atelier-vscode-themes"
+vscode "austenc.tailwind-docs"
+vscode "aykutsarac.jsoncrack-vscode"
+vscode "bradlc.vscode-tailwindcss"
+vscode "christian-kohler.npm-intellisense"
+vscode "christian-kohler.path-intellisense"
+vscode "dart-code.dart-code"
+vscode "dart-code.flutter"
+vscode "dbaeumer.vscode-eslint"
+vscode "dsznajder.es7-react-js-snippets"
+vscode "ecmel.vscode-html-css"
+vscode "eliverlara.andromeda"
+vscode "esbenp.prettier-vscode"
+vscode "figma.figma-vscode-extension"
+vscode "formulahendry.code-runner"
+vscode "formulahendry.terminal"
+vscode "github.remotehub"
+vscode "heybourn.headwind"
+vscode "idleberg.applescript"
+vscode "ionutvmi.path-autocomplete"
+vscode "mikestead.dotenv"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-vscode.cpptools"
+vscode "ms-vscode.remote-repositories"
+vscode "nash.awesome-flutter-snippets"
+vscode "openai.openai-chatgpt-adhoc"
+vscode "oscarcs.dart-syntax-highlighting-only"
+vscode "pkief.material-icon-theme"
+vscode "seansassenrath.vscode-theme-superonedark"
+vscode "stripe.markdoc-language-support"
+vscode "sumneko.lua"
+vscode "tomoki1207.pdf"
+vscode "visualstudioexptteam.intellicode-api-usage-examples"
+vscode "visualstudioexptteam.vscodeintellicode"
+vscode "wicked-labs.wvsc-serendipity"
+go "github.com/danielmiessler/fabric"
