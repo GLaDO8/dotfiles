@@ -312,6 +312,7 @@ claude_setup() {
 
     # Create directories
     run mkdir -p "$HOME/.claude/skills"
+    run mkdir -p "$HOME/.claude/hooks"
     run mkdir -p "$HOME/.agents/skills"
 
     # Remove existing files/symlinks (clean slate)
@@ -328,6 +329,19 @@ claude_setup() {
         run chmod +x "$HOME/.claude/statusline-command.sh" 2>/dev/null || true
     else
         log_warn "Claude backup directory not found, skipping config copy..."
+    fi
+
+    # Copy hooks
+    if [[ -d "$DOTFILES_DIR/claude/backup/hooks" ]]; then
+        log_info "Copying hooks to ~/.claude/hooks/..."
+        for hook_file in "$DOTFILES_DIR/claude/backup/hooks"/*; do
+            if [[ -f "$hook_file" ]]; then
+                hook_name=$(basename "$hook_file")
+                log_info "  - $hook_name"
+                run cp "$hook_file" "$HOME/.claude/hooks/"
+                run chmod +x "$HOME/.claude/hooks/$hook_name"
+            fi
+        done
     fi
 
     # Copy personal skills
