@@ -1,0 +1,22 @@
+// Static tasks configuration.
+
+//
+// Example:
+[
+  {
+    "label": "TypeScript: Watch",
+    "command": "tsc",
+    "args": ["--watch", "-p", "tsconfig.json"],
+    "shell": "system",
+    "reveal": "always",
+    "hide": "never"
+  },
+  {
+    "label": "NPM: Build",
+    "command": "npm",
+    "args": ["run", "build"],
+    "shell": "system",
+    "reveal": "always",
+    "hide": "never"
+  }
+]
