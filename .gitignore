@@ -1,0 +1,13 @@
+# Sensitive files
+config/gh/hosts.yml
+ssh/id_*
+ssh/*.pub
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
