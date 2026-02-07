@@ -182,9 +182,9 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Evaluate this permission request: $ARGUMENTS\n\nAuto-approve if it's a safe development operation. DENY only if it matches these dangerous patterns:\n- Destructive: rm -rf /, rm -rf ~, DROP DATABASE, TRUNCATE\n- Force operations: git push --force, git reset --hard\n- Piping to shell: curl|bash, wget|sh\n- Sensitive files: .env, credentials, id_rsa, .pem, api keys\n\nBe permissive - most dev operations (git, npm, file edits, builds, tests) are safe.\n\nRespond ONLY with JSON:\n{\"ok\": true} to approve\n{\"ok\": false, \"reason\": \"brief reason\"} to deny",
-            "timeout": 15,
-            "model": "haiku"
+            "prompt": "Tool permission request:\n\n$ARGUMENTS\n\nRules:\n- APPROVE: file ops in ~/*, reads, dev workflow, MCP tools\n- DENY: only if IRREVERSIBLE + LARGE blast radius + NO safety net (e.g., rm -rf ~)\n- Default: APPROVE (user can reject)\n\nRespond with ONLY this JSON, nothing else:\n{\"ok\":true}\nor\n{\"ok\":false,\"reason\":\"one sentence\"}",
+            "timeout": 10,
+            "model": "sonnet"
           }
         ]
       }
