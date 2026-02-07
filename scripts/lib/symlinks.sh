@@ -9,8 +9,6 @@ EXPECTED_SYMLINKS=(
     # Shell dotfiles
     "$HOME/.zshrc:zsh/.zshrc"
     "$HOME/.zsh_plugins.txt:zsh/.zsh_plugins.txt"
-    "$HOME/.aliases:.aliases"
-    "$HOME/.functions:.functions"
     "$HOME/.bash_profile:.bash_profile"
     "$HOME/.bashrc:.bashrc"
 

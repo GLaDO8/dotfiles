@@ -79,30 +79,6 @@ validate_shell() {
         fi
     fi
 
-    # Syntax check .aliases
-    if [[ -f "$DOTFILES_DIR/.aliases" ]]; then
-        if bash -n "$DOTFILES_DIR/.aliases" 2>/dev/null; then
-            log_success ".aliases syntax is valid"
-            add_result "ok" ".aliases" "Syntax is valid" false
-        else
-            log_error ".aliases has syntax errors"
-            add_result "error" ".aliases" "Syntax errors detected" false
-            ((errors++))
-        fi
-    fi
-
-    # Syntax check .functions
-    if [[ -f "$DOTFILES_DIR/.functions" ]]; then
-        if bash -n "$DOTFILES_DIR/.functions" 2>/dev/null; then
-            log_success ".functions syntax is valid"
-            add_result "ok" ".functions" "Syntax is valid" false
-        else
-            log_error ".functions has syntax errors"
-            add_result "error" ".functions" "Syntax errors detected" false
-            ((errors++))
-        fi
-    fi
-
     # Check zsh is the default shell
     if [[ "$SHELL" == *"zsh"* ]]; then
         log_success "Default shell is zsh"
