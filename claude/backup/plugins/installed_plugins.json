@@ -15,20 +15,20 @@
     "supabase@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/supabase/27d2b86d72da",
-        "version": "27d2b86d72da",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/supabase/236752ad9ab3",
+        "version": "236752ad9ab3",
         "installedAt": "2026-01-14T04:49:34.790Z",
-        "lastUpdated": "2026-01-30T10:30:47.204Z",
+        "lastUpdated": "2026-02-05T22:39:34.143Z",
         "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
       }
     ],
     "frontend-design@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/frontend-design/27d2b86d72da",
-        "version": "27d2b86d72da",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/frontend-design/236752ad9ab3",
+        "version": "236752ad9ab3",
         "installedAt": "2026-01-14T04:50:57.326Z",
-        "lastUpdated": "2026-01-30T10:30:47.203Z",
+        "lastUpdated": "2026-02-05T22:39:34.147Z",
         "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
       }
     ],
@@ -55,10 +55,10 @@
     "hookify@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/hookify/27d2b86d72da",
-        "version": "27d2b86d72da",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/hookify/236752ad9ab3",
+        "version": "236752ad9ab3",
         "installedAt": "2026-01-17T19:13:46.009Z",
-        "lastUpdated": "2026-01-30T10:30:47.204Z",
+        "lastUpdated": "2026-02-05T22:39:34.154Z",
         "gitCommitSha": "96276205880a60fd66bbae981f5ab568e70c4cbf"
       }
     ],
@@ -95,10 +95,10 @@
     "playground@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/playground/27d2b86d72da",
-        "version": "27d2b86d72da",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/playground/236752ad9ab3",
+        "version": "236752ad9ab3",
         "installedAt": "2026-01-30T06:14:24.194Z",
-        "lastUpdated": "2026-01-30T06:14:24.194Z",
+        "lastUpdated": "2026-02-05T22:39:34.145Z",
         "gitCommitSha": "27d2b86d72da27c64585150857cee8472ad47abb"
       }
     ]

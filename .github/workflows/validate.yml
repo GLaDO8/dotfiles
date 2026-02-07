@@ -1,0 +1,212 @@
+name: Dotfiles Validation
+
+on:
+  schedule:
+    # Run weekly on Sunday at 9 AM UTC
+    - cron: '0 9 * * 0'
+  workflow_dispatch:
+    inputs:
+      fix_mode:
+        description: 'Attempt to auto-fix issues'
+        required: false
+        default: 'true'
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: macos-latest
+    outputs:
+      has_errors: ${{ steps.validate.outputs.has_errors }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: chmod +x scripts/validate.sh scripts/lib/*.sh
+
+      - name: Run validation
+        id: validate
+        continue-on-error: true
+        run: |
+          # Run validation and capture output
+          set +e
+          ./scripts/validate.sh --json > validation-report.json 2>&1
+          exit_code=$?
+          set -e
+
+          # Check if there are errors
+          error_count=$(jq '.summary.error // 0' validation-report.json)
+          if [[ $error_count -gt 0 ]]; then
+            echo "has_errors=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_errors=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Output summary for logs
+          echo "## Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          jq -r '"- **Passed:** \(.summary.ok)\n- **Warnings:** \(.summary.warn)\n- **Errors:** \(.summary.error)"' validation-report.json >> $GITHUB_STEP_SUMMARY
+
+          exit $exit_code
+
+      - name: Upload validation report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-report
+          path: validation-report.json
+          retention-days: 30
+
+  fix-with-claude:
+    needs: validate
+    if: |
+      always() &&
+      needs.validate.outputs.has_errors == 'true' &&
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.fix_mode == 'true') ||
+      (github.event_name == 'schedule')
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download validation report
+        uses: actions/download-artifact@v4
+        with:
+          name: validation-report
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Analyze and fix with Claude
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Read the validation report
+          REPORT=$(cat validation-report.json)
+
+          # Run Claude Code to analyze and fix
+          claude --dangerously-skip-permissions \
+            --allowedTools "Bash,Read,Edit,Write,Glob,Grep" \
+            -p "You are analyzing a dotfiles validation report and need to fix the issues found.
+
+          Here is the validation report:
+          $REPORT
+
+          Your task:
+          1. Analyze the errors in the report
+          2. For each error marked as 'auto_fixable: true', implement the fix
+          3. For symlink errors, create the correct symlinks using 'ln -sfv'
+          4. For shell plugin errors, clone the missing plugins
+          5. Do NOT attempt to fix brew or git/ssh issues (security sensitive)
+          6. After making fixes, run './scripts/validate.sh' to verify
+
+          Focus on symlink fixes first as they are the most common issue.
+          Create a descriptive git commit message summarizing what was fixed."
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            fix: Auto-repair dotfiles drift
+
+            Automated fixes applied by Claude Code based on validation report.
+            See validation-report.json artifact for details.
+
+            Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+          title: "fix: Auto-repair dotfiles drift"
+          body: |
+            ## Summary
+
+            This PR contains automated fixes for dotfiles configuration drift detected by the weekly validation workflow.
+
+            ## Changes
+
+            The following types of issues were addressed:
+            - Broken or missing symlinks
+            - Incorrect symlink targets
+            - Missing shell plugins/themes
+
+            ## Validation
+
+            Please review the changes and ensure they are correct before merging.
+
+            ---
+            Generated automatically by [Claude Code](https://claude.ai/claude-code) based on validation results.
+          branch: fix/dotfiles-drift-${{ github.run_id }}
+          delete-branch: true
+          labels: |
+            automated
+            maintenance
+
+  notify-no-fixes:
+    needs: [validate, fix-with-claude]
+    if: |
+      always() &&
+      needs.validate.outputs.has_errors == 'true' &&
+      needs.fix-with-claude.result == 'skipped'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create issue for manual review
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Dotfiles validation failed - manual review required';
+            const body = `## Validation Failed
+
+            The weekly dotfiles validation detected issues that require manual review.
+
+            **Run ID:** ${{ github.run_id }}
+            **Workflow:** [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            Please review the validation report artifact and address any issues manually.
+
+            Common issues:
+            - Homebrew package drift
+            - Git/SSH configuration changes
+            - Shell syntax errors
+
+            ---
+            *This issue was created automatically by the dotfiles validation workflow.*
+            `;
+
+            // Check for existing open issues with the same title
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'validation-failed'
+            });
+
+            const existingIssue = issues.data.find(issue => issue.title === title);
+
+            if (!existingIssue) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['validation-failed', 'maintenance']
+              });
+            }
