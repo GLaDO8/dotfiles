@@ -1,0 +1,11 @@
+/System/Applications/Mail.app
+/Applications/Notion Calendar.app
+/Applications/Dia.app
+/Applications/Slack.app
+/Applications/Figma.app
+/Applications/mymind.app
+/Applications/Obsidian.app
+/Applications/Zed.app
+/Applications/Cursor.app
+/Applications/Ghostty.app
+/Applications/Claude.app
