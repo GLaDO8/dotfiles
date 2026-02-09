@@ -54,13 +54,7 @@ brew "tw93/tap/mole"
 cask "1password"
 cask "1password-cli"
 cask "nikitabobko/tap/aerospace"
-cask "affinity-designer"
-cask "airbuddy"
 cask "android-platform-tools"
-cask "android-studio"
-cask "arc"
-cask "bartender"
-cask "bettertouchtool"
 cask "bezel"
 cask "bike"
 cask "blender"
@@ -68,13 +62,14 @@ cask "choosy"
 cask "cleanshot"
 cask "cloudytabs"
 cask "contexts"
+cask "dia"
 cask "figma"
 cask "framer"
 cask "google-chrome"
 cask "itsycal"
+cask "jdownloader"
 cask "karabiner-elements"
 cask "keyclu"
-cask "leader-key"
 cask "libreoffice"
 cask "lm-studio"
 cask "logi-options+"
@@ -84,7 +79,6 @@ cask "notion-calendar"
 cask "ogdesign-eagle"
 cask "opal-composer"
 cask "origami-studio"
-cask "playcover-community"
 cask "postman"
 cask "qlvideo"
 cask "raindropio"
@@ -99,24 +93,17 @@ cask "spotify"
 cask "steam"
 cask "transmission"
 cask "typeface"
-cask "visual-studio-code"
-cask "vlc"
 cask "vnc-viewer"
 cask "voiceink"
 cask "warp"
-cask "xquartz"
-cask "zoom"
 mas "Balatro", id: 6502451661
-mas "Bear", id: 1091189122
 mas "BrightIntosh", id: 6452471855
 mas "Flighty", id: 1358823008
-mas "Gifski", id: 1351639930
 mas "iMovie", id: 408981434
 mas "Infuse", id: 1136220934
 mas "JSONPeep", id: 1458969831
 mas "Klack", id: 6446206067
 mas "mymind", id: 1532801185
-mas "PDFgear", id: 6469021132
 mas "Pieoneer", id: 6739781207
 mas "Plug", id: 1514182074
 mas "Shazam", id: 897118787
