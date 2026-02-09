@@ -251,6 +251,21 @@ config_setup() {
     return 0
 }
 
+mackup_setup() {
+    log_info "Setting up Mackup for app settings backup..."
+
+    if [[ -f "$DOTFILES_DIR/.mackup.cfg" ]]; then
+        run rm -f "$HOME/.mackup.cfg"
+        run ln -sfv "$DOTFILES_DIR/.mackup.cfg" "$HOME/.mackup.cfg"
+    else
+        log_warn ".mackup.cfg not found in dotfiles"
+    fi
+
+    log_info "Run 'mackup restore' manually after setup to restore app settings from iCloud"
+
+    return 0
+}
+
 vscode_setup() {
     log_info "Setting up VS Code..."
 
@@ -411,6 +426,57 @@ EOF
     return 0
 }
 
+dock_setup() {
+    log_info "Setting up Dock..."
+
+    if ! command -v dockutil &> /dev/null; then
+        log_warn "dockutil not found, skipping dock setup"
+        return 0
+    fi
+
+    DOCK_APPS="$DOTFILES_DIR/dock/dock-apps.txt"
+    if [[ ! -f "$DOCK_APPS" ]]; then
+        log_warn "dock-apps.txt not found, skipping dock setup"
+        return 0
+    fi
+
+    # Dock preferences
+    log_info "Setting dock preferences..."
+    run defaults write com.apple.dock orientation -string "left"
+    run defaults write com.apple.dock tilesize -int 48
+    run defaults write com.apple.dock largesize -int 54
+    run defaults write com.apple.dock magnification -bool true
+    run defaults write com.apple.dock autohide -bool false
+    run defaults write com.apple.dock minimize-to-application -bool true
+    run defaults write com.apple.dock mineffect -string "genie"
+    run defaults write com.apple.dock show-recents -bool false
+
+    # Clear existing dock apps
+    log_info "Clearing dock and adding apps..."
+    run dockutil --remove all --no-restart
+
+    # Add apps from dock-apps.txt
+    while IFS= read -r app_path; do
+        [[ -z "$app_path" || "$app_path" == \#* ]] && continue
+        if [[ -d "$app_path" ]]; then
+            log_info "  + $(basename "$app_path" .app)"
+            run dockutil --add "$app_path" --no-restart
+        else
+            log_warn "  App not found: $app_path"
+        fi
+    done < "$DOCK_APPS"
+
+    # Add Downloads folder
+    log_info "  + Downloads folder"
+    run dockutil --add "$HOME/Downloads" --sort dateadded --view fan --display folder --no-restart
+
+    # Restart Dock
+    log_info "Restarting Dock..."
+    run killall Dock
+
+    return 0
+}
+
 xcode_cl_tools() {
     log_info "Checking Xcode command line tools..."
 
@@ -468,6 +534,8 @@ main() {
     run_setup ai_tools_setup "AI coding tools" || true
     run_setup claude_setup "Claude Code configuration" || true
     run_setup xcode_cl_tools "Xcode command line tools" || true
+    run_setup mackup_setup "Mackup app settings backup" || true
+    run_setup dock_setup "Dock configuration" || true
     # run_setup macos_defaults_setup "macOS preferences" || true  # Uncomment if needed
 
     # Summary
