@@ -93,6 +93,10 @@ brew_setup() {
     if ! command -v brew &> /dev/null; then
         log_info "Installing Homebrew..."
         run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Add brew to PATH for this session (needed on Apple Silicon)
+        if [[ -x "/opt/homebrew/bin/brew" ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
     else
         log_info "Homebrew already installed"
     fi
@@ -181,8 +185,6 @@ dotfile_setup() {
     # Create symlinks for shell dotfiles in home directory
     run rm -rf "$HOME/.zshrc"
     run ln -sfv "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-    run ln -sfv "$DOTFILES_DIR/.aliases" "$HOME/.aliases"
-    run ln -sfv "$DOTFILES_DIR/.functions" "$HOME/.functions"
     run ln -sfv "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
 
     return 0
