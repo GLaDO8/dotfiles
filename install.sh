@@ -112,7 +112,7 @@ brew_setup() {
     # Install all our dependencies with bundle (See Brewfile)
     log_info "Installing brew packages and cask apps..."
     if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
-        run brew bundle install --file="$DOTFILES_DIR/Brewfile" || log_warn "Some packages failed to install"
+        run brew bundle install --verbose --file="$DOTFILES_DIR/Brewfile" || log_warn "Some packages failed to install"
     else
         log_error "Brewfile not found at $DOTFILES_DIR/Brewfile"
         return 1
