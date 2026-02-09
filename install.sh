@@ -12,6 +12,10 @@
 #
 set -o pipefail
 
+# Ask for sudo password upfront and keep it alive for the duration of the script
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -417,6 +421,10 @@ xcode_cl_tools() {
 
     log_info "Installing Xcode command line tools..."
     run xcode-select --install || log_warn "Xcode CLI tools installation may require manual intervention"
+
+    # Accept Xcode license
+    log_info "Accepting Xcode license..."
+    run sudo xcodebuild -license accept 2>/dev/null || log_warn "Xcode license acceptance failed (Xcode may not be installed yet)"
 
     return 0
 }
