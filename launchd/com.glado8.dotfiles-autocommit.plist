@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.glado8.dotfiles-autocommit</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>/Users/shreyasgupta/dotfiles/scripts/dotfiles-autocommit.sh</string>
+	</array>
+
+	<key>WatchPaths</key>
+	<array>
+		<string>/Users/shreyasgupta/dotfiles</string>
+	</array>
+
+	<key>StartInterval</key>
+	<integer>86400</integer>
+
+	<key>ThrottleInterval</key>
+	<integer>30</integer>
+
+	<key>RunAtLoad</key>
+	<true/>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+		<key>HOME</key>
+		<string>/Users/shreyasgupta</string>
+	</dict>
+
+	<key>StandardOutPath</key>
+	<string>/Users/shreyasgupta/Library/Logs/dotfiles-autocommit-stdout.log</string>
+
+	<key>StandardErrorPath</key>
+	<string>/Users/shreyasgupta/Library/Logs/dotfiles-autocommit-stderr.log</string>
+</dict>
+</plist>

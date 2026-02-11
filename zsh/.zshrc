@@ -234,3 +234,8 @@ alias ltreea='eza --tree --level=2 --long --header --group --git --icons --all'
 
 # opencode
 export PATH=/Users/shreyasgupta/.opencode/bin:$PATH
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/shreyasgupta/.lmstudio/bin"
+# End of LM Studio CLI section
+
