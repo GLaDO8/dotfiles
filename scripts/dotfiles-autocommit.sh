@@ -22,10 +22,10 @@ DRY_RUN=false
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 OP_AGENT_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 export SSH_AUTH_SOCK="$OP_AGENT_SOCK"
-# Force git to use the 1Password agent with the full expanded path —
-# the ~/.ssh/config IdentityAgent ~ may not expand in launchd context.
-# Inner double-quotes are SSH config syntax for values with spaces.
-export GIT_SSH_COMMAND="ssh -o 'IdentityAgent \"$OP_AGENT_SOCK\"'"
+# Use SSH wrapper script to pass 1Password agent with full expanded path —
+# avoids ~ expansion and quoting issues in launchd context
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export GIT_SSH_COMMAND="$SCRIPT_DIR/dotfiles-ssh.sh"
 
 # Parse arguments
 for arg in "$@"; do
