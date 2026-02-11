@@ -5,7 +5,7 @@
 [commit]
 	gpgsign = true
 [user]
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEwa/EkgO11I3RqkFrzJ/gfayi1vxabL8MAs3kGufgdT
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKZfs6+8JWBpnlVQso/W2HrTZK33M8BKEEnn+yc+i/zd
 	name = GLaDO8
 	email = gshreyas@icloud.com
 [core]

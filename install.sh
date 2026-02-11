@@ -426,6 +426,19 @@ EOF
     return 0
 }
 
+autocommit_setup() {
+    log_info "Setting up dotfiles auto-backup agent..."
+
+    if [[ -x "$DOTFILES_DIR/scripts/install-autocommit.sh" ]]; then
+        run "$DOTFILES_DIR/scripts/install-autocommit.sh"
+    else
+        log_error "install-autocommit.sh not found or not executable"
+        return 1
+    fi
+
+    return 0
+}
+
 dock_setup() {
     log_info "Setting up Dock..."
 
@@ -535,6 +548,7 @@ main() {
     run_setup claude_setup "Claude Code configuration" || true
     run_setup xcode_cl_tools "Xcode command line tools" || true
     run_setup mackup_setup "Mackup app settings backup" || true
+    run_setup autocommit_setup "Dotfiles auto-backup agent" || true
     run_setup dock_setup "Dock configuration" || true
     # run_setup macos_defaults_setup "macOS preferences" || true  # Uncomment if needed
 
