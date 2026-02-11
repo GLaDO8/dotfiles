@@ -18,9 +18,13 @@ REMOTE="origin"
 BRANCH="master"
 DRY_RUN=false
 
-# Ensure launchd has a usable PATH and SSH agent
+# Ensure launchd has a usable PATH and SSH agent (1Password)
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+OP_AGENT_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+export SSH_AUTH_SOCK="$OP_AGENT_SOCK"
+# Force git to use the 1Password agent with the full expanded path —
+# the ~/.ssh/config IdentityAgent ~ may not expand in launchd context
+export GIT_SSH_COMMAND="ssh -o IdentityAgent='$OP_AGENT_SOCK'"
 
 # Parse arguments
 for arg in "$@"; do
