@@ -189,6 +189,7 @@ dotfile_setup() {
     # Create symlinks for shell dotfiles in home directory
     run rm -rf "$HOME/.zshrc"
     run ln -sfv "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+    run ln -sfv "$DOTFILES_DIR/zsh/.zsh_plugins.txt" "$HOME/.zsh_plugins.txt"
     run ln -sfv "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
 
     return 0
