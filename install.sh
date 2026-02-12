@@ -299,6 +299,45 @@ vscode_setup() {
     return 0
 }
 
+cursor_setup() {
+    log_info "Setting up Cursor..."
+
+    CURSOR_USER="$HOME/Library/Application Support/Cursor/User"
+    run mkdir -p "$CURSOR_USER"
+
+    # Settings
+    if [[ -f "$DOTFILES_DIR/cursor/settings.json" ]]; then
+        run ln -sfv "$DOTFILES_DIR/cursor/settings.json" "$CURSOR_USER/settings.json"
+    else
+        log_warn "Cursor settings not found, skipping..."
+    fi
+
+    # Keybindings
+    if [[ -f "$DOTFILES_DIR/cursor/keybindings.json" ]]; then
+        run ln -sfv "$DOTFILES_DIR/cursor/keybindings.json" "$CURSOR_USER/keybindings.json"
+    else
+        log_warn "Cursor keybindings not found, skipping..."
+    fi
+
+    # Extensions
+    if command -v cursor &> /dev/null; then
+        if [[ -f "$DOTFILES_DIR/cursor/extensions.txt" ]]; then
+            log_info "Installing Cursor extensions..."
+            if $DRY_RUN; then
+                echo -e "${YELLOW}[DRY-RUN]${NC} Would install $(wc -l < "$DOTFILES_DIR/cursor/extensions.txt" | tr -d ' ') extensions"
+            else
+                while IFS= read -r extension; do
+                    cursor --install-extension "$extension" --force 2>/dev/null || log_warn "Failed to install: $extension"
+                done < "$DOTFILES_DIR/cursor/extensions.txt"
+            fi
+        fi
+    else
+        log_warn "Cursor CLI not found. Install extensions manually after installing Cursor."
+    fi
+
+    return 0
+}
+
 ai_tools_setup() {
     log_info "Installing AI coding tools..."
 
@@ -545,6 +584,7 @@ main() {
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
     run_setup vscode_setup "VS Code" || true
+    run_setup cursor_setup "Cursor" || true
     run_setup ai_tools_setup "AI coding tools" || true
     run_setup claude_setup "Claude Code configuration" || true
     run_setup xcode_cl_tools "Xcode command line tools" || true
