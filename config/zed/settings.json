@@ -12,19 +12,16 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
-  "edit_predictions": {
-    "provider": "zed"
-  },
   "search": {
     "whole_word": true,
-    "center_on_match": true
+    "center_on_match": true,
   },
   "telemetry": {
     "diagnostics": true,
-    "metrics": false
+    "metrics": false,
   },
   "session": {
-    "trust_all_worktrees": true
+    "trust_all_worktrees": true,
   },
   "icon_theme": {
     "mode": "system",
@@ -104,6 +101,9 @@
       "default_config_options": {},
       "favorite_config_option_values": {},
     },
+  },
+  "features": {
+    "edit_prediction_provider": "zed",
   },
   "agent": {
     "play_sound_when_agent_done": true,
