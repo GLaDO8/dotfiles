@@ -12,3 +12,5 @@
 	sshCommand = ssh -i ~/.ssh/id_rsa
 [init]
 	defaultBranch = main
+[url "git@github.com:"]
+	insteadOf = https://github.com/
