@@ -12,6 +12,9 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "edit_predictions": {
+    "provider": "zed"
+  },
   "search": {
     "whole_word": true,
     "center_on_match": true,
@@ -101,9 +104,6 @@
       "default_config_options": {},
       "favorite_config_option_values": {},
     },
-  },
-  "features": {
-    "edit_prediction_provider": "zed",
   },
   "agent": {
     "play_sound_when_agent_done": true,
