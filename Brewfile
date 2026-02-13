@@ -113,6 +113,8 @@ cask "vnc-viewer"
 cask "voiceink"
 cask "warp"
 cask "zed"
+cask "bambu-studio"
+cask "nordvpn"
 mas "Balatro", id: 6502451661
 mas "BrightIntosh", id: 6452471855
 mas "Flighty", id: 1358823008
