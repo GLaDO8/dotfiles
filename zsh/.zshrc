@@ -22,6 +22,15 @@ path=(
 )
 export PATH
 
+# Unlock macOS Keychain for SSH sessions (needed for Claude Code)
+claude() {
+    if [ -n "$SSH_CONNECTION" ] && [ -z "$KEYCHAIN_UNLOCKED" ]; then
+        security unlock-keychain ~/Library/Keychains/login.keychain-db
+        export KEYCHAIN_UNLOCKED=true
+    fi
+    command claude "$@"
+}
+
 # History / behavior
 setopt inc_append_history share_history hist_ignore_all_dups hist_reduce_blanks
 setopt autocd interactivecomments nomatch notify
