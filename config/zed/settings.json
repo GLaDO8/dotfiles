@@ -78,7 +78,7 @@
   "project_panel": {
     "file_icons": true,
     "git_status": true,
-    "button": true,
+    "button": false,
     "hide_root": true,
     "indent_size": 20.0,
     "entry_spacing": "standard",
