@@ -197,6 +197,7 @@ gac()  { git add . && git commit -m "$1"; }
 
 # Added by LM Studio CLI (lms)
 alias claude-usage="$HOME/.claude/usage-monitor.sh"
+alias cw="zellij --layout claude"
 
 # Google Cloud SDK (optional)
 if command -v gcloud >/dev/null 2>&1; then
