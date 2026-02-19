@@ -38,6 +38,7 @@ window-padding-x = 8
 window-padding-y = 8
 
 # ===== macOS =====
+macos-option-as-alt = true
 macos-titlebar-style = native
 keybind = cmd+t=new_tab
 keybind = global:cmd+backquote=toggle_quick_terminal
