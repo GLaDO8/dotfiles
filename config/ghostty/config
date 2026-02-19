@@ -48,21 +48,3 @@ copy-on-select = true
 
 # ===== SHELL INTEGRATION =====
 shell-integration-features = no-cursor
-
-# ===== KEYBOARD TEXT SELECTION =====
-# Shift+Arrow: Character-by-character selection
-keybind = shift+left=adjust_selection:left
-keybind = shift+right=adjust_selection:right
-keybind = shift+up=adjust_selection:up
-keybind = shift+down=adjust_selection:down
-
-# Shift+Option+Arrow: Word-ish selection (to line boundaries)
-keybind = shift+alt+left=adjust_selection:beginning_of_line
-keybind = shift+alt+right=adjust_selection:end_of_line
-
-# Shift+Cmd+Arrow: Full document selection
-keybind = shift+super+up=adjust_selection:beginning
-keybind = shift+super+down=adjust_selection:end
-
-# Copy with Cmd+C only when text is selected (otherwise sends interrupt)
-keybind = performable:super+c=copy_to_clipboard
