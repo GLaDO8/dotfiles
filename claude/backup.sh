@@ -3,80 +3,30 @@
 #
 # Usage: ./backup.sh
 #
-# This script copies configuration FROM the source locations TO dotfiles.
+# Thin wrapper around the shared backup-config library.
+# Called directly and also by the SessionEnd hook in settings.json.
+#
 # Source of truth: ~/.claude/ and ~/.agents/skills/
-# Backup location: dotfiles/claude/backup/
+# Backup location: dotfiles/claude/
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKUP_DIR="$SCRIPT_DIR/backup"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Source shared libraries
+source "$DOTFILES_DIR/scripts/lib/common.sh"
+source "$DOTFILES_DIR/scripts/lib/backup-config.sh"
 
 echo "Backing up Claude Code configuration..."
+echo ""
 
-# Create backup directories
-mkdir -p "$BACKUP_DIR/skills"
-mkdir -p "$BACKUP_DIR/agents-skills"
-mkdir -p "$BACKUP_DIR/hooks"
-mkdir -p "$BACKUP_DIR/plugins"
-
-# Backup config files
-echo "  - CLAUDE.md"
-cp ~/.claude/CLAUDE.md "$BACKUP_DIR/"
-
-echo "  - settings.json"
-cp ~/.claude/settings.json "$BACKUP_DIR/"
-
-echo "  - statusline-command.sh"
-cp ~/.claude/statusline-command.sh "$BACKUP_DIR/"
-
-# Backup hooks
-if [ -d ~/.claude/hooks ]; then
-    echo "  - Hooks from ~/.claude/hooks/"
-    for hook_file in ~/.claude/hooks/*; do
-        if [ -f "$hook_file" ]; then
-            hook_name=$(basename "$hook_file")
-            # Skip hidden files
-            if [[ "$hook_name" != .* ]]; then
-                echo "    - $hook_name"
-                cp "$hook_file" "$BACKUP_DIR/hooks/"
-            fi
-        fi
-    done
-fi
-
-# Backup plugins list
-if [ -f ~/.claude/plugins/installed_plugins.json ]; then
-    echo "  - installed_plugins.json"
-    cp ~/.claude/plugins/installed_plugins.json "$BACKUP_DIR/plugins/"
-fi
-
-# Backup personal skills (excluding symlinks to community skills)
-echo "  - Personal skills from ~/.claude/skills/"
-for skill_dir in ~/.claude/skills/*/; do
-    skill_name=$(basename "$skill_dir")
-    # Skip if it's a symlink (community skills are symlinked to ~/.agents/skills/)
-    if [ ! -L "${skill_dir%/}" ]; then
-        echo "    - $skill_name"
-        rsync -a --delete "$skill_dir" "$BACKUP_DIR/skills/$skill_name/"
-    fi
-done
-
-# Backup community skills from ~/.agents/skills/
-echo "  - Community skills from ~/.agents/skills/"
-for skill_dir in ~/.agents/skills/*/; do
-    skill_name=$(basename "$skill_dir")
-    # Skip hidden files and .DS_Store
-    if [[ "$skill_name" != .* ]]; then
-        echo "    - $skill_name"
-        rsync -a --delete "$skill_dir" "$BACKUP_DIR/agents-skills/$skill_name/"
-    fi
-done
+sync_claude_configs "false"
 
 echo ""
 echo "Backup complete!"
 echo ""
-echo "Backed up to: $BACKUP_DIR"
+echo "Backed up to: $SCRIPT_DIR"
 echo ""
 echo "Don't forget to commit and push:"
-echo "  cd $SCRIPT_DIR && git add -A && git commit -m 'Backup Claude config' && git push"
+echo "  cd $DOTFILES_DIR && git add -A && git commit -m 'Backup Claude config' && git push"

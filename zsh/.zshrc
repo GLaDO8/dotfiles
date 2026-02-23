@@ -31,16 +31,14 @@ claude() {
     command claude "$@"
 }
 
+# LS_COLORS for completion menu coloring (macOS doesn't set this by default)
+export LS_COLORS='di=1;34:ln=36:so=35:pi=33:ex=1;32:bd=1;33:cd=1;33:su=1;31:sg=1;31:tw=34;42:ow=34;43:*.tar=31:*.gz=31:*.zip=31:*.zst=31:*.jpg=35:*.png=35:*.svg=35:*.mp4=35:*.mp3=35:*.md=33:*.json=33:*.yml=33:*.yaml=33:*.toml=33:*.conf=33:*.js=32:*.ts=32:*.tsx=32:*.jsx=32:*.py=32:*.rb=32:*.rs=32:*.go=32:*.sh=32:*.zsh=32:*.swift=32'
+
 # History / behavior
 setopt inc_append_history share_history hist_ignore_all_dups hist_reduce_blanks
 setopt autocd interactivecomments nomatch notify
 
-# Completions (cached)
-autoload -Uz compinit
-zcompdump=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump
-mkdir -p "${zcompdump:h}"
-
-# Additional fpath for zsh-completions and Homebrew completions
+# Additional fpath for Homebrew completions
 fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 
 # Docker CLI completions (load only when Docker is present)
@@ -48,7 +46,27 @@ if command -v docker >/dev/null 2>&1; then
   fpath=("$HOME/.docker/completions" $fpath)
 fi
 
-compinit -C -d "$zcompdump"
+# ═══════════════════════════════════════════════════════════════════════════════
+# Autocomplete: live-filtered completion menu as you type
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Start showing completions after 1 character (0 = immediately, too noisy)
+zstyle ':autocomplete:*' min-input 1
+
+# 100ms delay to avoid lag on fast typing
+zstyle ':autocomplete:*' delay 0.1
+
+# Cap completion wait time (prevents hangs on slow completers like package managers)
+zstyle ':autocomplete:*' timeout 1.0
+
+# Show 8 lines in the dropdown (tune to taste)
+zstyle ':autocomplete:*:*' list-lines 16
+
+# Auto-insert the unambiguous common prefix before showing menu
+zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
+
+# Pass cache flag to compinit for speed
+zstyle '*:compinit' arguments -C
 
 # bun completions
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
@@ -63,8 +81,28 @@ PROMPT='%B%F{yellow}%T%f %F{cyan}%~%f %F{magenta}${vcs_info_msg_0_}%f %F{white}$
 # Antidote plugins (fast loader)
 if [[ -f /opt/homebrew/share/antidote/antidote.zsh ]]; then
   source /opt/homebrew/share/antidote/antidote.zsh
-  antidote load ~/.zsh_plugins.txt
+  antidote load ~/.zsh_plugins.txt 2> >(command grep -v 'unhandled ZLE widget' >&2)
 fi
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Keybinding overrides (must be after plugin load)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# List completions in columns (top-to-bottom) instead of rows (left-to-right)
+setopt nolistrowsfirst
+
+# Tab: insert top completion / cycle through menu
+bindkey '\t' menu-select
+bindkey "$terminfo[kcbt]" menu-select  # Shift+Tab: reverse cycle
+
+# Enter in menu: accept and run (don't just exit menu)
+bindkey -M menuselect '\r' .accept-line
+
+# Autosuggestions: use completion + history strategy (ghost text for file paths too)
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion history)
+
+# Prevent autosuggestions from being slow on long buffers
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SUPERCHARGED ZSH: Tool Initializations
@@ -86,7 +124,7 @@ eval "$(mcfly init zsh)"
 # Run `direnv allow` once per directory to authorize
 eval "$(direnv hook zsh)"
 
-# fzf (fuzzy finder foundation) - powers Ctrl+T, Alt+C, and fzf-tab
+# fzf (fuzzy finder foundation) - powers Ctrl+T and Alt+C
 # Ctrl+T: fuzzy file finder, Alt+C: fuzzy cd, Ctrl+R: handled by mcfly
 source <(fzf --zsh)
 
@@ -94,39 +132,11 @@ source <(fzf --zsh)
 # Note: Shell integration (Alt+E) not available in v0.30.0
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# fzf-tab Configuration (ayu-dark themed)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-# Color scheme matching your ayu-dark Ghostty theme
-zstyle ':fzf-tab:*' fzf-flags --color=bg+:#1b3a5b,bg:#0b0e14,spinner:#ff8f40,hl:#ffb454 \
-  --color=fg:#bfbdb6,header:#ffb454,info:#e6b450,pointer:#ff8f40 \
-  --color=marker:#ff8f40,fg+:#bfbdb6,prompt:#e6b450,hl+:#ffb454
-
-# Preview file contents when completing files
-zstyle ':fzf-tab:complete:*:*' fzf-preview 'less ${(Q)realpath}'
-
-# Preview directory contents when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-
-# Preview git diffs for git commands
-zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
-  'git diff $word | delta 2>/dev/null || git diff $word'
-
-# Switch between completion groups with < and >
-zstyle ':fzf-tab:*' switch-group '<' '>'
-
-# Show completion group headers
-zstyle ':fzf-tab:*' show-group full
-
-# ═══════════════════════════════════════════════════════════════════════════════
 # Enhanced Completion Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Case-insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-# Menu selection with arrow keys
-zstyle ':completion:*' menu select
+# Case-insensitive + prefix matching (works well with autocomplete's insert-unambiguous)
+zstyle ':completion:*:*' matcher-list 'm:{[:lower:]-}={[:upper:]_}' '+r:|[.]=**'
 
 # Descriptions for completions
 zstyle ':completion:*:descriptions' format '[%d]'
@@ -136,6 +146,9 @@ zstyle ':completion:*' group-name ''
 
 # Colors for completion listings (files, dirs, etc.)
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# Don't pack columns tightly — gives more breathing room
+zstyle ':completion:*' list-packed no
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Custom AI Helper Function (leverages Claude CLI)

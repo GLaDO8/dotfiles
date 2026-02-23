@@ -133,6 +133,20 @@ output_json() {
 }
 
 # ============================================================================
+# Scan Progress Helpers
+# ============================================================================
+# Refreshing single-line status on stderr (stdout stays clean for captures).
+# Uses \r (carriage return) + \033[K (clear to end of line).
+
+_scan_status() {
+    printf '\r\033[K  ● %s' "$1" >&2
+}
+
+_scan_done() {
+    printf '\r\033[K' >&2
+}
+
+# ============================================================================
 # Utility Functions
 # ============================================================================
 

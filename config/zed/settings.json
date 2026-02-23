@@ -12,15 +12,18 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "tab_bar": {
+    "show_pinned_tabs_in_separate_row": false,
+  },
   "edit_predictions": {
-    "provider": "zed"
+    "provider": "zed",
   },
   "search": {
     "whole_word": true,
     "center_on_match": true,
   },
   "telemetry": {
-    "diagnostics": true,
+    "diagnostics": false,
     "metrics": false,
   },
   "session": {
@@ -93,7 +96,7 @@
   },
   "title_bar": {
     "show_user_menu": true,
-    "show_menus": false,
+    "show_menus": true,
     "show_user_picture": true,
     "show_onboarding_banner": true,
     "show_branch_icon": true,
@@ -108,7 +111,6 @@
   "agent": {
     "play_sound_when_agent_done": true,
     "dock": "left",
-    "always_allow_tool_actions": false,
     "default_model": {
       "provider": "anthropic",
       "model": "claude-3-5-sonnet-latest",

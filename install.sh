@@ -249,6 +249,43 @@ config_setup() {
         log_warn "GitHub CLI config not found, skipping..."
     fi
 
+    # Zellij
+    run mkdir -p "$HOME/.config/zellij/layouts"
+    if [[ -f "$DOTFILES_DIR/config/zellij/config.kdl" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
+        for layout in "$DOTFILES_DIR/config/zellij/layouts"/*.kdl; do
+            [[ -f "$layout" ]] && run ln -sfv "$layout" "$HOME/.config/zellij/layouts/$(basename "$layout")"
+        done
+    else
+        log_warn "Zellij config not found, skipping..."
+    fi
+
+    # Helix
+    run mkdir -p "$HOME/.config/helix"
+    if [[ -f "$DOTFILES_DIR/config/helix/config.toml" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/helix/config.toml" "$HOME/.config/helix/config.toml"
+    else
+        log_warn "Helix config not found, skipping..."
+    fi
+
+    # Neovim
+    run mkdir -p "$HOME/.config/nvim"
+    if [[ -d "$DOTFILES_DIR/config/nvim" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+        [[ -f "$DOTFILES_DIR/config/nvim/lazy-lock.json" ]] && run ln -sfv "$DOTFILES_DIR/config/nvim/lazy-lock.json" "$HOME/.config/nvim/lazy-lock.json"
+    else
+        log_warn "Neovim config not found, skipping..."
+    fi
+
+    # Yazi
+    run mkdir -p "$HOME/.config/yazi"
+    if [[ -d "$DOTFILES_DIR/config/yazi" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/yazi/yazi.toml" "$HOME/.config/yazi/yazi.toml"
+        run ln -sfv "$DOTFILES_DIR/config/yazi/keymap.toml" "$HOME/.config/yazi/keymap.toml"
+    else
+        log_warn "Yazi config not found, skipping..."
+    fi
+
     return 0
 }
 
@@ -382,20 +419,20 @@ claude_setup() {
     run rm -f "$HOME/.claude/statusline-command.sh"
 
     # Copy config files from backup
-    if [[ -d "$DOTFILES_DIR/claude/backup" ]]; then
+    if [[ -d "$DOTFILES_DIR/claude" ]]; then
         log_info "Copying Claude config files..."
-        run cp "$DOTFILES_DIR/claude/backup/CLAUDE.md" "$HOME/.claude/" 2>/dev/null || true
-        run cp "$DOTFILES_DIR/claude/backup/settings.json" "$HOME/.claude/" 2>/dev/null || true
-        run cp "$DOTFILES_DIR/claude/backup/statusline-command.sh" "$HOME/.claude/" 2>/dev/null || true
+        run cp "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/" 2>/dev/null || true
+        run cp "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/" 2>/dev/null || true
+        run cp "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/" 2>/dev/null || true
         run chmod +x "$HOME/.claude/statusline-command.sh" 2>/dev/null || true
     else
         log_warn "Claude backup directory not found, skipping config copy..."
     fi
 
     # Copy hooks
-    if [[ -d "$DOTFILES_DIR/claude/backup/hooks" ]]; then
+    if [[ -d "$DOTFILES_DIR/claude/hooks" ]]; then
         log_info "Copying hooks to ~/.claude/hooks/..."
-        for hook_file in "$DOTFILES_DIR/claude/backup/hooks"/*; do
+        for hook_file in "$DOTFILES_DIR/claude/hooks"/*; do
             if [[ -f "$hook_file" ]]; then
                 hook_name=$(basename "$hook_file")
                 log_info "  - $hook_name"
@@ -406,9 +443,9 @@ claude_setup() {
     fi
 
     # Copy personal skills
-    if [[ -d "$DOTFILES_DIR/claude/backup/skills" ]]; then
+    if [[ -d "$DOTFILES_DIR/claude/skills" ]]; then
         log_info "Copying personal skills to ~/.claude/skills/..."
-        for skill_dir in "$DOTFILES_DIR/claude/backup/skills"/*/; do
+        for skill_dir in "$DOTFILES_DIR/claude/skills"/*/; do
             if [[ -d "$skill_dir" ]]; then
                 skill_name=$(basename "$skill_dir")
                 log_info "  - $skill_name"
@@ -419,9 +456,9 @@ claude_setup() {
     fi
 
     # Copy community skills
-    if [[ -d "$DOTFILES_DIR/claude/backup/agents-skills" ]]; then
+    if [[ -d "$DOTFILES_DIR/claude/agents-skills" ]]; then
         log_info "Copying community skills to ~/.agents/skills/..."
-        for skill_dir in "$DOTFILES_DIR/claude/backup/agents-skills"/*/; do
+        for skill_dir in "$DOTFILES_DIR/claude/agents-skills"/*/; do
             if [[ -d "$skill_dir" ]]; then
                 skill_name=$(basename "$skill_dir")
                 log_info "  - $skill_name"
@@ -443,10 +480,10 @@ claude_setup() {
     done
 
     # Copy plugins list
-    if [[ -f "$DOTFILES_DIR/claude/backup/plugins/installed_plugins.json" ]]; then
+    if [[ -f "$DOTFILES_DIR/claude/plugins/installed_plugins.json" ]]; then
         log_info "Copying installed_plugins.json..."
         run mkdir -p "$HOME/.claude/plugins"
-        run cp "$DOTFILES_DIR/claude/backup/plugins/installed_plugins.json" "$HOME/.claude/plugins/"
+        run cp "$DOTFILES_DIR/claude/plugins/installed_plugins.json" "$HOME/.claude/plugins/"
     fi
 
     # Create settings.local.json template if it doesn't exist

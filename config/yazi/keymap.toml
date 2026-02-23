@@ -1,0 +1,9 @@
+[[mgr.prepend_keymap]]
+on   = "<Enter>"
+run  = "shell -- ~/.local/bin/yazi-open-in-helix %h"
+desc = "Open in Helix"
+
+[[mgr.prepend_keymap]]
+on   = "o"
+run  = "open"
+desc = "Open (default)"

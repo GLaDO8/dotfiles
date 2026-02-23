@@ -1,21 +1,20 @@
-# Additional completions (adds to fpath, must be before compinit)
+# Additional completions (fpath only — autocomplete handles compinit)
 zsh-users/zsh-completions kind:fpath path:src
 
-# fzf-tab (replaces default tab completion with fuzzy finder)
-# MUST load after compinit, before autosuggestions
-Aloxaf/fzf-tab
+# Live completion menu as you type
+marlonrichert/zsh-autocomplete
 
-# Autosuggestions (fish-style suggestions as you type)
+# Ghost text suggestions (MUST be after autocomplete)
 zsh-users/zsh-autosuggestions
 
-# Alias reminders ("Hey, you have an alias for that!")
+# Alias reminders
 MichaelAquilina/zsh-you-should-use
 
-# Auto-close brackets, quotes, etc.
+# Auto-close brackets, quotes
 hlissner/zsh-autopair
 
-# Git commands with fzf integration
+# Git commands with fzf
 wfxr/forgit
 
-# Syntax highlighting (MUST be last - highlights everything)
+# Syntax highlighting (MUST be last)
 zdharma-continuum/fast-syntax-highlighting

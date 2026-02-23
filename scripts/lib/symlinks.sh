@@ -34,6 +34,21 @@ EXPECTED_SYMLINKS=(
     # GitHub CLI
     "$HOME/.config/gh/config.yml:config/gh/config.yml"
 
+    # Zellij
+    "$HOME/.config/zellij/config.kdl:config/zellij/config.kdl"
+    "$HOME/.config/zellij/layouts/claude.kdl:config/zellij/layouts/claude.kdl"
+
+    # Helix
+    "$HOME/.config/helix/config.toml:config/helix/config.toml"
+
+    # Neovim
+    "$HOME/.config/nvim/init.lua:config/nvim/init.lua"
+    "$HOME/.config/nvim/lazy-lock.json:config/nvim/lazy-lock.json"
+
+    # Yazi
+    "$HOME/.config/yazi/yazi.toml:config/yazi/yazi.toml"
+    "$HOME/.config/yazi/keymap.toml:config/yazi/keymap.toml"
+
     # VS Code
     "$HOME/Library/Application Support/Code/User/settings.json:vscode/settings.json"
 )
