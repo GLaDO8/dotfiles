@@ -1,0 +1,10 @@
+theme = "ayu_dark"
+
+[editor]
+
+[editor.soft-wrap]
+enable = true
+
+[editor.file-picker]
+hidden = false
+max-depth = 6

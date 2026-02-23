@@ -1,0 +1,16 @@
+layout {
+    pane size=1 borderless=true {
+        plugin location="zellij:compact-bar"
+    }
+    pane split_direction="vertical" {
+        // Left column Claude + terminal
+        pane size="50%" split_direction="horizontal" {
+            pane name="Claude" command="claude"
+            pane size="30%" name="Terminal"
+        }
+        // Right column (50%): Helix editor
+        pane size="50%" name="Editor" command="hx" {
+            args "."
+        }
+    }
+}

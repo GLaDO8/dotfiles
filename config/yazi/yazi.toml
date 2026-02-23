@@ -1,0 +1,7 @@
+[mgr]
+ratio = [0, 1, 0]
+show_hidden = true
+
+[preview]
+max_width = 0
+max_height = 0
