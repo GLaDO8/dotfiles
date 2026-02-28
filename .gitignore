@@ -2,6 +2,7 @@
 config/gh/hosts.yml
 ssh/id_*
 ssh/*.pub
+.secrets
 
 # OS files
 .DS_Store
