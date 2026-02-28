@@ -262,9 +262,6 @@ export PATH=/Users/shreyasgupta/.opencode/bin:$PATH
 export PATH="$PATH:/Users/shreyasgupta/.lmstudio/bin"
 # End of LM Studio CLI section
 
-# Midscene iOS Automation (vision model for UI grounding)
-export MIDSCENE_MODEL_NAME="qwen/qwen3-vl-235b-a22b-instruct"
-export MIDSCENE_MODEL_API_KEY="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"
-export MIDSCENE_MODEL_BASE_URL="https://openrouter.ai/api/v1"
-export MIDSCENE_MODEL_FAMILY="qwen3-vl"
+# Secrets (API keys, tokens) — loaded from ~/.secrets (gitignored)
+[ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
 
