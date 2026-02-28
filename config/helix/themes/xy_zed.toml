@@ -1,0 +1,149 @@
+# xy-zed theme for Helix
+# Ported from zarifpour/xy-zed (Zed dark theme)
+# Matches Ghostty XY-ZED terminal palette
+
+# Syntax highlighting
+"type" = "cyan"
+"type.builtin" = "cyan"
+"type.enum.variant" = "cyan"
+"constructor" = "red_pastel"
+"constant" = "red_pastel"
+"constant.builtin" = "red_pastel"
+"constant.character" = "red_pastel"
+"constant.numeric" = "light_green"
+"string" = "orange"
+"string.regexp" = "red_pastel"
+"string.special" = "orange"
+"string.special.path" = "orange"
+"string.escape" = "deep_blue"
+"comment" = { fg = "comment_green", modifiers = ["italic"] }
+"variable" = { fg = "bright_blue", modifiers = ["bold"] }
+"variable.parameter" = "baby_blue"
+"variable.builtin" = "bright_blue"
+"variable.other.member" = "baby_blue"
+"label" = "baby_blue"
+"punctuation" = "light_yellow"
+"punctuation.bracket" = "light_yellow"
+"punctuation.delimiter" = "light_yellow"
+"punctuation.special" = "red_pastel"
+"keyword" = "purple"
+"keyword.control" = "purple"
+"keyword.control.return" = "purple"
+"keyword.control.conditional" = "purple"
+"keyword.control.repeat" = "purple"
+"keyword.control.import" = "purple"
+"keyword.control.exception" = "purple"
+"keyword.function" = "purple"
+"keyword.operator" = "yellow"
+"keyword.directive" = "purple"
+"keyword.storage" = "purple"
+"operator" = "yellow"
+"function" = "light_yellow"
+"function.builtin" = "light_yellow"
+"function.method" = "light_yellow"
+"function.macro" = "purple"
+"tag" = "neon_green"
+"tag.builtin" = "neon_green"
+"namespace" = "purple"
+"attribute" = { fg = "deep_blue", modifiers = ["italic"] }
+"boolean" = { fg = "boolean_green", modifiers = ["italic"] }
+"number" = "light_green"
+"markup.heading" = { fg = "purple", modifiers = ["bold"] }
+"markup.list" = "bright_blue"
+"markup.bold" = { fg = "foreground", modifiers = ["bold"] }
+"markup.italic" = { fg = "purple", modifiers = ["italic"] }
+"markup.strikethrough" = { modifiers = ["crossed_out"] }
+"markup.raw.block" = "orange"
+"markup.raw.inline" = "orange"
+"markup.link.url" = { fg = "deep_blue", modifiers = ["underlined"] }
+"markup.link.text" = "cyan"
+"markup.link.label" = "purple"
+"markup.quote" = { fg = "comment_green", modifiers = ["italic"] }
+"diff.plus" = "neon_green"
+"diff.minus" = "red"
+"diff.delta" = "yellow_diag"
+
+# Interface
+"ui.background" = { bg = "background" }
+"ui.cursor" = { fg = "background", bg = "accent" }
+"ui.cursor.primary" = { fg = "background", bg = "accent" }
+"ui.cursor.insert" = { fg = "background", bg = "bright_blue" }
+"ui.cursor.select" = { fg = "background", bg = "purple" }
+"ui.cursor.match" = { fg = "red", modifiers = ["bold"] }
+"ui.cursorline" = { bg = "active_line" }
+"ui.linenr" = "line_number"
+"ui.linenr.selected" = { fg = "accent", modifiers = ["bold"] }
+"ui.statusline" = { fg = "foreground", bg = "statusbar" }
+"ui.statusline.normal" = { fg = "background", bg = "accent" }
+"ui.statusline.insert" = { fg = "background", bg = "bright_blue" }
+"ui.statusline.select" = { fg = "background", bg = "purple" }
+"ui.statusline.inactive" = { fg = "muted", bg = "statusbar" }
+"ui.popup" = { fg = "foreground", bg = "elevated" }
+"ui.window" = "border"
+"ui.help" = { fg = "foreground", bg = "elevated" }
+"ui.text" = "foreground"
+"ui.text.focus" = { fg = "foreground", bg = "selection" }
+"ui.text.info" = "foreground"
+"ui.virtual.whitespace" = "line_number"
+"ui.virtual.ruler" = { bg = "active_line" }
+"ui.virtual.inlay-hint" = { fg = "muted" }
+"ui.virtual.jump-label" = { fg = "red", modifiers = ["bold"] }
+"ui.menu" = { fg = "foreground", bg = "elevated" }
+"ui.menu.selected" = { fg = "foreground", bg = "selection" }
+"ui.menu.scroll" = { fg = "accent", bg = "elevated" }
+"ui.selection" = { bg = "selection" }
+"ui.selection.primary" = { bg = "selection" }
+"ui.bufferline" = { fg = "muted", bg = "background" }
+"ui.bufferline.active" = { fg = "foreground", bg = "active_line" }
+"ui.bufferline.background" = { bg = "background" }
+"ui.debug" = { fg = "red" }
+"ui.highlight.frameline" = { bg = "search_match" }
+
+"warning" = "yellow_diag"
+"error" = { fg = "red", modifiers = ["bold"] }
+"info" = { fg = "teal", modifiers = ["bold"] }
+"hint" = { fg = "cyan" }
+"diagnostic.hint" = { underline = { color = "cyan", style = "curl" } }
+"diagnostic.info" = { underline = { color = "teal", style = "curl" } }
+"diagnostic.warning" = { underline = { color = "yellow_diag", style = "curl" } }
+"diagnostic.error" = { underline = { color = "red", style = "curl" } }
+"diagnostic.unnecessary" = { modifiers = ["dim"] }
+"diagnostic.deprecated" = { modifiers = ["crossed_out"] }
+
+"special" = "accent"
+
+[palette]
+# Core surface colors
+background = "#121212"
+elevated = "#1b1b1b"
+statusbar = "#0a0a0a"
+foreground = "#f7f7f8"
+muted = "#aca8ae"
+accent = "#7de486"
+
+# UI state colors (pre-blended, no alpha)
+active_line = "#191f19"
+selection = "#2c442e"
+search_match = "#3c291c"
+border = "#303030"
+line_number = "#3b3b3b"
+
+# Syntax colors — from xy-zed
+purple = "#c678dd"
+light_yellow = "#DCDCAA"
+cyan = "#08e7c5"
+bright_blue = "#4cc2fb"
+baby_blue = "#9cdcfe"
+orange = "#CD9069"
+deep_blue = "#4788CC"
+red_pastel = "#FF5858"
+comment_green = "#6A9955"
+light_green = "#B4CDA8"
+boolean_green = "#22c942"
+yellow = "#FFFF00"
+neon_green = "#7ce184"
+
+# Diagnostic colors
+red = "#f82871"
+yellow_diag = "#fee56c"
+teal = "#10a793"
