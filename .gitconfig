@@ -10,7 +10,17 @@
 	email = gshreyas@icloud.com
 [core]
 	sshCommand = ssh -i ~/.ssh/id_rsa
+	pager = delta
 [init]
 	defaultBranch = main
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	side-by-side = false
+[merge]
+	conflictstyle = diff3
+[diff]
+	colorMoved = default
