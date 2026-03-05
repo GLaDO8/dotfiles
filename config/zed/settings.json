@@ -112,8 +112,9 @@
     "play_sound_when_agent_done": true,
     "dock": "left",
     "default_model": {
+      "enable_thinking": true,
       "provider": "anthropic",
-      "model": "claude-3-5-sonnet-latest",
+      "model": "claude-opus-4-6-1m-context-thinking-latest",
     },
   },
   "vim_mode": false,
