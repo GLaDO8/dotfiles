@@ -22,6 +22,11 @@
           "paths": [
             "/home/blueberry"
           ]
+        },
+        {
+          "paths": [
+            "/home/blueberry/openclaw-config"
+          ]
         }
       ]
     }
