@@ -17,7 +17,13 @@
       "host": "100.84.100.85",
       "username": "blueberry",
       "args": [],
-      "projects": []
+      "projects": [
+        {
+          "paths": [
+            "/home/blueberry"
+          ]
+        }
+      ]
     }
   ],
   "tab_bar": {
