@@ -12,6 +12,14 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "ssh_connections": [
+    {
+      "host": "100.84.100.85",
+      "username": "blueberry",
+      "args": [],
+      "projects": []
+    }
+  ],
   "tab_bar": {
     "show_pinned_tabs_in_separate_row": false,
   },
