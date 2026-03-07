@@ -1,6 +1,7 @@
 tap "homebrew/bundle"
 tap "jordond/tap"
 tap "nikitabobko/tap"
+tap "robjama/aranet4", "https://github.com/robjama/Aranet4MenuBar"
 tap "tw93/tap"
 brew "aichat"
 brew "antidote"
