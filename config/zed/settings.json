@@ -12,6 +12,23 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        }
+      },
+      "enable_lsp_tasks": true
+    }
+  },
   "ssh_connections": [
     {
       "host": "100.84.100.85",
