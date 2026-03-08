@@ -12,6 +12,7 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "multi_cursor_modifier": "cmd_or_ctrl",
   "lsp": {
     "vtsls": {
       "settings": {
@@ -90,7 +91,7 @@
   "use_system_window_tabs": true,
   "buffer_line_height": "comfortable",
   "agent_buffer_font_size": 14.0,
-  "agent_ui_font_size": 14.0,
+  "agent_ui_font_size": 15.0,
   "prettier": {
     "allowed": true,
   },
