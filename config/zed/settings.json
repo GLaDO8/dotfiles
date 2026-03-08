@@ -12,6 +12,7 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "minimum_contrast_for_highlights": 50.0,
   "multi_cursor_modifier": "cmd_or_ctrl",
   "lsp": {
     "vtsls": {
