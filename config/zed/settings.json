@@ -90,7 +90,7 @@
   "use_system_window_tabs": true,
   "buffer_line_height": "comfortable",
   "agent_buffer_font_size": 15.0,
-  "agent_ui_font_size": 17.0,
+  "agent_ui_font_size": 15.0,
   "prettier": {
     "allowed": true,
   },
