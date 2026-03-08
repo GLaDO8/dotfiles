@@ -106,7 +106,7 @@
     "show": "never",
   },
   "sticky_scroll": {
-    "enabled": false,
+    "enabled": true,
   },
   "status_bar": {
     "active_language_button": true,
