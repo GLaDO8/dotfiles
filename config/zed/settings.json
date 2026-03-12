@@ -184,6 +184,9 @@
     "shell": "system",
     "working_directory": "current_project_directory",
   },
+  "file_types": {
+    "Markdown": ["mdoc"],
+  },
   "languages": {
     "CSS": {
       "language_servers": ["tailwindcss-intellisense-css"],
