@@ -203,7 +203,7 @@ bindkey "^[[1;5C" forward-word    # Ctrl+Right
 # Aliases
 # ═══════════════════════════════════════════════════════════════════════════════
 
-alias obsidian='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents && claude'
+alias obsidian='cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents'
 alias gs="git status"
 alias gcm="git commit -m"
 alias ga="git add"
