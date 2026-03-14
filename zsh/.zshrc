@@ -1,5 +1,9 @@
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
+export ANTHROPIC_BASE_URL="https://api.portkey.ai" 
+export ANTHROPIC_AUTH_TOKEN="Wjq6yLL2AZQegoiPJvbOJx2rXMi9"
+
+
 export BUN_INSTALL="$HOME/.bun"
 export GOPATH="$HOME/go"
 export GOROOT="/opt/homebrew/opt/go/libexec"
