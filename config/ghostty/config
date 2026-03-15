@@ -47,7 +47,6 @@ focus-follows-mouse = true
 
 # macOS
 macos-option-as-alt = true
-macos-titlebar-style = native
 keybind = cmd+t=new_tab
 keybind = global:cmd+backquote=toggle_quick_terminal
 quick-terminal-size = 30%,50%
