@@ -41,6 +41,7 @@ split-divider-color = #ff7348
 window-padding-x = 8
 window-padding-y = 8
 macos-titlebar-style = hidden
+window-title-font-family = TX-02
 window-colorspace = display-p3
 focus-follows-mouse = true
 
