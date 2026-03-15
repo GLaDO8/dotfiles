@@ -13,7 +13,7 @@ cursor-style-blink = true
 mouse-hide-while-typing = true
 
 # THEME (Neon Blue Split Contrast)
-palette = 0=#000000
+palette = 0=#121212
 palette = 1=#f6188f
 palette = 2=#1ebb2b
 palette = 3=#fdf834
