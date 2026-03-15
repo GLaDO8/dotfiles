@@ -13,7 +13,7 @@ cursor-style-blink = true
 mouse-hide-while-typing = true
 
 # THEME (XY-ZED)
-background = #000d09
+background = #000904
 foreground = #f7f7f8
 selection-background = #2c442e
 selection-foreground = #f7f7f8
