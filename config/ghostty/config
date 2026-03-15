@@ -55,3 +55,6 @@ copy-on-select = true
 
 # SHELL INTEGRATION
 shell-integration-features = no-cursor
+
+# SHADERS
+custom-shader = ~/.config/ghostty/shaders/bloom.glsl
