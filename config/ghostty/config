@@ -24,7 +24,7 @@ unfocused-split-opacity = 0.7
 # unfocused-split-fill = #001a4d
 
 # Split divider
-split-divider-color = ff7348
+split-divider-color = #ff7348
 
 # Selection
 selection-background = #0047ff
