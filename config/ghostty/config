@@ -20,7 +20,7 @@ foreground = #00ff00
 cursor-color = #ff00ff
 
 # Inactive splits (blue tint)
-unfocused-split-opacity = 0.4
+unfocused-split-opacity = 0.7
 # unfocused-split-fill = #001a4d
 
 # Split divider
