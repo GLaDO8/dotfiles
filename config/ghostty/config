@@ -12,25 +12,15 @@ cursor-style = block
 cursor-style-blink = true
 mouse-hide-while-typing = true
 
-# THEME (XY-ZED)
-
-# Base colors
+# THEME ()
 background = #0a0a0a
 foreground = #00ff00
 cursor-color = #ff00ff
-
-# Inactive splits (blue tint)
 unfocused-split-opacity = 0.7
 # unfocused-split-fill = #001a4d
-
-# Split divider
 split-divider-color = #ff7348
-
-# Selection
 selection-background = #0047ff
 selection-foreground = #ffffff
-
-# ANSI palette (loud / vivid)
 palette = 0=#000000
 palette = 1=#ff0055
 palette = 2=#00ff66
