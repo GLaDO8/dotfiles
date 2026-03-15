@@ -58,3 +58,5 @@ shell-integration-features = no-cursor
 
 # Shaders
 custom-shader = ~/.config/ghostty/shaders/bloom.glsl
+custom-shader = ~/.config/ghostty/shaders/tft.glsl
+
