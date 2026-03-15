@@ -13,28 +13,40 @@ cursor-style-blink = true
 mouse-hide-while-typing = true
 
 # THEME (XY-ZED)
-background = #000904
-foreground = #f7f7f8
-selection-background = #2c442e
-selection-foreground = #f7f7f8
-cursor-color = #7de486
-cursor-text = #121212
-palette = 0=#1e2025
-palette = 1=#f82871
-palette = 2=#96df71
-palette = 3=#fee56c
-palette = 4=#10a793
-palette = 5=#c74cec
-palette = 6=#08e7c5
-palette = 7=#f7f7f8
-palette = 8=#40434c
-palette = 9=#ffa3b5
-palette = 10=#cef0b9
-palette = 11=#fef1b7
-palette = 12=#9cd4c7
-palette = 13=#e7abf7
-palette = 14=#a9f4e1
-palette = 15=#f7f7f8
+
+# Base colors
+background = #0a0a0a
+foreground = #00ff00      # neon green active text
+cursor-color = #ff00ff    # bright pink cursor
+
+# Inactive splits (blue tint)
+unfocused-split-opacity = 0.4
+unfocused-split-fill = #001a4d    # deep blue tint on unfocused splits
+
+# Split divider
+split-divider-color = #ff00ff     # neon pink divider helps separate splits
+
+# Selection
+selection-background = #0047ff
+selection-foreground = #ffffff
+
+# ANSI palette (loud / vivid)
+palette = 0=#000000
+palette = 1=#ff0055
+palette = 2=#00ff66
+palette = 3=#ffee00
+palette = 4=#0099ff
+palette = 5=#ff00ff
+palette = 6=#00ffee
+palette = 7=#ffffff
+palette = 8=#444444
+palette = 9=#ff3366
+palette = 10=#33ff99
+palette = 11=#ffff66
+palette = 12=#33bbff
+palette = 13=#ff33ff
+palette = 14=#66ffff
+palette = 15=#ffffff
 
 # WINDOW
 window-padding-x = 8
