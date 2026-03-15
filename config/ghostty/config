@@ -16,15 +16,15 @@ mouse-hide-while-typing = true
 
 # Base colors
 background = #0a0a0a
-foreground = #00ff00      # neon green active text
-cursor-color = #ff00ff    # bright pink cursor
+foreground = #00ff00
+cursor-color = #ff00ff
 
 # Inactive splits (blue tint)
 unfocused-split-opacity = 0.4
-unfocused-split-fill = #001a4d    # deep blue tint on unfocused splits
+# unfocused-split-fill = #001a4d
 
 # Split divider
-split-divider-color = #ff00ff     # neon pink divider helps separate splits
+split-divider-color = #ff00ff
 
 # Selection
 selection-background = #0047ff
