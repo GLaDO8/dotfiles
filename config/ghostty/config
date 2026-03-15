@@ -12,7 +12,7 @@ cursor-style = block
 cursor-style-blink = true
 mouse-hide-while-typing = true
 
-# THEME ()
+# THEME (Neon Blue Split Contrast)
 background = #0a0a0a
 foreground = #00ff00
 cursor-color = #ff00ff
