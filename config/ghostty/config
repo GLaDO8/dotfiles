@@ -12,31 +12,34 @@ cursor-style = block
 cursor-style-blink = true
 mouse-hide-while-typing = true
 
+# NERV/EVA-01 inspired palette
+background = #0a0a12
+foreground = #c8e0c8
 
-# THEME (Neon Blue Split Contrast)
-palette = 0=#121212
-palette = 1=#f6188f
-palette = 2=#1ebb2b
-palette = 3=#fdf834
-palette = 4=#2186ec
-palette = 5=#f85a21
-palette = 6=#12c3e2
-palette = 7=#ffffff
-palette = 8=#7f7094
-palette = 9=#f841a0
-palette = 10=#25c141
-palette = 11=#fdf454
-palette = 12=#2f9ded
-palette = 13=#f97137
-palette = 14=#19cde6
-palette = 15=#ffffff
-background = #121212
-foreground = #dad9c7
-cursor-color = #19cde6
-cursor-text = #ffffed
-selection-background = #19cde6
-selection-foreground = #000000
-split-divider-color = #ff7348
+# Greens (EVA-01 / MAGI displays)
+palette = 0=#0a0a12
+palette = 1=#ff3333
+palette = 2=#44cc44
+palette = 3=#ff9900
+palette = 4=#6633cc
+palette = 5=#cc33ff
+palette = 6=#33cccc
+palette = 7=#a0b8a0
+
+# Bright variants
+palette = 8=#333344
+palette = 9=#ff6666
+palette = 10=#66ff66
+palette = 11=#ffcc33
+palette = 12=#9966ff
+palette = 13=#ff66ff
+palette = 14=#66ffcc
+palette = 15=#d0e8d0
+
+cursor-color = #ff6600
+cursor-text = #000000
+selection-background = #334433
+selection-foreground = #66ff66
 
 # WINDOW
 window-padding-x = 8
