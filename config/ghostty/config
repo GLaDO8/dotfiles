@@ -12,6 +12,7 @@ cursor-style = block
 cursor-style-blink = true
 mouse-hide-while-typing = true
 
+
 # THEME (Neon Blue Split Contrast)
 palette = 0=#121212
 palette = 1=#f6188f
