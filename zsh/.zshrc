@@ -3,6 +3,11 @@ export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/
 export ANTHROPIC_BASE_URL="https://api.portkey.ai" 
 export ANTHROPIC_AUTH_TOKEN="Wjq6yLL2AZQegoiPJvbOJx2rXMi9"
 
+# HONCHO keys
+export HONCHO_API_KEY="hch-v3-t9n6a7maoazd4equrom16ll603e81khxfqfmjxm70hbbkn8rewf80veoqgvrjgls"
+
+# Optional (defaults shown)
+export HONCHO_PEER_NAME="shreyas"           # Your name/identity
 
 export BUN_INSTALL="$HOME/.bun"
 export GOPATH="$HOME/go"
