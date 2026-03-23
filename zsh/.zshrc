@@ -282,3 +282,7 @@ export PATH="$PATH:/Users/shreyasgupta/.lmstudio/bin"
 # Secrets (API keys, tokens) — loaded from ~/.secrets (gitignored)
 [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
 
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

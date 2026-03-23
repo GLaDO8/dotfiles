@@ -10,3 +10,5 @@ export PATH=~/.npm-global/bin:$PATH
 export PATH="$PATH:/Users/shreyasgupta/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+. "$HOME/.atuin/bin/env"
