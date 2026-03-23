@@ -11,3 +11,5 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export PATH="$PATH:/Users/shreyasgupta/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+. "$HOME/.atuin/bin/env"
