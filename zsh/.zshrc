@@ -118,7 +118,6 @@ zsh-refresh-cache() {
   echo "Regenerating cached init scripts..."
   mkdir -p "$_zsh_cache"
   zoxide init zsh          > "$_zsh_cache/zoxide.zsh"
-  mcfly init zsh           > "$_zsh_cache/mcfly.zsh"
   direnv hook zsh          > "$_zsh_cache/direnv.zsh"
   fzf --zsh                > "$_zsh_cache/fzf.zsh"
   atuin init zsh           > "$_zsh_cache/atuin.zsh"
@@ -129,7 +128,6 @@ zsh-refresh-cache() {
 if [[ ! -d "$_zsh_cache" ]]; then
   mkdir -p "$_zsh_cache"
   zoxide init zsh          > "$_zsh_cache/zoxide.zsh"
-  mcfly init zsh           > "$_zsh_cache/mcfly.zsh"
   direnv hook zsh          > "$_zsh_cache/direnv.zsh"
   fzf --zsh                > "$_zsh_cache/fzf.zsh"
   atuin init zsh           > "$_zsh_cache/atuin.zsh"
