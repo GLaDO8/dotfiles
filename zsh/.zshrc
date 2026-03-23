@@ -133,9 +133,12 @@ eval "$(mcfly init zsh)"
 # Run `direnv allow` once per directory to authorize
 eval "$(direnv hook zsh)"
 
-# fzf (fuzzy finder foundation) - powers Ctrl+T and Alt+C
-# Ctrl+T: fuzzy file finder, Alt+C: fuzzy cd, Ctrl+R: handled by mcfly
+# fzf (fuzzy finder foundation)
+# Rebind to avoid Zellij conflicts (Ctrl+T = Zellij tab mode)
+# Ctrl+F: fuzzy file finder, Ctrl+E: fuzzy cd, Ctrl+R: handled by mcfly
 source <(fzf --zsh)
+bindkey '^F' fzf-file-widget    # Ctrl+F → insert file path
+bindkey '^E' fzf-cd-widget      # Ctrl+E → fuzzy cd into directory
 
 # aichat - use directly: `aichat "question"` or `aichat -e "natural language command"`
 # Note: Shell integration (Alt+E) not available in v0.30.0
