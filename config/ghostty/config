@@ -60,7 +60,7 @@ copy-on-select = true
 
 # SHELL INTEGRATION
 shell-integration-features = no-cursor
-command = /opt/homebrew/bin/zellij
+# command = /opt/homebrew/bin/zellij
 
 # Shaders
 custom-shader = ~/.config/ghostty/shaders/bettercrt.glsl
