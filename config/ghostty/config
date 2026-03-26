@@ -53,6 +53,10 @@ focus-follows-mouse = true
 macos-option-as-alt = true
 keybind = cmd+t=new_tab
 keybind = global:cmd+backquote=toggle_quick_terminal
+keybind = alt+left=esc:[1;3D
+keybind = alt+right=esc:[1;3C
+keybind = alt+up=esc:[1;3A
+keybind = alt+down=esc:[1;3B
 quick-terminal-size = 30%,50%
 link-previews = true
 clipboard-trim-trailing-spaces = true
