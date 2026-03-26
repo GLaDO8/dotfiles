@@ -220,3 +220,9 @@ if command -v gcloud >/dev/null 2>&1; then
   [ -f "$HOME/GCP/google-cloud-sdk/path.zsh.inc" ] && . "$HOME/GCP/google-cloud-sdk/path.zsh.inc"
   [ -f "$HOME/GCP/google-cloud-sdk/completion.zsh.inc" ] && . "$HOME/GCP/google-cloud-sdk/completion.zsh.inc"
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/shreyasgupta/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shreyasgupta/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/shreyasgupta/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shreyasgupta/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
