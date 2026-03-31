@@ -15,12 +15,15 @@ set -o pipefail
 # Ask for sudo password upfront and keep it alive for the duration of the script
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDO_PID=$!
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+DIM='\033[2m'
 NC='\033[0m' # No Color
 
 # Auto-detect dotfiles directory (where this script lives)
@@ -41,7 +44,14 @@ for arg in "$@"; do
     esac
 done
 
-# Logging functions
+# Temp dir for parallel job output
+PARALLEL_DIR=$(mktemp -d)
+trap 'rm -rf "$PARALLEL_DIR"; kill $SUDO_PID 2>/dev/null' EXIT
+
+# ============================================================================
+# Logging
+# ============================================================================
+
 log_info() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
@@ -59,6 +69,13 @@ log_error() {
     ERRORS+=("$1")
 }
 
+log_phase() {
+    echo ""
+    echo -e "${CYAN}┌──────────────────────────────────────────────────────┐${NC}"
+    echo -e "${CYAN}│${NC}  Phase $1: $2"
+    echo -e "${CYAN}└──────────────────────────────────────────────────────┘${NC}"
+}
+
 # Execute command with dry-run support
 run() {
     if $DRY_RUN; then
@@ -69,7 +86,7 @@ run() {
     fi
 }
 
-# Run a setup function with error handling
+# Run a setup function with error handling (foreground)
 run_setup() {
     local func_name=$1
     local description=$2
@@ -89,8 +106,81 @@ run_setup() {
 }
 
 # ============================================================================
+# Parallel execution helpers
+# ============================================================================
+
+BG_PIDS=()
+BG_LOGS=()
+BG_NAMES=()
+
+# Run a setup function in the background, capturing output to a temp file
+run_setup_bg() {
+    local func_name=$1
+    local description=$2
+    local log_file="$PARALLEL_DIR/${func_name}.log"
+
+    (
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo -e "${BLUE}[INFO]${NC} Starting: $description"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+        if $func_name; then
+            echo -e "${GREEN}[OK]${NC} Completed: $description"
+        else
+            echo -e "${RED}[ERROR]${NC} Failed: $description"
+            echo "$description" >> "$PARALLEL_DIR/errors"
+        fi
+    ) > "$log_file" 2>&1 &
+
+    BG_PIDS+=($!)
+    BG_LOGS+=("$log_file")
+    BG_NAMES+=("$description")
+}
+
+# Wait for all background jobs and replay their output in order
+wait_phase() {
+    local i
+    for i in "${!BG_PIDS[@]}"; do
+        wait "${BG_PIDS[$i]}" 2>/dev/null || true
+        # Replay captured output
+        [[ -f "${BG_LOGS[$i]}" ]] && cat "${BG_LOGS[$i]}"
+    done
+
+    # Collect errors from background jobs
+    if [[ -f "$PARALLEL_DIR/errors" ]]; then
+        while IFS= read -r err; do
+            ERRORS+=("Failed: $err")
+        done < "$PARALLEL_DIR/errors"
+        rm -f "$PARALLEL_DIR/errors"
+    fi
+
+    BG_PIDS=()
+    BG_LOGS=()
+    BG_NAMES=()
+}
+
+# ============================================================================
 # Setup Functions
 # ============================================================================
+
+xcode_cl_tools() {
+    log_info "Checking Xcode command line tools..."
+
+    if xcode-select -p &>/dev/null; then
+        log_info "Xcode command line tools already installed"
+        return 0
+    fi
+
+    log_info "Installing Xcode command line tools..."
+    run xcode-select --install || log_warn "Xcode CLI tools installation may require manual intervention"
+
+    # Accept Xcode license
+    log_info "Accepting Xcode license..."
+    run sudo xcodebuild -license accept 2>/dev/null || log_warn "Xcode license acceptance failed (Xcode may not be installed yet)"
+
+    return 0
+}
 
 brew_setup() {
     # Check for Homebrew and install if we don't have it
@@ -219,6 +309,11 @@ config_setup() {
     run ln -sfv "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
     run ln -sfv "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
     run ln -sfv "$DOTFILES_DIR/.npmrc" "$HOME/.npmrc"
+
+    # Global ignore (ripgrep, fd, etc.)
+    if [[ -f "$DOTFILES_DIR/.ignore" ]]; then
+        run ln -sfv "$DOTFILES_DIR/.ignore" "$HOME/.ignore"
+    fi
 
     # SSH config
     run mkdir -p "$HOME/.ssh"
@@ -368,16 +463,18 @@ vscode_setup() {
         log_warn "VS Code settings not found, skipping..."
     fi
 
-    # Extensions
+    # Extensions (parallel install with xargs)
     if command -v code &> /dev/null; then
         if [[ -f "$DOTFILES_DIR/vscode/extensions.txt" ]]; then
-            log_info "Installing VS Code extensions..."
+            local ext_count
+            ext_count=$(wc -l < "$DOTFILES_DIR/vscode/extensions.txt" | tr -d ' ')
+            log_info "Installing $ext_count VS Code extensions (4 parallel)..."
             if $DRY_RUN; then
-                echo -e "${YELLOW}[DRY-RUN]${NC} Would install $(wc -l < "$DOTFILES_DIR/vscode/extensions.txt" | tr -d ' ') extensions"
+                echo -e "${YELLOW}[DRY-RUN]${NC} Would install $ext_count extensions"
             else
-                while IFS= read -r extension; do
-                    code --install-extension "$extension" --force 2>/dev/null || log_warn "Failed to install: $extension"
-                done < "$DOTFILES_DIR/vscode/extensions.txt"
+                xargs -P4 -I{} code --install-extension {} --force 2>/dev/null \
+                    < "$DOTFILES_DIR/vscode/extensions.txt" \
+                    || log_warn "Some VS Code extensions failed to install"
             fi
         fi
     else
@@ -407,16 +504,18 @@ cursor_setup() {
         log_warn "Cursor keybindings not found, skipping..."
     fi
 
-    # Extensions
+    # Extensions (parallel install with xargs)
     if command -v cursor &> /dev/null; then
         if [[ -f "$DOTFILES_DIR/cursor/extensions.txt" ]]; then
-            log_info "Installing Cursor extensions..."
+            local ext_count
+            ext_count=$(wc -l < "$DOTFILES_DIR/cursor/extensions.txt" | tr -d ' ')
+            log_info "Installing $ext_count Cursor extensions (4 parallel)..."
             if $DRY_RUN; then
-                echo -e "${YELLOW}[DRY-RUN]${NC} Would install $(wc -l < "$DOTFILES_DIR/cursor/extensions.txt" | tr -d ' ') extensions"
+                echo -e "${YELLOW}[DRY-RUN]${NC} Would install $ext_count extensions"
             else
-                while IFS= read -r extension; do
-                    cursor --install-extension "$extension" --force 2>/dev/null || log_warn "Failed to install: $extension"
-                done < "$DOTFILES_DIR/cursor/extensions.txt"
+                xargs -P4 -I{} cursor --install-extension {} --force 2>/dev/null \
+                    < "$DOTFILES_DIR/cursor/extensions.txt" \
+                    || log_warn "Some Cursor extensions failed to install"
             fi
         fi
     else
@@ -462,20 +561,38 @@ claude_setup() {
     # Create directories
     run mkdir -p "$HOME/.claude/skills"
     run mkdir -p "$HOME/.claude/hooks"
+    run mkdir -p "$HOME/.claude/agent-docs"
+    run mkdir -p "$HOME/.claude/rules"
     run mkdir -p "$HOME/.agents/skills"
 
     # Remove existing files/symlinks (clean slate)
     run rm -f "$HOME/.claude/CLAUDE.md"
+    run rm -f "$HOME/.claude/RTK.md"
     run rm -f "$HOME/.claude/settings.json"
     run rm -f "$HOME/.claude/statusline-command.sh"
+    run rm -f "$HOME/.claude/statusline.sh"
+    run rm -f "$HOME/.claude/statusline.conf"
+    run rm -f "$HOME/.claude/sl-toggle.sh"
 
-    # Copy config files from backup
+    # Copy config files from backup (full parity with backup-config.sh)
     if [[ -d "$DOTFILES_DIR/claude" ]]; then
         log_info "Copying Claude config files..."
-        run cp "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/" 2>/dev/null || true
-        run cp "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/" 2>/dev/null || true
-        run cp "$DOTFILES_DIR/claude/statusline-command.sh" "$HOME/.claude/" 2>/dev/null || true
-        run chmod +x "$HOME/.claude/statusline-command.sh" 2>/dev/null || true
+        local claude_files=(
+            "CLAUDE.md"
+            "RTK.md"
+            "settings.json"
+            "statusline-command.sh"
+            "statusline.sh"
+            "statusline.conf"
+            "sl-toggle.sh"
+        )
+        for f in "${claude_files[@]}"; do
+            [[ -f "$DOTFILES_DIR/claude/$f" ]] && run cp "$DOTFILES_DIR/claude/$f" "$HOME/.claude/"
+        done
+        # Make shell scripts executable
+        for f in statusline-command.sh statusline.sh sl-toggle.sh; do
+            [[ -f "$HOME/.claude/$f" ]] && run chmod +x "$HOME/.claude/$f"
+        done
     else
         log_warn "Claude backup directory not found, skipping config copy..."
     fi
@@ -491,6 +608,26 @@ claude_setup() {
                 run chmod +x "$HOME/.claude/hooks/$hook_name"
             fi
         done
+    fi
+
+    # Copy agent-docs
+    if [[ -d "$DOTFILES_DIR/claude/agent-docs" ]]; then
+        log_info "Syncing agent-docs to ~/.claude/agent-docs/..."
+        if ! $DRY_RUN; then
+            rsync -a --delete "$DOTFILES_DIR/claude/agent-docs/" "$HOME/.claude/agent-docs/"
+        else
+            echo -e "${YELLOW}[DRY-RUN]${NC} rsync agent-docs/"
+        fi
+    fi
+
+    # Copy rules
+    if [[ -d "$DOTFILES_DIR/claude/rules" ]]; then
+        log_info "Syncing rules to ~/.claude/rules/..."
+        if ! $DRY_RUN; then
+            rsync -a --delete "$DOTFILES_DIR/claude/rules/" "$HOME/.claude/rules/"
+        else
+            echo -e "${YELLOW}[DRY-RUN]${NC} rsync rules/"
+        fi
     fi
 
     # Copy personal skills
@@ -618,24 +755,6 @@ dock_setup() {
     return 0
 }
 
-xcode_cl_tools() {
-    log_info "Checking Xcode command line tools..."
-
-    if xcode-select -p &>/dev/null; then
-        log_info "Xcode command line tools already installed"
-        return 0
-    fi
-
-    log_info "Installing Xcode command line tools..."
-    run xcode-select --install || log_warn "Xcode CLI tools installation may require manual intervention"
-
-    # Accept Xcode license
-    log_info "Accepting Xcode license..."
-    run sudo xcodebuild -license accept 2>/dev/null || log_warn "Xcode license acceptance failed (Xcode may not be installed yet)"
-
-    return 0
-}
-
 macos_defaults_setup() {
     log_info "Setting macOS preferences..."
 
@@ -654,6 +773,8 @@ macos_defaults_setup() {
 # ============================================================================
 
 main() {
+    local start_time=$SECONDS
+
     echo ""
     echo "╔════════════════════════════════════════════════════════════════╗"
     echo "║                    DOTFILES INSTALLATION                       ║"
@@ -666,33 +787,37 @@ main() {
         echo -e "${YELLOW}>>> DRY-RUN MODE: No changes will be made <<<${NC}"
     fi
 
-    # Run each setup with error handling (continue on failure)
-    # 1. Prerequisites
+    # ── Phase 1: Prerequisites (sequential) ──────────────────────
+    log_phase "1/4" "Prerequisites"
     run_setup xcode_cl_tools "Xcode command line tools" || true
     run_setup brew_setup "Homebrew packages" || true
 
-    # 2. Secrets (needs sops + age from brew, before shell dotfiles source ~/.secrets)
+    # ── Phase 2: Configuration (instant, sequential) ─────────────
+    log_phase "2/4" "Configuration"
     run_setup secrets_setup "Decrypt secrets" || true
-
-    # 3. Shell and config symlinks
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
 
-    # 4. Editors
-    run_setup vscode_setup "VS Code" || true
-    run_setup cursor_setup "Cursor" || true
+    # ── Phase 3: App setup (parallel) ────────────────────────────
+    log_phase "3/4" "App setup (parallel)"
+    run_setup_bg vscode_setup "VS Code"
+    run_setup_bg cursor_setup "Cursor"
+    run_setup_bg ai_tools_setup "AI coding tools"
+    run_setup_bg autocommit_setup "Dotfiles auto-backup agent"
+    wait_phase
 
-    # 5. AI tools (needs npm from brew, then claude config needs claude binary)
-    run_setup ai_tools_setup "AI coding tools" || true
+    # ── Phase 4: Final setup (sequential) ────────────────────────
+    log_phase "4/4" "Final setup"
     run_setup claude_setup "Claude Code configuration" || true
-
-    # 6. System setup
     run_setup mackup_setup "Mackup app settings backup" || true
-    run_setup autocommit_setup "Dotfiles auto-backup agent" || true
+    run_setup macos_defaults_setup "macOS preferences" || true
     run_setup dock_setup "Dock configuration" || true
-    # run_setup macos_defaults_setup "macOS preferences" || true  # Uncomment if needed
 
-    # Summary
+    # ── Summary ──────────────────────────────────────────────────
+    local elapsed=$(( SECONDS - start_time ))
+    local minutes=$(( elapsed / 60 ))
+    local seconds=$(( elapsed % 60 ))
+
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "                    SUMMARY"
@@ -706,6 +831,8 @@ main() {
             echo -e "  ${RED}•${NC} $error"
         done
     fi
+
+    echo -e "${DIM}Elapsed: ${minutes}m ${seconds}s${NC}"
 
     if $DRY_RUN; then
         echo ""
