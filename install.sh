@@ -235,8 +235,39 @@ config_setup() {
     # Ghostty
     if [[ -f "$DOTFILES_DIR/config/ghostty/config" ]]; then
         run ln -sfv "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+        for shader in "$DOTFILES_DIR/config/ghostty/shaders"/*.glsl; do
+            [[ -f "$shader" ]] && run ln -sfv "$shader" "$HOME/.config/ghostty/shaders/$(basename "$shader")"
+        done
     else
         log_warn "Ghostty config not found, skipping..."
+    fi
+
+    # btop
+    if [[ -f "$DOTFILES_DIR/config/btop/btop.conf" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/btop/btop.conf" "$HOME/.config/btop/btop.conf"
+    else
+        log_warn "btop config not found, skipping..."
+    fi
+
+    # Git global ignore
+    if [[ -f "$DOTFILES_DIR/config/git/ignore" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/git/ignore" "$HOME/.config/git/ignore"
+    else
+        log_warn "Git global ignore not found, skipping..."
+    fi
+
+    # Atuin
+    if [[ -f "$DOTFILES_DIR/config/atuin/config.toml" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/atuin/config.toml" "$HOME/.config/atuin/config.toml"
+    else
+        log_warn "Atuin config not found, skipping..."
+    fi
+
+    # Karabiner
+    if [[ -f "$DOTFILES_DIR/config/karabiner/karabiner.json" ]]; then
+        run ln -sfv "$DOTFILES_DIR/config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+    else
+        log_warn "Karabiner config not found, skipping..."
     fi
 
     # aichat
