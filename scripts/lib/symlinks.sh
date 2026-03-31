@@ -62,6 +62,10 @@ EXPECTED_SYMLINKS=(
 
     # VS Code
     "$HOME/Library/Application Support/Code/User/settings.json:vscode/settings.json"
+
+    # Cursor
+    "$HOME/Library/Application Support/Cursor/User/settings.json:cursor/settings.json"
+    "$HOME/Library/Application Support/Cursor/User/keybindings.json:cursor/keybindings.json"
 )
 
 # ============================================================================
