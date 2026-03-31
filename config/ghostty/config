@@ -72,4 +72,4 @@ custom-shader = ~/.config/ghostty/shaders/tft.glsl
 # custom-shader = ~/.config/ghostty/shaders/retro-terminal.glsl
 custom-shader = ~/.config/ghostty/shaders/glow-rgbsplit-twitchy.glsl
 # custom-shader = ~/.config/ghostty/shaders/bloom.glsl
-custom-shader-animation = true
+# custom-shader-animation = true
