@@ -1,0 +1,39 @@
+# macOS system
+Library/
+Applications/
+Movies/
+Music/
+Pictures/
+Public/
+.Trash/
+
+# Package managers & runtimes
+node_modules/
+.nvm/
+.bun/
+.npm/
+.npm-global/
+.swiftpm/
+go/
+
+# Caches & build artifacts
+.cache/
+.local/
+.ollama/
+.lmstudio/
+
+# Tool data
+.agent-browser/
+.agents/
+.cursor/
+.opencode/
+.stash/
+.SoulseekQt/
+.vim/
+.zsh_sessions/
+
+# IDE/editor noise
+.DS_Store
+*.pyc
+__pycache__/
+.git/
