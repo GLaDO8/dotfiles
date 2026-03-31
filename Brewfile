@@ -71,7 +71,6 @@ cask "1password-cli"
 cask "brightintosh"
 cask "codex"
 cask "eagle"
-cask "granola"
 cask "handbrake-app"
 cask "json-viewer"
 cask "logi-options+"
@@ -87,10 +86,8 @@ cask "blender"
 cask "choosy"
 cask "claude"
 cask "cleanshot"
-cask "cloudytabs"
 cask "contexts"
 cask "cursor"
-cask "plex-media-server"
 cask "qlmarkdown"
 cask "slack"
 cask "tailscale-app"
@@ -135,7 +132,6 @@ cask "tor-browser"
 cask "transmission"
 cask "typeface"
 cask "vnc-viewer"
-cask "voiceink"
 cask "warp"
 cask "whyfi"
 cask "zed"
@@ -145,7 +141,6 @@ mas " Minimal Twitter      ", id: 1668204600
 mas " Save to Raindrop.io  ", id: 1549370672
 mas " WhatFont             ", id: 1437138382
 mas "1Password for Safari ", id: 1569813296
-mas "Balatro", id: 6502451661
 mas "BrightIntosh", id: 6452471855
 mas "Flighty", id: 1358823008
 mas "iMovie", id: 408981434
@@ -153,7 +148,6 @@ mas "Infuse", id: 1136220934
 mas "JSONPeep", id: 1458969831
 mas "Klack", id: 6446206067
 mas "mymind", id: 1532801185
-mas "Pieoneer", id: 6739781207
 mas "Plug", id: 1514182074
 mas "Shazam", id: 897118787
 mas "Slack", id: 803453959
@@ -179,7 +173,7 @@ vscode "dbaeumer.vscode-eslint"
 vscode "dsznajder.es7-react-js-snippets"
 vscode "ecmel.vscode-html-css"
 vscode "eliverlara.andromeda"
-vscode "esbenp.prettier-vscode"
+vscode "esbenp.prettier-vsco:de"
 vscode "figma.figma-vscode-extension"
 vscode "formulahendry.code-runner"
 vscode "formulahendry.terminal"
