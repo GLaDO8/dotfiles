@@ -131,6 +131,58 @@ brew_setup() {
     return 0
 }
 
+secrets_setup() {
+    log_info "Decrypting secrets from sops-encrypted store..."
+
+    local encrypted="$DOTFILES_DIR/secrets/secrets.yaml"
+    local target="$HOME/.secrets"
+
+    if [[ ! -f "$encrypted" ]]; then
+        log_warn "No encrypted secrets file found at $encrypted"
+        return 0
+    fi
+
+    if ! command -v sops &> /dev/null; then
+        log_warn "sops not installed, skipping secrets decryption"
+        return 0
+    fi
+
+    # Check for age key
+    if [[ ! -f "$HOME/.config/sops/age/keys.txt" ]]; then
+        log_warn "Age private key not found at ~/.config/sops/age/keys.txt"
+        log_warn "Transfer your age key to this machine, then run: sops -d $encrypted"
+        return 0
+    fi
+
+    # Decrypt YAML and convert to shell exports
+    log_info "Decrypting to $target..."
+    if $DRY_RUN; then
+        echo -e "${YELLOW}[DRY-RUN]${NC} sops -d $encrypted → $target (as shell exports)"
+        return 0
+    fi
+
+    local decrypted
+    decrypted=$(sops decrypt "$encrypted" 2>/dev/null) || {
+        log_error "sops decryption failed — check your age key"
+        return 1
+    }
+
+    # Convert YAML key: value to export KEY="value" (skip comments and blank lines)
+    echo "# Auto-generated from secrets/secrets.yaml — do not edit directly" > "$target"
+    echo "# To modify: cd dotfiles && sops secrets/secrets.yaml" >> "$target"
+    echo "$decrypted" | grep -v '^#' | grep -v '^$' | while IFS=': ' read -r key value; do
+        # Strip surrounding quotes from value
+        value="${value#\"}"
+        value="${value%\"}"
+        echo "export $key=\"$value\"" >> "$target"
+    done
+
+    chmod 600 "$target"
+    log_success "Secrets decrypted to $target"
+
+    return 0
+}
+
 zsh_setup() {
     # Make ZSH the default shell environment
     if [[ "$SHELL" != *"zsh"* ]]; then
@@ -619,19 +671,22 @@ main() {
     run_setup xcode_cl_tools "Xcode command line tools" || true
     run_setup brew_setup "Homebrew packages" || true
 
-    # 2. Shell and config symlinks
+    # 2. Secrets (needs sops + age from brew, before shell dotfiles source ~/.secrets)
+    run_setup secrets_setup "Decrypt secrets" || true
+
+    # 3. Shell and config symlinks
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
 
-    # 3. Editors
+    # 4. Editors
     run_setup vscode_setup "VS Code" || true
     run_setup cursor_setup "Cursor" || true
 
-    # 4. AI tools (needs npm from brew, then claude config needs claude binary)
+    # 5. AI tools (needs npm from brew, then claude config needs claude binary)
     run_setup ai_tools_setup "AI coding tools" || true
     run_setup claude_setup "Claude Code configuration" || true
 
-    # 5. System setup
+    # 6. System setup
     run_setup mackup_setup "Mackup app settings backup" || true
     run_setup autocommit_setup "Dotfiles auto-backup agent" || true
     run_setup dock_setup "Dock configuration" || true
