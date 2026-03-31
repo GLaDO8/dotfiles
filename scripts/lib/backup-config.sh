@@ -147,13 +147,21 @@ sync_claude_configs() {
 
     local claude_srcs=(
         "$HOME/.claude/CLAUDE.md"
+        "$HOME/.claude/RTK.md"
         "$HOME/.claude/settings.json"
+        "$HOME/.claude/statusline.sh"
+        "$HOME/.claude/statusline.conf"
         "$HOME/.claude/statusline-command.sh"
+        "$HOME/.claude/sl-toggle.sh"
     )
     local claude_dests=(
         "$claude_dest/CLAUDE.md"
+        "$claude_dest/RTK.md"
         "$claude_dest/settings.json"
+        "$claude_dest/statusline.sh"
+        "$claude_dest/statusline.conf"
         "$claude_dest/statusline-command.sh"
+        "$claude_dest/sl-toggle.sh"
     )
 
     local i
