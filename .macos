@@ -3,7 +3,8 @@
 # macOS system preferences — sourced by install.sh (sudo handled there)
 #
 
-# ── Keyboard & Trackpad ─────────────────────────────────────────
+# ── Keyboard & Trackpad ──────────────────────────────────────────
+
 # Trackpad: enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
@@ -14,15 +15,12 @@ defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
 
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
 # Set a blazingly fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
-# Require password immediately after sleep or screen saver begins
-defaults write com.apple.screensaver askForPassword -int 1
-defaults write com.apple.screensaver askForPasswordDelay -int 0
-
-# ── Security & Power ─────────────────────────────────────────
+# ── Security & Power ─────────────────────────────────────────────
 
 # Require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
@@ -31,20 +29,23 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 # Set machine sleep to 5 minutes on battery
 sudo pmset -b sleep 5
 
+# ── Screenshots ──────────────────────────────────────────────────
+
 # Save screenshots to the desktop
 defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
 
-#FINDER
-# Finder: show all filename extensions
+# ── Finder ───────────────────────────────────────────────────────
+
+# Show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-# Finder: show status bar
+# Show status bar
 defaults write com.apple.finder ShowStatusBar -bool true
 
-# Finder: show path bar
+# Show path bar
 defaults write com.apple.finder ShowPathbar -bool true
 
 # When performing a search, search the current folder by default
@@ -60,44 +61,43 @@ defaults write com.apple.finder _FXSortFoldersFirst -bool true
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 # Increase the size of icons on the desktop and in other icon views
-/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
+/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist 2>/dev/null || true
 
+# ── Dock ─────────────────────────────────────────────────────────
 
-#DOCK
-# Minimize windows into their application’s icon
+# Minimize windows into their application's icon
 defaults write com.apple.dock minimize-to-application -bool true
 
 # Show indicator lights for open applications in the Dock
 defaults write com.apple.dock show-process-indicators -bool true
 
-# Don’t group windows by application in Mission Control
-# (i.e. use the old Exposé behavior instead)
+# Don't group windows by application in Mission Control
 defaults write com.apple.dock expose-group-by-app -bool false
 
+# ── Safari ───────────────────────────────────────────────────────
 
-#SAFARI
 # Show the full URL in the address bar (note: this still hides the scheme)
 defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 
-# Privacy: don’t send search queries to Apple
+# Privacy: don't send search queries to Apple
 defaults write com.apple.Safari UniversalSearchEnabled -bool false
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
-# Set Safari’s home page to `about:blank` for faster loading
+# Set Safari's home page to about:blank for faster loading
 defaults write com.apple.Safari HomePage -string "about:blank"
 
-# Prevent Safari from opening ‘safe’ files automatically after downloading
+# Prevent Safari from opening 'safe' files automatically after downloading
 defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 
-# Enable the Develop menu and the Web Inspector in Safari
+# Enable the Develop menu and the Web Inspector
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
+# ── Activity Monitor ─────────────────────────────────────────────
 
-#ACTIVITY MONITOR
 # Show the main window when launching Activity Monitor
 defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
 
@@ -111,8 +111,8 @@ defaults write com.apple.ActivityMonitor ShowCategory -int 0
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
+# ── Mac App Store ────────────────────────────────────────────────
 
-#MAC APP STORE
 # Enable the automatic update check
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
 
@@ -131,9 +131,9 @@ defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
 # Turn on app auto-update
 defaults write com.apple.commerce AutoUpdate -bool true
 
+# ── Transmission ─────────────────────────────────────────────────
 
-#TRANSMISSION
-# Use `~/Documents/Torrents` to store incomplete downloads
+# Use ~/Documents/Torrents to store incomplete downloads
 defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
 defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Documents/Torrents"
 
@@ -143,9 +143,14 @@ defaults write org.m0k.transmission WarningDonate -bool false
 # Hide the legal disclaimer
 defaults write org.m0k.transmission WarningLegal -bool false
 
-# Don’t prompt for confirmation before downloading
+# Don't prompt for confirmation before downloading
 defaults write org.m0k.transmission DownloadAsk -bool false
 defaults write org.m0k.transmission MagnetOpenAsk -bool false
 
-# Don’t prompt for confirmation before removing non-downloading active transfers
+# Don't prompt for confirmation before removing non-downloading active transfers
 defaults write org.m0k.transmission CheckRemoveDownloading -bool true
+
+# ── Apply Changes ────────────────────────────────────────────────
+
+# Restart Finder to apply changes
+killall Finder 2>/dev/null || true
