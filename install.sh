@@ -132,53 +132,17 @@ brew_setup() {
 }
 
 zsh_setup() {
-    # Install oh-my-zsh
-    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-        log_info "Installing oh-my-zsh..."
-        run sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    else
-        log_info "oh-my-zsh already installed"
-    fi
-
     # Make ZSH the default shell environment
     if [[ "$SHELL" != *"zsh"* ]]; then
         log_info "Setting zsh as default shell..."
         run chsh -s "$(which zsh)"
+    else
+        log_info "Zsh is already the default shell"
     fi
 
-    # Install powerline fonts
-    if [[ ! -d "$HOME/.local/share/fonts" ]] || ! ls "$HOME/.local/share/fonts"/*Powerline* &>/dev/null; then
-        log_info "Installing powerline fonts..."
-        (
-            run git clone https://github.com/powerline/fonts.git --depth=1 /tmp/powerline-fonts
-            cd /tmp/powerline-fonts && run ./install.sh
-            rm -rf /tmp/powerline-fonts
-        )
-    fi
-
-    # Install spaceship prompt
-    ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    if [[ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]]; then
-        log_info "Installing spaceship prompt..."
-        run git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
-        run ln -sf "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-    fi
-
-    # Install zsh plugins
-    if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
-        log_info "Installing zsh-syntax-highlighting..."
-        run git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-    fi
-
-    if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
-        log_info "Installing zsh-autosuggestions..."
-        run git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-    fi
-
-    if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]]; then
-        log_info "Installing zsh-completions..."
-        run git clone https://github.com/zsh-users/zsh-completions "$ZSH_CUSTOM/plugins/zsh-completions"
-    fi
+    # antidote (plugin manager) is installed via Brewfile
+    # Plugins are declared in .zsh_plugins.txt and bundled on first shell load
+    log_info "Zsh plugins managed by antidote — will be installed on first shell launch"
 
     return 0
 }
