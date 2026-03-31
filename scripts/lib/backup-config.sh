@@ -26,6 +26,8 @@ set -euo pipefail
 # Add new entries to BOTH arrays to track more files.
 
 CONFIG_SOURCES=(
+    # Global ignore (ripgrep, fd)
+    "$HOME/.ignore"
     # Zsh
     "$HOME/.zshrc"
     "$HOME/.zsh_plugins.txt"
@@ -53,6 +55,8 @@ CONFIG_SOURCES=(
 )
 
 CONFIG_DESTS=(
+    # Global ignore (ripgrep, fd)
+    ".ignore"
     # Zsh
     "zsh/.zshrc"
     "zsh/.zsh_plugins.txt"

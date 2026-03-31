@@ -16,6 +16,8 @@ EXPECTED_SYMLINKS=(
     "$HOME/.gitconfig:.gitconfig"
     "$HOME/.tmux.conf:.tmux.conf"
     "$HOME/.npmrc:.npmrc"
+    "$HOME/.ignore:.ignore"
+    "$HOME/.mackup.cfg:.mackup.cfg"
 
     # SSH
     "$HOME/.ssh/config:ssh/config"
