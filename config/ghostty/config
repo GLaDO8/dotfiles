@@ -67,9 +67,9 @@ shell-integration-features = no-cursor
 # command = /opt/homebrew/bin/zellij
 
 # Shaders
-custom-shader = ~/.config/ghostty/shaders/bettercrt.glsl
-custom-shader = ~/.config/ghostty/shaders/tft.glsl
+# custom-shader = ~/.config/ghostty/shaders/bettercrt.glsl
+# custom-shader = ~/.config/ghostty/shaders/tft.glsl
 # custom-shader = ~/.config/ghostty/shaders/retro-terminal.glsl
 custom-shader = ~/.config/ghostty/shaders/glow-rgbsplit-twitchy.glsl
 # custom-shader = ~/.config/ghostty/shaders/bloom.glsl
-# custom-shader-animation = true
+custom-shader-animation = true
