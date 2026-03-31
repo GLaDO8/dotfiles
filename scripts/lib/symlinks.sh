@@ -37,9 +37,6 @@ EXPECTED_SYMLINKS=(
     # Atuin
     "$HOME/.config/atuin/config.toml:config/atuin/config.toml"
 
-    # Karabiner
-    "$HOME/.config/karabiner/karabiner.json:config/karabiner/karabiner.json"
-
     # aichat
     "$HOME/.config/aichat/config.yaml:config/aichat/config.yaml"
 
