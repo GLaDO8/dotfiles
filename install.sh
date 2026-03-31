@@ -651,15 +651,23 @@ main() {
     fi
 
     # Run each setup with error handling (continue on failure)
+    # 1. Prerequisites
+    run_setup xcode_cl_tools "Xcode command line tools" || true
     run_setup brew_setup "Homebrew packages" || true
-    # run_setup zsh_setup "Zsh and oh-my-zsh" || true  # Uncomment if needed
+
+    # 2. Shell and config symlinks
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
+
+    # 3. Editors
     run_setup vscode_setup "VS Code" || true
     run_setup cursor_setup "Cursor" || true
+
+    # 4. AI tools (needs npm from brew, then claude config needs claude binary)
     run_setup ai_tools_setup "AI coding tools" || true
     run_setup claude_setup "Claude Code configuration" || true
-    run_setup xcode_cl_tools "Xcode command line tools" || true
+
+    # 5. System setup
     run_setup mackup_setup "Mackup app settings backup" || true
     run_setup autocommit_setup "Dotfiles auto-backup agent" || true
     run_setup dock_setup "Dock configuration" || true
