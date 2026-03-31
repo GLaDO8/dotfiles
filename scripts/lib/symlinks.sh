@@ -28,6 +28,18 @@ EXPECTED_SYMLINKS=(
     # Ghostty terminal
     "$HOME/.config/ghostty/config:config/ghostty/config"
 
+    # btop
+    "$HOME/.config/btop/btop.conf:config/btop/btop.conf"
+
+    # Git global ignore
+    "$HOME/.config/git/ignore:config/git/ignore"
+
+    # Atuin
+    "$HOME/.config/atuin/config.toml:config/atuin/config.toml"
+
+    # Karabiner
+    "$HOME/.config/karabiner/karabiner.json:config/karabiner/karabiner.json"
+
     # aichat
     "$HOME/.config/aichat/config.yaml:config/aichat/config.yaml"
 

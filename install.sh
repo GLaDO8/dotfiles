@@ -215,9 +215,13 @@ config_setup() {
 
     # App configs (~/.config/)
     run mkdir -p "$HOME/.config/zed"
-    run mkdir -p "$HOME/.config/ghostty"
+    run mkdir -p "$HOME/.config/ghostty/shaders"
     run mkdir -p "$HOME/.config/aichat"
     run mkdir -p "$HOME/.config/gh"
+    run mkdir -p "$HOME/.config/btop"
+    run mkdir -p "$HOME/.config/git"
+    run mkdir -p "$HOME/.config/atuin"
+    run mkdir -p "$HOME/.config/karabiner"
 
     # Zed
     if [[ -d "$DOTFILES_DIR/config/zed" ]]; then
