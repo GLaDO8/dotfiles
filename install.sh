@@ -263,9 +263,9 @@ config_setup() {
         log_warn "Atuin config not found, skipping..."
     fi
 
-    # Karabiner
+    # Karabiner (copy, not symlink — Karabiner rewrites atomically and breaks symlinks)
     if [[ -f "$DOTFILES_DIR/config/karabiner/karabiner.json" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+        run cp "$DOTFILES_DIR/config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
     else
         log_warn "Karabiner config not found, skipping..."
     fi
