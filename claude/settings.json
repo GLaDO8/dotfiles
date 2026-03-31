@@ -1,7 +1,13 @@
 {
   "cleanupPeriodDays": 180,
   "env": {
-    "ENABLE_TOOL_SEARCH": "true"
+    "ANTHROPIC_BASE_URL": "https://api.portkey.ai",
+    "ANTHROPIC_AUTH_TOKEN": "Wjq6yLL2AZQegoiPJvbOJx2rXMi9",
+    "ANTHROPIC_CUSTOM_HEADERS": "x-portkey-api-key: Wjq6yLL2AZQegoiPJvbOJx2rXMi9\nx-portkey-provider: @azure-anthropic-east-us2",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-6",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-4-6",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4-5-20251001",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "0"
   },
   "permissions": {
     "allow": [
@@ -18,165 +24,42 @@
       "TodoRead",
       "TodoWrite",
       "mcp__*",
-      "Bash(npm:*)",
-      "Bash(npx:*)",
-      "Bash(yarn:*)",
-      "Bash(pnpm:*)",
-      "Bash(bun:*)",
-      "Bash(node:*)",
-      "Bash(deno:*)",
-      "Bash(git:*)",
-      "Bash(gh:*)",
-      "Bash(ls:*)",
-      "Bash(find:*)",
-      "Bash(tree:*)",
-      "Bash(cat:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
-      "Bash(less:*)",
-      "Bash(more:*)",
-      "Bash(wc:*)",
-      "Bash(diff:*)",
-      "Bash(sort:*)",
-      "Bash(uniq:*)",
-      "Bash(cut:*)",
-      "Bash(awk:*)",
-      "Bash(sed:*)",
-      "Bash(tr:*)",
-      "Bash(jq:*)",
-      "Bash(yq:*)",
-      "Bash(xargs:*)",
-      "Bash(grep:*)",
-      "Bash(rg:*)",
-      "Bash(ag:*)",
-      "Bash(fzf:*)",
-      "Bash(fd:*)",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(cp:*)",
-      "Bash(ln:*)",
-      "Bash(chmod:*)",
-      "Bash(chown:*)",
-      "Bash(touch:*)",
-      "Bash(echo:*)",
-      "Bash(printf:*)",
-      "Bash(basename:*)",
-      "Bash(dirname:*)",
-      "Bash(realpath:*)",
-      "Bash(readlink:*)",
-      "Bash(stat:*)",
-      "Bash(file:*)",
-      "Bash(du:*)",
-      "Bash(df:*)",
-      "Bash(env)",
-      "Bash(printenv:*)",
-      "Bash(export:*)",
-      "Bash(which:*)",
-      "Bash(whereis:*)",
-      "Bash(type:*)",
-      "Bash(pwd)",
-      "Bash(cd:*)",
-      "Bash(whoami)",
-      "Bash(id:*)",
-      "Bash(uname:*)",
-      "Bash(date:*)",
-      "Bash(hostname)",
-      "Bash(ps:*)",
-      "Bash(pgrep:*)",
-      "Bash(pkill:*)",
-      "Bash(kill:*)",
-      "Bash(lsof:*)",
-      "Bash(ping:*)",
-      "Bash(host:*)",
-      "Bash(dig:*)",
-      "Bash(nslookup:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)",
-      "Bash(http:*)",
-      "Bash(tar:*)",
-      "Bash(zip:*)",
-      "Bash(unzip:*)",
-      "Bash(gzip:*)",
-      "Bash(gunzip:*)",
-      "Bash(python:*)",
-      "Bash(python3:*)",
-      "Bash(pip:*)",
-      "Bash(pip3:*)",
-      "Bash(uv:*)",
-      "Bash(poetry:*)",
-      "Bash(pipenv:*)",
-      "Bash(ruby:*)",
-      "Bash(gem:*)",
-      "Bash(bundle:*)",
-      "Bash(rails:*)",
-      "Bash(rake:*)",
-      "Bash(go:*)",
-      "Bash(cargo:*)",
-      "Bash(rustc:*)",
-      "Bash(rustup:*)",
-      "Bash(swift:*)",
-      "Bash(swiftc:*)",
-      "Bash(xcodebuild:*)",
-      "Bash(xcrun:*)",
-      "Bash(make:*)",
-      "Bash(cmake:*)",
-      "Bash(gcc:*)",
-      "Bash(g++:*)",
-      "Bash(clang:*)",
-      "Bash(clang++:*)",
-      "Bash(docker:*)",
-      "Bash(docker-compose:*)",
-      "Bash(kubectl:*)",
-      "Bash(helm:*)",
-      "Bash(terraform:*)",
-      "Bash(brew:*)",
-      "Bash(apt:*)",
-      "Bash(apt-get:*)",
-      "Bash(open:*)",
-      "Bash(code:*)",
-      "Bash(supabase:*)",
-      "Bash(vercel:*)",
-      "Bash(netlify:*)",
-      "Bash(firebase:*)",
-      "Bash(aws:*)",
-      "Bash(gcloud:*)",
-      "Bash(az:*)",
-      "Bash(heroku:*)",
-      "Bash(flyctl:*)",
-      "Bash(ssh:*)",
-      "Bash(scp:*)",
-      "Bash(rsync:*)",
-      "Bash(ffmpeg:*)",
-      "Bash(convert:*)",
-      "Bash(magick:*)",
-      "Bash(pbcopy)",
-      "Bash(pbpaste)",
-      "Bash(base64:*)",
-      "Bash(md5:*)",
-      "Bash(shasum:*)",
-      "Bash(openssl:*)",
-      "Bash(sleep:*)",
-      "Bash(true)",
-      "Bash(false)",
-      "Bash(test:*)",
-      "Bash([:*)",
-      "Bash(~/.claude/CLAUDE.md)",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__query-docs",
-      "Bash(ghostty +show-config:*)",
-      "Bash(sqlite3:*)",
-      "Bash(osascript:*)",
-      "Bash(mdfind:*)",
-      "Bash(sw_vers:*)",
-      "Bash(sudo find:*)",
-      "Bash(defaults read:*)",
-      "Bash(sudo ls:*)",
-      "Bash(~/bin/iphone-tabs:*)",
-      "Bash(./backup.sh:*)"
+      "Bash",
+      "mcp__pencil",
+      "Skill(claudeception)"
     ],
-    "defaultMode": "plan"
+    "deny": [
+      "Bash(rm -rf ~*)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf .*)",
+      "Bash(sudo rm -rf*)",
+      "Bash(mkfs*)",
+      "Bash(dd if=*)",
+      "Bash(> /dev/sd*)",
+      "Bash(chmod -R 777*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(docker system prune*)",
+      "Bash(docker rmi -f*)",
+      "Bash(kubectl delete namespace*)",
+      "Bash(kubectl delete --all*)",
+      "Bash(helm uninstall*)"
+    ],
+    "defaultMode": "acceptEdits"
   },
+  "model": "opus[1m]",
   "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify-sound.sh notification",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PermissionRequest": [
       {
         "hooks": [
@@ -187,9 +70,27 @@
             "model": "sonnet"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
       }
     ],
     "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/context-tracker.sh",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
@@ -197,6 +98,47 @@
             "type": "command",
             "command": "~/.claude/hooks/lint-check.sh",
             "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/commit-guard.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/shreyasgupta/.claude/hooks/rtk-rewrite.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify-sound.sh compact",
+            "timeout": 5
           }
         ]
       }
@@ -211,6 +153,55 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/claudeception-activator.sh",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify-sound.sh done",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$SUPERSET_HOME_DIR\" ] && [ -x \"$SUPERSET_HOME_DIR/hooks/notify.sh\" ] && \"$SUPERSET_HOME_DIR/hooks/notify.sh\" || true"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -218,17 +209,23 @@
     "command": "~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "supabase@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true,
-    "figma@claude-plugins-official": true,
-    "hookify@claude-plugins-official": true,
-    "compound-engineering@every-marketplace": true,
+    "claude-code-setup@claude-plugins-official": true,
     "coding-tutor@every-marketplace": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
+    "compound-engineering@every-marketplace": true,
+    "hookify@claude-plugins-official": true,
     "playground@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true
-  }
+    "supabase@claude-plugins-official": false,
+    "honcho@honcho": true,
+    "honcho-dev@honcho": true
+  },
+  "extraKnownMarketplaces": {
+    "honcho": {
+      "source": {
+        "source": "github",
+        "repo": "plastic-labs/claude-honcho"
+      }
+    }
+  },
+  "effortLevel": "high"
 }

@@ -185,47 +185,75 @@ sync_claude_configs() {
         ((changed++)) || true
     done
 
-    # --- Hooks directory ---
+    # --- Hooks directory (rsync to capture subdirs like sounds/) ---
 
     if [[ -d "$HOME/.claude/hooks" ]]; then
         local hooks_dest="$claude_dest/hooks"
-        local hook_file hook_name
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "[DRY-RUN] Would rsync hooks/"
+        else
+            mkdir -p "$hooks_dest"
+            rsync -a --delete \
+                --exclude='.*' \
+                "$HOME/.claude/hooks/" "$hooks_dest/"
+            log_success "Synced hooks/"
+        fi
+        ((changed++)) || true
+    fi
 
-        for hook_file in "$HOME/.claude/hooks"/*; do
-            [[ -f "$hook_file" ]] || continue
-            hook_name=$(basename "$hook_file")
-            [[ "$hook_name" == .* ]] && continue
+    # --- Agent-docs directory ---
 
-            if [[ -f "$hooks_dest/$hook_name" ]] && diff -q "$hook_file" "$hooks_dest/$hook_name" &>/dev/null; then
+    if [[ -d "$HOME/.claude/agent-docs" ]]; then
+        local agentdocs_dest="$claude_dest/agent-docs"
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "[DRY-RUN] Would rsync agent-docs/"
+        else
+            mkdir -p "$agentdocs_dest"
+            rsync -a --delete "$HOME/.claude/agent-docs/" "$agentdocs_dest/"
+            log_success "Synced agent-docs/"
+        fi
+        ((changed++)) || true
+    fi
+
+    # --- Rules directory ---
+
+    if [[ -d "$HOME/.claude/rules" ]]; then
+        local rules_dest="$claude_dest/rules"
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "[DRY-RUN] Would rsync rules/"
+        else
+            mkdir -p "$rules_dest"
+            rsync -a --delete "$HOME/.claude/rules/" "$rules_dest/"
+            log_success "Synced rules/"
+        fi
+        ((changed++)) || true
+    fi
+
+    # --- Plugins (all json config files) ---
+
+    if [[ -d "$HOME/.claude/plugins" ]]; then
+        local plugins_dest="$claude_dest/plugins"
+        local plugin_file plugin_name
+
+        for plugin_file in "$HOME/.claude/plugins"/*.json; do
+            [[ -f "$plugin_file" ]] || continue
+            plugin_name=$(basename "$plugin_file")
+            # Skip ephemeral caches
+            [[ "$plugin_name" == "install-counts-cache.json" ]] && continue
+
+            if [[ -f "$plugins_dest/$plugin_name" ]] && diff -q "$plugin_file" "$plugins_dest/$plugin_name" &>/dev/null; then
                 continue
             fi
 
             if [[ "$dry_run" == "true" ]]; then
-                log_info "[DRY-RUN] Would sync hook: $hook_name"
+                log_info "[DRY-RUN] Would sync plugin config: $plugin_name"
             else
-                mkdir -p "$hooks_dest"
-                cp "$hook_file" "$hooks_dest/$hook_name"
-                log_success "Synced hook: $hook_name"
+                mkdir -p "$plugins_dest"
+                cp "$plugin_file" "$plugins_dest/$plugin_name"
+                log_success "Synced plugin config: $plugin_name"
             fi
             ((changed++)) || true
         done
-    fi
-
-    # --- Plugins list ---
-
-    if [[ -f "$HOME/.claude/plugins/installed_plugins.json" ]]; then
-        local plugins_dest="$claude_dest/plugins/installed_plugins.json"
-
-        if ! ( [[ -f "$plugins_dest" ]] && diff -q "$HOME/.claude/plugins/installed_plugins.json" "$plugins_dest" &>/dev/null ); then
-            if [[ "$dry_run" == "true" ]]; then
-                log_info "[DRY-RUN] Would sync: installed_plugins.json"
-            else
-                mkdir -p "$claude_dest/plugins"
-                cp "$HOME/.claude/plugins/installed_plugins.json" "$plugins_dest"
-                log_success "Synced: installed_plugins.json"
-            fi
-            ((changed++)) || true
-        fi
     fi
 
     # --- Personal skills (non-symlink dirs in ~/.claude/skills/) ---

@@ -15,60 +15,30 @@
     "supabase@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/supabase/aa296ec81e8c",
-        "version": "aa296ec81e8c",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/supabase/unknown",
+        "version": "unknown",
         "installedAt": "2026-01-14T04:49:34.790Z",
-        "lastUpdated": "2026-02-20T18:08:28.067Z",
+        "lastUpdated": "2026-03-30T02:10:22.095Z",
         "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
-      }
-    ],
-    "frontend-design@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/frontend-design/aa296ec81e8c",
-        "version": "aa296ec81e8c",
-        "installedAt": "2026-01-14T04:50:57.326Z",
-        "lastUpdated": "2026-02-20T18:08:28.069Z",
-        "gitCommitSha": "f70b65538da094ff474a855e7a679fb2c2c8064f"
-      }
-    ],
-    "vercel@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/vercel/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-01-14T04:51:14.305Z",
-        "lastUpdated": "2026-01-14T04:51:14.305Z",
-        "gitCommitSha": "ae067751b4f42c97d13054211657275029ca8b6d"
-      }
-    ],
-    "figma@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/figma/1.1.0",
-        "version": "1.1.0",
-        "installedAt": "2026-01-14T06:43:46.627Z",
-        "lastUpdated": "2026-02-12T03:29:38.817Z",
-        "gitCommitSha": "20aca44ee6ba6092037e943c151c067896828360"
       }
     ],
     "hookify@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/hookify/aa296ec81e8c",
-        "version": "aa296ec81e8c",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/hookify/unknown",
+        "version": "unknown",
         "installedAt": "2026-01-17T19:13:46.009Z",
-        "lastUpdated": "2026-02-20T18:08:28.079Z",
+        "lastUpdated": "2026-03-30T02:10:22.096Z",
         "gitCommitSha": "96276205880a60fd66bbae981f5ab568e70c4cbf"
       }
     ],
     "compound-engineering@every-marketplace": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/every-marketplace/compound-engineering/2.27.0",
-        "version": "2.27.0",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/every-marketplace/compound-engineering/2.59.0",
+        "version": "2.59.0",
         "installedAt": "2026-01-21T18:12:48.223Z",
-        "lastUpdated": "2026-01-21T18:12:48.223Z",
+        "lastUpdated": "2026-03-29T10:35:25.547Z",
         "gitCommitSha": "cb2485ff481cb6d556163003d339ce16d4dcffdb"
       }
     ],
@@ -82,43 +52,23 @@
         "gitCommitSha": "cb2485ff481cb6d556163003d339ce16d4dcffdb"
       }
     ],
-    "rust-analyzer-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/rust-analyzer-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-01-26T08:24:33.455Z",
-        "lastUpdated": "2026-01-26T08:24:33.455Z",
-        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
-      }
-    ],
     "playground@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/playground/aa296ec81e8c",
-        "version": "aa296ec81e8c",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/playground/unknown",
+        "version": "unknown",
         "installedAt": "2026-01-30T06:14:24.194Z",
-        "lastUpdated": "2026-02-20T18:08:28.076Z",
+        "lastUpdated": "2026-03-30T02:10:22.096Z",
         "gitCommitSha": "27d2b86d72da27c64585150857cee8472ad47abb"
-      }
-    ],
-    "swift-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/swift-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-02-10T14:28:47.755Z",
-        "lastUpdated": "2026-02-10T14:28:47.755Z",
-        "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
     "ralph-loop@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/ralph-loop/aa296ec81e8c",
-        "version": "aa296ec81e8c",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/claude-plugins-official/ralph-loop/1.0.0",
+        "version": "1.0.0",
         "installedAt": "2026-02-15T23:51:54.350Z",
-        "lastUpdated": "2026-02-20T18:08:28.072Z",
+        "lastUpdated": "2026-03-29T10:35:25.504Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ],
@@ -130,6 +80,26 @@
         "installedAt": "2026-02-17T14:41:25.736Z",
         "lastUpdated": "2026-02-17T14:41:25.736Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
+      }
+    ],
+    "honcho@honcho": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/honcho/honcho/0.2.2",
+        "version": "0.2.2",
+        "installedAt": "2026-03-20T09:07:11.964Z",
+        "lastUpdated": "2026-03-20T09:07:11.964Z",
+        "gitCommitSha": "8d34db2a66de9acecf8912d0962c9b6b5757da71"
+      }
+    ],
+    "honcho-dev@honcho": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/honcho/honcho-dev/0.1.3",
+        "version": "0.1.3",
+        "installedAt": "2026-03-20T09:10:13.500Z",
+        "lastUpdated": "2026-03-20T09:10:13.500Z",
+        "gitCommitSha": "8d34db2a66de9acecf8912d0962c9b6b5757da71"
       }
     ]
   }
