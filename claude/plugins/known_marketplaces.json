@@ -1,0 +1,27 @@
+{
+  "claude-plugins-official": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
+    },
+    "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/claude-plugins-official",
+    "lastUpdated": "2026-03-31T06:06:38.553Z"
+  },
+  "every-marketplace": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/EveryInc/compound-engineering-plugin.git"
+    },
+    "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/every-marketplace",
+    "lastUpdated": "2026-03-31T06:18:19.558Z",
+    "autoUpdate": true
+  },
+  "honcho": {
+    "source": {
+      "source": "github",
+      "repo": "plastic-labs/claude-honcho"
+    },
+    "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/honcho",
+    "lastUpdated": "2026-03-29T14:42:08.779Z"
+  }
+}

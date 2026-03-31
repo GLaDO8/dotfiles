@@ -1,6 +1,7 @@
 ---
 name: extract-ios-icons
 description: Extract app icons (alternate and primary) from an iOS IPA file as PNG and macOS .icns files. Use when the user wants to extract icons from an IPA, get custom app icons from an iOS app, convert iOS icons to macOS icns format, or apply iOS icons to a macOS app. If no IPA is provided, guides the user through obtaining one via Apple Configurator 2 with an automated cache watcher.
+disable-model-invocation: true
 ---
 
 # Extract iOS App Icons from IPA
