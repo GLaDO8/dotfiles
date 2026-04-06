@@ -757,6 +757,7 @@ config_setup() {
     run mkdir -p "$HOME/.config/git"
     run mkdir -p "$HOME/.config/atuin"
     run mkdir -p "$HOME/.config/karabiner"
+    run mkdir -p "$HOME/Library/Application Support/Choosy"
 
     # Zed
     if [[ -d "$DOTFILES_DIR/config/zed" ]]; then
@@ -774,6 +775,14 @@ config_setup() {
         ensure_symlink_tree "$DOTFILES_DIR/config/ghostty/themes" "$HOME/.config/ghostty/themes"
     else
         log_warn "Ghostty config not found, skipping..."
+    fi
+
+    # Choosy (copy, not symlink — app-managed files)
+    if [[ -f "$DOTFILES_DIR/config/choosy/behaviours.plist" ]]; then
+        ensure_copy "$DOTFILES_DIR/config/choosy/behaviours.plist" "$HOME/Library/Application Support/Choosy/behaviours.plist"
+    fi
+    if [[ -f "$DOTFILES_DIR/config/choosy/com.choosyosx.Choosy.plist" ]]; then
+        ensure_copy "$DOTFILES_DIR/config/choosy/com.choosyosx.Choosy.plist" "$HOME/Library/Preferences/com.choosyosx.Choosy.plist"
     fi
 
     # btop
@@ -863,6 +872,109 @@ config_setup() {
     if [[ -f "$DOTFILES_DIR/config/uv/uv-receipt.json" ]]; then
         ensure_symlink "$DOTFILES_DIR/config/uv/uv-receipt.json" "$HOME/.config/uv/uv-receipt.json"
     fi
+
+    return 0
+}
+
+iina_default_player_setup() {
+    local iina_app="/Applications/IINA.app"
+    local iina_bundle_id="com.colliderli.iina"
+    local type_or_ext
+
+    log_info "Setting IINA as default media player..."
+
+    if [[ ! -d "$iina_app" ]]; then
+        log_warn "IINA is not installed, skipping default media association"
+        return 0
+    fi
+
+    if ! command -v duti &>/dev/null; then
+        log_warn "duti not found, skipping IINA default media association"
+        return 0
+    fi
+
+    local -a content_types=(
+        "public.movie"
+        "public.video"
+        "public.audio"
+        "public.audiovisual-content"
+        "public.mpeg-4"
+        "public.mp3"
+    )
+
+    local -a extensions=(
+        "avi"
+        "flac"
+        "m4a"
+        "m4v"
+        "mkv"
+        "mov"
+        "mp3"
+        "mp4"
+        "mpeg"
+        "mpg"
+        "wav"
+        "webm"
+    )
+
+    for type_or_ext in "${content_types[@]}"; do
+        run duti -s "$iina_bundle_id" "$type_or_ext" all || log_warn "Failed to assign IINA for content type: $type_or_ext"
+    done
+
+    for type_or_ext in "${extensions[@]}"; do
+        run duti -s "$iina_bundle_id" ".$type_or_ext" all || log_warn "Failed to assign IINA for extension: .$type_or_ext"
+    done
+
+    return 0
+}
+
+choosy_default_browser_setup() {
+    local choosy_app="/Applications/Choosy.app"
+    local choosy_bundle_id="com.choosyosx.Choosy"
+    local type_or_scheme
+
+    log_info "Setting Choosy as default browser..."
+
+    if [[ ! -d "$choosy_app" ]]; then
+        log_warn "Choosy is not installed, skipping default browser association"
+        return 0
+    fi
+
+    if ! command -v duti &>/dev/null; then
+        log_warn "duti not found, skipping Choosy default browser association"
+        return 0
+    fi
+
+    local -a url_schemes=(
+        "http"
+        "https"
+    )
+
+    local -a content_types=(
+        "public.html"
+        "public.xhtml"
+        "public.url"
+        "public.url-name"
+    )
+
+    local -a extensions=(
+        "htm"
+        "html"
+        "shtml"
+        "xhtml"
+    )
+
+    for type_or_scheme in "${url_schemes[@]}"; do
+        run duti -s "$choosy_bundle_id" "$type_or_scheme" all || log_warn "Failed to assign Choosy for URL scheme: $type_or_scheme"
+    done
+
+    for type_or_scheme in "${content_types[@]}"; do
+        run duti -s "$choosy_bundle_id" "$type_or_scheme" all || log_warn "Failed to assign Choosy for content type: $type_or_scheme"
+    done
+
+    for type_or_scheme in "${extensions[@]}"; do
+        run duti -s "$choosy_bundle_id" ".$type_or_scheme" all || log_warn "Failed to assign Choosy for extension: .$type_or_scheme"
+    done
 
     return 0
 }
@@ -1280,6 +1392,8 @@ main() {
     run_setup claude_setup "Claude Code configuration" || true
     run_setup mackup_setup "Mackup app settings backup" || true
     run_setup dock_setup "Dock configuration" || true
+    run_setup choosy_default_browser_setup "Choosy default browser association" || true
+    run_setup iina_default_player_setup "IINA default media association" || true
 
     # ── Phase 6: Validation (sequential) ─────────────────────────
     log_phase "6/6" "Validation"

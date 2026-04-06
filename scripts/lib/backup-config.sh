@@ -37,6 +37,9 @@ CONFIG_SOURCES=(
     "$HOME/.config/zed/tasks.json"
     # Ghostty
     "$HOME/.config/ghostty/config"
+    # Choosy
+    "$HOME/Library/Application Support/Choosy/behaviours.plist"
+    "$HOME/Library/Preferences/com.choosyosx.Choosy.plist"
     # aichat
     "$HOME/.config/aichat/config.yaml"
     # GitHub CLI
@@ -66,6 +69,9 @@ CONFIG_DESTS=(
     "config/zed/tasks.json"
     # Ghostty
     "config/ghostty/config"
+    # Choosy
+    "config/choosy/behaviours.plist"
+    "config/choosy/com.choosyosx.Choosy.plist"
     # aichat
     "config/aichat/config.yaml"
     # GitHub CLI

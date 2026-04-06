@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
+	<key>SUHasLaunchedBefore</key>
+	<true/>
+	<key>browsers</key>
+	<array>
+		<dict>
+			<key>path</key>
+			<string>/Applications/Dia.app</string>
+			<key>type</key>
+			<string>ChoosyBrowser</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app</string>
+			<key>type</key>
+			<string>ChoosyBrowser</string>
+		</dict>
+	</array>
+	<key>displayMenuBarItem</key>
+	<false/>
+	<key>launchAtLogin</key>
+	<true/>
+</dict>
+</plist>

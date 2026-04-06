@@ -14,7 +14,7 @@ This repo currently manages:
 - Homebrew taps, formulae, casks, Mac App Store apps, and Go-installed tools through [Brewfile](/Users/shreyasgupta/local-documents/dotfiles/Brewfile)
 - Shell dotfiles like `.zshrc`, `.zsh_plugins.txt`, `.bash_profile`, `.bashrc`
 - Git, SSH, tmux, npm, ignore, and Mackup config
-- App config under `config/` for tools like Zed, Ghostty, Helix, Neovim, Yazi, Zellij, aichat, GitHub CLI, Atuin, Karabiner, Nicotine+, and `uv`
+- App config under `config/` for tools like Zed, Ghostty, Helix, Neovim, Yazi, Zellij, aichat, GitHub CLI, Atuin, Karabiner, Nicotine+, `uv`, and Choosy
 - VS Code and Cursor settings plus extension lists
 - Claude Code config, hooks, skills, and agent docs
 - Dock layout and macOS defaults
@@ -89,6 +89,8 @@ Important behavior:
 - Backs up replaced regular files into `~/.dotfiles-backup/`
 - Runs some independent setup tasks in parallel
   These currently include VS Code, Cursor, AI tools, and the autocommit agent
+- Can set Choosy as the default browser when `duti` is available
+- Can set IINA as the default handler for common media file types when `duti` is available
 - Finishes with [scripts/validate.sh](/Users/shreyasgupta/local-documents/dotfiles/scripts/validate.sh) unless disabled
 
 Environment toggles:
@@ -171,10 +173,13 @@ The current install flow covers:
 - Shell dotfiles
 - Git, SSH, tmux, npm, ignore, and Mackup config
 - App config under `config/`
+- Choosy rules and basic Choosy preferences
+- Choosy as the default browser for `http`, `https`, and common HTML document types
 - VS Code settings plus extension install attempts
 - Cursor settings, keybindings, and extension install attempts
 - Claude Code config, hooks, skills, and plugin metadata
 - Dock preferences and app list
+- IINA as the default handler for common audio/video types
 - macOS defaults via `.macos`
 - Optional secrets decryption via `sops`
 - Validation after restore
