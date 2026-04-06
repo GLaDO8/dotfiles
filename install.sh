@@ -12,11 +12,6 @@
 #
 set -o pipefail
 
-# Ask for sudo password upfront and keep it alive for the duration of the script
-sudo -v
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-SUDO_PID=$!
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -33,6 +28,8 @@ DOTFILES_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 # Track errors for summary
 ERRORS=()
 DRY_RUN=false
+INSTALL_MAS="${INSTALL_MAS:-false}"
+SUDO_PID=""
 
 # Parse arguments
 for arg in "$@"; do
@@ -46,7 +43,7 @@ done
 
 # Temp dir for parallel job output
 PARALLEL_DIR=$(mktemp -d)
-trap 'rm -rf "$PARALLEL_DIR"; kill $SUDO_PID 2>/dev/null' EXIT
+trap 'rm -rf "$PARALLEL_DIR"; [[ -n "$SUDO_PID" ]] && kill "$SUDO_PID" 2>/dev/null' EXIT
 
 # ============================================================================
 # Logging
@@ -160,6 +157,187 @@ wait_phase() {
     BG_NAMES=()
 }
 
+setup_sudo_session() {
+    if $DRY_RUN; then
+        return 0
+    fi
+
+    sudo -v || return 1
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+    SUDO_PID=$!
+}
+
+# ============================================================================
+# Brewfile helpers
+# ============================================================================
+
+quoted_field() {
+    local line=$1
+    local position=$2
+
+    awk -F'"' -v position="$position" '{print $(position * 2)}' <<< "$line"
+}
+
+should_process_brewfile_line() {
+    local line=$1
+
+    [[ "$line" =~ ^[[:space:]]*# ]] && return 1
+    [[ -z "${line// }" ]] && return 1
+
+    if [[ "$line" =~ ^mas[[:space:]]+ ]] && [[ "$INSTALL_MAS" != "true" ]]; then
+        return 1
+    fi
+
+    [[ "$line" =~ ^(tap|brew|cask|mas|go)[[:space:]]+ ]]
+}
+
+brewfile_entry_total() {
+    local line
+    local total=0
+
+    while IFS= read -r line; do
+        if should_process_brewfile_line "$line"; then
+            ((total++))
+        fi
+    done < "$DOTFILES_DIR/Brewfile"
+
+    echo "$total"
+}
+
+brewfile_install_entry() {
+    local index=$1
+    local total=$2
+    local line=$3
+    local type
+    local link_false=false
+    local primary_field
+    local secondary_field
+
+    type=${line%% *}
+    primary_field=$(quoted_field "$line" 1)
+    secondary_field=$(quoted_field "$line" 2)
+
+    case "$type" in
+        tap)
+            local tap_name="$primary_field"
+            local tap_url="$secondary_field"
+            log_info "[$index/$total] tap $tap_name"
+
+            if brew tap | grep -Fxq "$tap_name"; then
+                log_success "Already tapped: $tap_name"
+                return 0
+            fi
+
+            if [[ -n "$tap_url" ]]; then
+                run brew tap "$tap_name" "$tap_url" || return 1
+            else
+                run brew tap "$tap_name" || return 1
+            fi
+            ;;
+
+        brew)
+            local formula="$primary_field"
+            [[ "$line" == *"link: false"* ]] && link_false=true
+            log_info "[$index/$total] brew $formula"
+
+            if brew list --formula "$formula" &>/dev/null; then
+                log_success "Already installed: $formula"
+                return 0
+            fi
+
+            run brew install "$formula" || return 1
+            if $link_false; then
+                run brew unlink "$formula" || log_warn "Could not unlink $formula after install"
+            fi
+            ;;
+
+        cask)
+            local cask="$primary_field"
+            log_info "[$index/$total] cask $cask"
+
+            if brew list --cask "$cask" &>/dev/null; then
+                log_success "Already installed: $cask"
+                return 0
+            fi
+
+            run brew install --cask "$cask" || return 1
+            ;;
+
+        mas)
+            local app_name="$primary_field"
+            local app_id
+
+            if ! command -v mas &>/dev/null; then
+                log_warn "mas CLI not installed yet, skipping App Store app: $app_name"
+                return 1
+            fi
+
+            if ! mas account &>/dev/null; then
+                log_warn "App Store account not signed in, skipping: $app_name"
+                return 1
+            fi
+
+            if [[ "$line" =~ id:[[:space:]]*([0-9]+) ]]; then
+                app_id="${BASH_REMATCH[1]}"
+            else
+                log_warn "Could not parse App Store ID for: $app_name"
+                return 1
+            fi
+
+            log_info "[$index/$total] mas $app_name"
+
+            if mas list | awk '{print $1}' | grep -qx "$app_id"; then
+                log_success "Already installed: $app_name"
+                return 0
+            fi
+
+            run mas install "$app_id" || return 1
+            ;;
+
+        go)
+            local package="$primary_field"
+            local binary="${package##*/}"
+            log_info "[$index/$total] go $package"
+
+            if ! command -v go &>/dev/null; then
+                log_warn "go is not installed yet, skipping: $package"
+                return 1
+            fi
+
+            if command -v "$binary" &>/dev/null; then
+                log_success "Already installed: $binary"
+                return 0
+            fi
+
+            run go install "$package@latest" || return 1
+            ;;
+    esac
+
+    log_success "Installed: $primary_field"
+    return 0
+}
+
+install_from_brewfile() {
+    local line
+    local current=0
+    local total
+
+    total=$(brewfile_entry_total)
+    log_info "Installing Brewfile entries with progress ($total items)..."
+
+    while IFS= read -r line; do
+        if ! should_process_brewfile_line "$line"; then
+            continue
+        fi
+
+        ((current++))
+        if ! brewfile_install_entry "$current" "$total" "$line"; then
+            log_warn "Continuing after failed Brewfile entry: $line"
+            ERRORS+=("Brewfile entry failed: $line")
+        fi
+    done < "$DOTFILES_DIR/Brewfile"
+}
+
 # ============================================================================
 # Setup Functions
 # ============================================================================
@@ -203,13 +381,17 @@ brew_setup() {
     log_info "Upgrading installed packages..."
     run brew upgrade || log_warn "brew upgrade failed, continuing..."
 
-    # Install all our dependencies with bundle (See Brewfile)
+    # Install all dependencies from Brewfile with progress and soft-fail behavior.
     log_info "Installing brew packages and cask apps..."
     if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
-        run brew bundle install --verbose --file="$DOTFILES_DIR/Brewfile" || log_warn "Some packages failed to install"
+        install_from_brewfile
     else
         log_error "Brewfile not found at $DOTFILES_DIR/Brewfile"
         return 1
+    fi
+
+    if [[ "$INSTALL_MAS" != "true" ]]; then
+        log_warn "Skipping Mac App Store installs by default. Run INSTALL_MAS=true ./install.sh after signing into the App Store and disabling the purchase-password prompt."
     fi
 
     # Create sha256sum symlink if coreutils is installed
@@ -787,30 +969,34 @@ main() {
         echo -e "${YELLOW}>>> DRY-RUN MODE: No changes will be made <<<${NC}"
     fi
 
-    # ── Phase 1: Prerequisites (sequential) ──────────────────────
-    log_phase "1/4" "Prerequisites"
+    setup_sudo_session || log_warn "Could not establish sudo session upfront; privileged steps may require manual intervention"
+
+    # ── Phase 1: System defaults (sequential) ────────────────────
+    log_phase "1/5" "System defaults"
+    run_setup macos_defaults_setup "macOS preferences" || true
+
+    # ── Phase 2: Prerequisites (sequential) ──────────────────────
+    log_phase "2/5" "Prerequisites"
     run_setup xcode_cl_tools "Xcode command line tools" || true
     run_setup brew_setup "Homebrew packages" || true
 
-    # ── Phase 2: Configuration (instant, sequential) ─────────────
-    log_phase "2/4" "Configuration"
+    # ── Phase 3: Configuration (instant, sequential) ─────────────
+    log_phase "3/5" "Configuration"
     run_setup secrets_setup "Decrypt secrets" || true
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
 
-    # ── Phase 3: App setup (parallel) ────────────────────────────
-    log_phase "3/4" "App setup (parallel)"
-    run_setup_bg vscode_setup "VS Code"
+    # ── Phase 4: App setup (parallel) ────────────────────────────
+    log_phase "4/5" "App setup (parallel)"
     run_setup_bg cursor_setup "Cursor"
     run_setup_bg ai_tools_setup "AI coding tools"
     run_setup_bg autocommit_setup "Dotfiles auto-backup agent"
     wait_phase
 
-    # ── Phase 4: Final setup (sequential) ────────────────────────
-    log_phase "4/4" "Final setup"
+    # ── Phase 5: Final setup (sequential) ────────────────────────
+    log_phase "5/5" "Final setup"
     run_setup claude_setup "Claude Code configuration" || true
     run_setup mackup_setup "Mackup app settings backup" || true
-    run_setup macos_defaults_setup "macOS preferences" || true
     run_setup dock_setup "Dock configuration" || true
 
     # ── Summary ──────────────────────────────────────────────────

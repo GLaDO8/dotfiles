@@ -113,36 +113,66 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 _zsh_cache="$HOME/.cache/zsh-inits"
 
+_cache_init_script() {
+  local cache_file=$1
+  shift
+
+  local tmp_file="${cache_file}.tmp"
+  "$@" > "$tmp_file" && mv "$tmp_file" "$cache_file"
+}
+
 zsh-refresh-cache() {
   echo "Regenerating cached init scripts..."
   mkdir -p "$_zsh_cache"
-  zoxide init zsh          > "$_zsh_cache/zoxide.zsh"
-  direnv hook zsh          > "$_zsh_cache/direnv.zsh"
-  fzf --zsh                > "$_zsh_cache/fzf.zsh"
-  atuin init zsh           > "$_zsh_cache/atuin.zsh"
+  _cache_init_script "$_zsh_cache/zoxide.zsh" zoxide init zsh
+  _cache_init_script "$_zsh_cache/direnv.zsh" direnv hook zsh
+  _cache_init_script "$_zsh_cache/fzf.zsh" fzf --zsh
+  _cache_init_script "$_zsh_cache/atuin.zsh" atuin init zsh
   echo "Done. Restart your shell to pick up changes."
 }
 
-# Generate cache on first run
-if [[ ! -d "$_zsh_cache" ]]; then
-  mkdir -p "$_zsh_cache"
-  zoxide init zsh          > "$_zsh_cache/zoxide.zsh"
-  direnv hook zsh          > "$_zsh_cache/direnv.zsh"
-  fzf --zsh                > "$_zsh_cache/fzf.zsh"
-  atuin init zsh           > "$_zsh_cache/atuin.zsh"
-fi
+# Ensure the cache directory exists for manual refreshes.
+mkdir -p "$_zsh_cache"
 
 # fzf config (before sourcing its init)
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+_fzf_fd_excludes=(
+  --exclude .git
+  --exclude .next
+  --exclude .nuxt
+  --exclude .output
+  --exclude .svelte-kit
+  --exclude .turbo
+  --exclude .yarn
+  --exclude coverage
+  --exclude dist
+  --exclude build
+  --exclude out
+  --exclude target
+  --exclude node_modules
+)
+
+export FZF_DEFAULT_COMMAND="fd --type f --hidden ${_fzf_fd_excludes[*]}"
+export FZF_CTRL_T_COMMAND="{ fd --type d --hidden ${_fzf_fd_excludes[*]}; fd --type f --hidden ${_fzf_fd_excludes[*]}; }"
+export FZF_ALT_C_COMMAND="fd --type d --hidden ${_fzf_fd_excludes[*]}"
 
 # Source cached inits
-for f in "$_zsh_cache"/*.zsh; do source "$f"; done
+for f in "$_zsh_cache"/*.zsh; do
+  [[ -s "$f" ]] && source "$f"
+done
+
+# Fall back to a live fzf init if the cached file is missing/empty or its widgets
+# are unavailable in the current shell.
+if (( ! ${+widgets[fzf-file-widget]} || ! ${+widgets[fzf-cd-widget]} )); then
+  source <(fzf --zsh)
+fi
 
 # fzf rebinds for Zellij (Ctrl+T conflicts with Zellij tab mode)
-bindkey '^F' fzf-file-widget       # Ctrl+F → fuzzy file path
-bindkey '^E' fzf-cd-widget         # Ctrl+E → fuzzy cd
+bindkey -M emacs '^F' fzf-file-widget  # Ctrl+F → fuzzy file path
+bindkey -M viins '^F' fzf-file-widget
+bindkey -M vicmd '^F' fzf-file-widget
+bindkey -M emacs '^E' fzf-cd-widget    # Ctrl+E → fuzzy cd
+bindkey -M viins '^E' fzf-cd-widget
+bindkey -M vicmd '^E' fzf-cd-widget
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║  ALIASES & FUNCTIONS                                                    ║

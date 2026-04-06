@@ -67,6 +67,9 @@ defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 # ── Dock ─────────────────────────────────────────────────────────
 
+# Put the Dock on the left as early as possible in the restore flow
+defaults write com.apple.dock orientation -string "left"
+
 # Minimize windows into their application's icon
 defaults write com.apple.dock minimize-to-application -bool true
 
@@ -154,3 +157,4 @@ defaults write org.m0k.transmission CheckRemoveDownloading -bool true
 
 # Restart Finder to apply changes
 killall Finder 2>/dev/null || true
+killall Dock 2>/dev/null || true

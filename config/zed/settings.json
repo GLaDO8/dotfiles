@@ -12,6 +12,7 @@
     "favorite_models": [],
     "model_parameters": []
   }, */
+  "base_keymap": "VSCode",
   "minimum_contrast_for_highlights": 50.0,
   "multi_cursor_modifier": "cmd_or_ctrl",
   "lsp": {
@@ -67,11 +68,7 @@
   "session": {
     "trust_all_worktrees": true,
   },
-  "icon_theme": {
-    "mode": "system",
-    "light": "Colored Zed Icons Theme Light",
-    "dark": "Colored Zed Icons Theme Dark",
-  },
+  "icon_theme": "Colored Zed Icons Theme Dark",
   "toolbar": {
     "code_actions": false,
     "breadcrumbs": true,
@@ -164,11 +161,7 @@
   "buffer_font_family": "TX-02",
   "cursor_shape": "block",
   "cursor_blink": true,
-  "theme": {
-    "mode": "system",
-    "light": "macOS Classic Light",
-    "dark": "XY-Zed",
-  },
+  "theme": "XY-Zed",
   "git": {
     "git_gutter": "tracked_files",
   },

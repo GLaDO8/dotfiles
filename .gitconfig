@@ -9,7 +9,6 @@
 	name = GLaDO8
 	email = gshreyas@icloud.com
 [core]
-	sshCommand = ssh -i ~/.ssh/id_rsa
 	pager = delta
 [init]
 	defaultBranch = main

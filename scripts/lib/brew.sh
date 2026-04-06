@@ -63,7 +63,7 @@ validate_brew() {
     done < <(brew list --cask 2>/dev/null)
 
     # Check critical formulas
-    local critical_formulas=("git" "gh" "node" "fzf" "zoxide" "eza" "tmux" "aichat" "vim" "zsh")
+    local critical_formulas=("git" "gh" "node" "fzf" "zoxide" "eza" "tmux" "aichat" "python" "zsh")
 
     for formula in "${critical_formulas[@]}"; do
         if printf '%s\n' "${installed_formulas[@]}" | grep -qx "$formula"; then
@@ -114,7 +114,7 @@ fix_brew() {
     print_section "Homebrew Sync"
 
     log_info "To install missing packages, run:"
-    log_info "  brew bundle install --file=$DOTFILES_DIR/Brewfile"
+    log_info "  ./install.sh"
     log_info ""
     log_info "To add installed packages to Brewfile, run:"
     log_info "  brew bundle dump --file=$DOTFILES_DIR/Brewfile --force"
