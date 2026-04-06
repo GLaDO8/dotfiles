@@ -10,7 +10,7 @@
 # Environment:
 #   DOTFILES_DIR              # Override dotfiles location (default: auto-detect)
 #
-set -o pipefail
+set -uo pipefail
 
 # Colors for output
 RED='\033[0;31m'
@@ -29,14 +29,42 @@ DOTFILES_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 ERRORS=()
 DRY_RUN=false
 INSTALL_MAS="${INSTALL_MAS:-false}"
+INSTALL_VALIDATE="${INSTALL_VALIDATE:-true}"
+BREW_UPGRADE="${BREW_UPGRADE:-false}"
 SUDO_PID=""
+BACKUP_ROOT="${BACKUP_ROOT:-$HOME/.dotfiles-backup}"
+BACKUP_DIR=""
+
+BREW_STATE_LOADED=false
+MAS_STATE_LOADED=false
+HAS_MAS_ACCOUNT=false
+INSTALLED_TAPS=()
+INSTALLED_FORMULAS=()
+INSTALLED_CASKS=()
+INSTALLED_MAS_IDS=()
 
 # Parse arguments
 for arg in "$@"; do
     case $arg in
         -n|--dry-run)
             DRY_RUN=true
-            shift
+            ;;
+        -h|--help)
+            cat <<EOF
+Usage: ./install.sh [OPTIONS]
+
+Options:
+  -n, --dry-run   Preview changes without applying them
+  -h, --help      Show this help
+
+Environment:
+  DOTFILES_DIR        Override dotfiles directory
+  INSTALL_MAS=true    Include Mac App Store installs from Brewfile
+  BREW_UPGRADE=true   Run brew upgrade before restoring packages
+  INSTALL_VALIDATE=false  Skip post-install validation
+  BACKUP_ROOT=...     Override backup root for replaced files
+EOF
+            exit 0
             ;;
     esac
 done
@@ -81,6 +109,120 @@ run() {
     else
         "$@"
     fi
+}
+
+ensure_backup_dir() {
+    if [[ -n "$BACKUP_DIR" ]]; then
+        return 0
+    fi
+
+    BACKUP_DIR="$BACKUP_ROOT/install-$(date +%Y%m%d_%H%M%S)"
+    if $DRY_RUN; then
+        return 0
+    fi
+
+    mkdir -p "$BACKUP_DIR"
+}
+
+backup_path() {
+    local target=$1
+    local backup_path
+
+    if [[ ! -e "$target" ]] && [[ ! -L "$target" ]]; then
+        return 0
+    fi
+
+    ensure_backup_dir || return 1
+
+    backup_path="$BACKUP_DIR/${target#/}"
+    if $DRY_RUN; then
+        echo -e "${YELLOW}[DRY-RUN]${NC} backup $target -> $backup_path"
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$backup_path")"
+    mv "$target" "$backup_path"
+    log_info "Backed up $target to $backup_path"
+}
+
+ensure_parent_dir() {
+    local target=$1
+    run mkdir -p "$(dirname "$target")"
+}
+
+ensure_symlink() {
+    local source=$1
+    local target=$2
+    local current_target=""
+    local resolved_target=""
+
+    if [[ ! -e "$source" ]]; then
+        log_warn "Missing source, skipping symlink: $source"
+        return 0
+    fi
+
+    ensure_parent_dir "$target" || return 1
+
+    if [[ -L "$target" ]]; then
+        current_target=$(readlink "$target")
+        if [[ "$current_target" == "$source" ]]; then
+            return 0
+        fi
+
+        resolved_target=$(cd "$(dirname "$target")" && cd "$(dirname "$current_target")" 2>/dev/null && pwd)/$(basename "$current_target")
+        if [[ "$resolved_target" == "$source" ]]; then
+            return 0
+        fi
+    elif [[ -e "$target" ]]; then
+        backup_path "$target" || return 1
+    fi
+
+    run ln -sfn "$source" "$target"
+}
+
+ensure_copy() {
+    local source=$1
+    local target=$2
+
+    if [[ ! -e "$source" ]]; then
+        log_warn "Missing source, skipping copy: $source"
+        return 0
+    fi
+
+    ensure_parent_dir "$target" || return 1
+
+    if [[ -L "$target" ]]; then
+        backup_path "$target" || return 1
+    elif [[ -f "$target" ]] && cmp -s "$source" "$target"; then
+        return 0
+    elif [[ -e "$target" ]]; then
+        backup_path "$target" || return 1
+    fi
+
+    run cp "$source" "$target"
+}
+
+ensure_symlink_tree() {
+    local source_dir=$1
+    local target_dir=$2
+    local source_path
+    local relative_path
+
+    if [[ ! -d "$source_dir" ]]; then
+        log_warn "Missing directory, skipping: $source_dir"
+        return 0
+    fi
+
+    while IFS= read -r source_path; do
+        relative_path="${source_path#"$source_dir"/}"
+        ensure_symlink "$source_path" "$target_dir/$relative_path" || return 1
+    done < <(find "$source_dir" -type f | sort)
+}
+
+array_contains() {
+    local value=$1
+    shift
+    printf '%s\n' "$@" | grep -Fxq -- "$value"
 }
 
 # Run a setup function with error handling (foreground)
@@ -167,6 +309,32 @@ setup_sudo_session() {
     SUDO_PID=$!
 }
 
+preflight_checks() {
+    log_info "Running preflight checks..."
+
+    if [[ "$(uname -s)" != "Darwin" ]]; then
+        log_error "This installer only supports macOS"
+        return 1
+    fi
+
+    if [[ ! -d "$DOTFILES_DIR" ]]; then
+        log_error "Dotfiles directory not found: $DOTFILES_DIR"
+        return 1
+    fi
+
+    if [[ ! -f "$DOTFILES_DIR/Brewfile" ]]; then
+        log_error "Brewfile not found at $DOTFILES_DIR/Brewfile"
+        return 1
+    fi
+
+    if ! $DRY_RUN && [[ ! -w "$HOME" ]]; then
+        log_error "Home directory is not writable: $HOME"
+        return 1
+    fi
+
+    return 0
+}
+
 # ============================================================================
 # Brewfile helpers
 # ============================================================================
@@ -204,6 +372,60 @@ brewfile_entry_total() {
     echo "$total"
 }
 
+load_brew_state() {
+    local item
+
+    if $BREW_STATE_LOADED; then
+        return 0
+    fi
+
+    INSTALLED_TAPS=()
+    INSTALLED_FORMULAS=()
+    INSTALLED_CASKS=()
+
+    while IFS= read -r item; do
+        [[ -n "$item" ]] && INSTALLED_TAPS+=("$item")
+    done < <(brew tap)
+
+    while IFS= read -r item; do
+        [[ -n "$item" ]] && INSTALLED_FORMULAS+=("$item")
+    done < <(brew list --formula 2>/dev/null)
+
+    while IFS= read -r item; do
+        [[ -n "$item" ]] && INSTALLED_CASKS+=("$item")
+    done < <(brew list --cask 2>/dev/null)
+
+    BREW_STATE_LOADED=true
+}
+
+load_mas_state() {
+    local item
+    local app_id
+
+    if $MAS_STATE_LOADED; then
+        return 0
+    fi
+
+    INSTALLED_MAS_IDS=()
+    HAS_MAS_ACCOUNT=false
+
+    if ! command -v mas &>/dev/null; then
+        MAS_STATE_LOADED=true
+        return 0
+    fi
+
+    if mas account &>/dev/null; then
+        HAS_MAS_ACCOUNT=true
+        while IFS= read -r item; do
+            [[ -z "$item" ]] && continue
+            app_id=${item%% *}
+            [[ -n "$app_id" ]] && INSTALLED_MAS_IDS+=("$app_id")
+        done < <(mas list 2>/dev/null)
+    fi
+
+    MAS_STATE_LOADED=true
+}
+
 brewfile_install_entry() {
     local index=$1
     local total=$2
@@ -223,7 +445,8 @@ brewfile_install_entry() {
             local tap_url="$secondary_field"
             log_info "[$index/$total] tap $tap_name"
 
-            if brew tap | grep -Fxq "$tap_name"; then
+            load_brew_state
+            if array_contains "$tap_name" "${INSTALLED_TAPS[@]}"; then
                 log_success "Already tapped: $tap_name"
                 return 0
             fi
@@ -233,6 +456,7 @@ brewfile_install_entry() {
             else
                 run brew tap "$tap_name" || return 1
             fi
+            INSTALLED_TAPS+=("$tap_name")
             ;;
 
         brew)
@@ -240,7 +464,8 @@ brewfile_install_entry() {
             [[ "$line" == *"link: false"* ]] && link_false=true
             log_info "[$index/$total] brew $formula"
 
-            if brew list --formula "$formula" &>/dev/null; then
+            load_brew_state
+            if array_contains "$formula" "${INSTALLED_FORMULAS[@]}"; then
                 log_success "Already installed: $formula"
                 return 0
             fi
@@ -249,30 +474,35 @@ brewfile_install_entry() {
             if $link_false; then
                 run brew unlink "$formula" || log_warn "Could not unlink $formula after install"
             fi
+            INSTALLED_FORMULAS+=("$formula")
             ;;
 
         cask)
             local cask="$primary_field"
             log_info "[$index/$total] cask $cask"
 
-            if brew list --cask "$cask" &>/dev/null; then
+            load_brew_state
+            if array_contains "$cask" "${INSTALLED_CASKS[@]}"; then
                 log_success "Already installed: $cask"
                 return 0
             fi
 
             run brew install --cask "$cask" || return 1
+            INSTALLED_CASKS+=("$cask")
             ;;
 
         mas)
             local app_name="$primary_field"
             local app_id
 
+            load_mas_state
+
             if ! command -v mas &>/dev/null; then
                 log_warn "mas CLI not installed yet, skipping App Store app: $app_name"
                 return 1
             fi
 
-            if ! mas account &>/dev/null; then
+            if ! $HAS_MAS_ACCOUNT; then
                 log_warn "App Store account not signed in, skipping: $app_name"
                 return 1
             fi
@@ -286,12 +516,13 @@ brewfile_install_entry() {
 
             log_info "[$index/$total] mas $app_name"
 
-            if mas list | awk '{print $1}' | grep -qx "$app_id"; then
+            if array_contains "$app_id" "${INSTALLED_MAS_IDS[@]}"; then
                 log_success "Already installed: $app_name"
                 return 0
             fi
 
             run mas install "$app_id" || return 1
+            INSTALLED_MAS_IDS+=("$app_id")
             ;;
 
         go)
@@ -351,9 +582,15 @@ xcode_cl_tools() {
     fi
 
     log_info "Installing Xcode command line tools..."
-    run xcode-select --install || log_warn "Xcode CLI tools installation may require manual intervention"
+    if ! run xcode-select --install; then
+        log_warn "Xcode CLI tools installation may require manual intervention in a GUI prompt"
+    fi
 
-    # Accept Xcode license
+    if ! xcode-select -p &>/dev/null; then
+        log_warn "Xcode CLI tools are still unavailable; rerun the installer after installation completes"
+        return 0
+    fi
+
     log_info "Accepting Xcode license..."
     run sudo xcodebuild -license accept 2>/dev/null || log_warn "Xcode license acceptance failed (Xcode may not be installed yet)"
 
@@ -373,13 +610,18 @@ brew_setup() {
         log_info "Homebrew already installed"
     fi
 
+    load_brew_state
+
     # Make sure we're using the latest Homebrew
     log_info "Updating Homebrew..."
     run brew update || log_warn "brew update failed, continuing..."
 
-    # Upgrade any already-installed formulae
-    log_info "Upgrading installed packages..."
-    run brew upgrade || log_warn "brew upgrade failed, continuing..."
+    if [[ "$BREW_UPGRADE" == "true" ]]; then
+        log_info "Upgrading installed packages..."
+        run brew upgrade || log_warn "brew upgrade failed, continuing..."
+    else
+        log_info "Skipping brew upgrade (set BREW_UPGRADE=true to enable)"
+    fi
 
     # Install all dependencies from Brewfile with progress and soft-fail behavior.
     log_info "Installing brew packages and cask apps..."
@@ -395,6 +637,7 @@ brew_setup() {
     fi
 
     # Create sha256sum symlink if coreutils is installed
+    local BREW_PREFIX
     BREW_PREFIX=$(brew --prefix)
     if [[ -f "${BREW_PREFIX}/bin/gsha256sum" ]]; then
         run ln -sf "${BREW_PREFIX}/bin/gsha256sum" "${BREW_PREFIX}/bin/sha256sum" 2>/dev/null
@@ -475,10 +718,9 @@ dotfile_setup() {
     log_info "Setting up shell dotfiles..."
 
     # Create symlinks for shell dotfiles in home directory
-    run rm -rf "$HOME/.zshrc"
-    run ln -sfv "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-    run ln -sfv "$DOTFILES_DIR/zsh/.zsh_plugins.txt" "$HOME/.zsh_plugins.txt"
-    run ln -sfv "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
+    ensure_symlink "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+    ensure_symlink "$DOTFILES_DIR/zsh/.zsh_plugins.txt" "$HOME/.zsh_plugins.txt"
+    ensure_symlink "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
 
     return 0
 }
@@ -487,21 +729,21 @@ config_setup() {
     log_info "Setting up app configurations..."
 
     # Critical dotfiles (symlinks)
-    run ln -sfv "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
-    run ln -sfv "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
-    run ln -sfv "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
-    run ln -sfv "$DOTFILES_DIR/.npmrc" "$HOME/.npmrc"
+    ensure_symlink "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
+    ensure_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
+    ensure_symlink "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
+    ensure_symlink "$DOTFILES_DIR/.npmrc" "$HOME/.npmrc"
 
     # Global ignore (ripgrep, fd, etc.)
     if [[ -f "$DOTFILES_DIR/.ignore" ]]; then
-        run ln -sfv "$DOTFILES_DIR/.ignore" "$HOME/.ignore"
+        ensure_symlink "$DOTFILES_DIR/.ignore" "$HOME/.ignore"
     fi
 
     # SSH config
     run mkdir -p "$HOME/.ssh"
     run chmod 700 "$HOME/.ssh"
     if [[ -f "$DOTFILES_DIR/ssh/config" ]]; then
-        run ln -sfv "$DOTFILES_DIR/ssh/config" "$HOME/.ssh/config"
+        ensure_symlink "$DOTFILES_DIR/ssh/config" "$HOME/.ssh/config"
     else
         log_warn "SSH config not found, skipping..."
     fi
@@ -518,61 +760,60 @@ config_setup() {
 
     # Zed
     if [[ -d "$DOTFILES_DIR/config/zed" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/zed/settings.json" "$HOME/.config/zed/settings.json"
-        run ln -sfv "$DOTFILES_DIR/config/zed/keymap.json" "$HOME/.config/zed/keymap.json"
-        run ln -sfv "$DOTFILES_DIR/config/zed/tasks.json" "$HOME/.config/zed/tasks.json"
+        ensure_symlink "$DOTFILES_DIR/config/zed/settings.json" "$HOME/.config/zed/settings.json"
+        ensure_symlink "$DOTFILES_DIR/config/zed/keymap.json" "$HOME/.config/zed/keymap.json"
+        ensure_symlink "$DOTFILES_DIR/config/zed/tasks.json" "$HOME/.config/zed/tasks.json"
     else
         log_warn "Zed config not found, skipping..."
     fi
 
     # Ghostty
     if [[ -f "$DOTFILES_DIR/config/ghostty/config" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
-        for shader in "$DOTFILES_DIR/config/ghostty/shaders"/*.glsl; do
-            [[ -f "$shader" ]] && run ln -sfv "$shader" "$HOME/.config/ghostty/shaders/$(basename "$shader")"
-        done
+        ensure_symlink "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+        ensure_symlink_tree "$DOTFILES_DIR/config/ghostty/shaders" "$HOME/.config/ghostty/shaders"
+        ensure_symlink_tree "$DOTFILES_DIR/config/ghostty/themes" "$HOME/.config/ghostty/themes"
     else
         log_warn "Ghostty config not found, skipping..."
     fi
 
     # btop
     if [[ -f "$DOTFILES_DIR/config/btop/btop.conf" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/btop/btop.conf" "$HOME/.config/btop/btop.conf"
+        ensure_symlink "$DOTFILES_DIR/config/btop/btop.conf" "$HOME/.config/btop/btop.conf"
     else
         log_warn "btop config not found, skipping..."
     fi
 
     # Git global ignore
     if [[ -f "$DOTFILES_DIR/config/git/ignore" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/git/ignore" "$HOME/.config/git/ignore"
+        ensure_symlink "$DOTFILES_DIR/config/git/ignore" "$HOME/.config/git/ignore"
     else
         log_warn "Git global ignore not found, skipping..."
     fi
 
     # Atuin
     if [[ -f "$DOTFILES_DIR/config/atuin/config.toml" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/atuin/config.toml" "$HOME/.config/atuin/config.toml"
+        ensure_symlink "$DOTFILES_DIR/config/atuin/config.toml" "$HOME/.config/atuin/config.toml"
     else
         log_warn "Atuin config not found, skipping..."
     fi
 
     # Karabiner (copy, not symlink — Karabiner rewrites atomically and breaks symlinks)
     if [[ -f "$DOTFILES_DIR/config/karabiner/karabiner.json" ]]; then
-        run cp "$DOTFILES_DIR/config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+        ensure_copy "$DOTFILES_DIR/config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
     else
         log_warn "Karabiner config not found, skipping..."
     fi
 
     # aichat
     if [[ -f "$DOTFILES_DIR/config/aichat/config.yaml" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/aichat/config.yaml" "$HOME/.config/aichat/config.yaml"
+        ensure_symlink "$DOTFILES_DIR/config/aichat/config.yaml" "$HOME/.config/aichat/config.yaml"
     else
         log_warn "aichat config not found, skipping..."
     fi
 
     # GitHub CLI
     if [[ -f "$DOTFILES_DIR/config/gh/config.yml" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/gh/config.yml" "$HOME/.config/gh/config.yml"
+        ensure_symlink "$DOTFILES_DIR/config/gh/config.yml" "$HOME/.config/gh/config.yml"
     else
         log_warn "GitHub CLI config not found, skipping..."
     fi
@@ -580,10 +821,8 @@ config_setup() {
     # Zellij
     run mkdir -p "$HOME/.config/zellij/layouts"
     if [[ -f "$DOTFILES_DIR/config/zellij/config.kdl" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
-        for layout in "$DOTFILES_DIR/config/zellij/layouts"/*.kdl; do
-            [[ -f "$layout" ]] && run ln -sfv "$layout" "$HOME/.config/zellij/layouts/$(basename "$layout")"
-        done
+        ensure_symlink "$DOTFILES_DIR/config/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
+        ensure_symlink_tree "$DOTFILES_DIR/config/zellij/layouts" "$HOME/.config/zellij/layouts"
     else
         log_warn "Zellij config not found, skipping..."
     fi
@@ -591,7 +830,8 @@ config_setup() {
     # Helix
     run mkdir -p "$HOME/.config/helix"
     if [[ -f "$DOTFILES_DIR/config/helix/config.toml" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/helix/config.toml" "$HOME/.config/helix/config.toml"
+        ensure_symlink "$DOTFILES_DIR/config/helix/config.toml" "$HOME/.config/helix/config.toml"
+        ensure_symlink_tree "$DOTFILES_DIR/config/helix/themes" "$HOME/.config/helix/themes"
     else
         log_warn "Helix config not found, skipping..."
     fi
@@ -599,8 +839,7 @@ config_setup() {
     # Neovim
     run mkdir -p "$HOME/.config/nvim"
     if [[ -d "$DOTFILES_DIR/config/nvim" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
-        [[ -f "$DOTFILES_DIR/config/nvim/lazy-lock.json" ]] && run ln -sfv "$DOTFILES_DIR/config/nvim/lazy-lock.json" "$HOME/.config/nvim/lazy-lock.json"
+        ensure_symlink_tree "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
     else
         log_warn "Neovim config not found, skipping..."
     fi
@@ -608,10 +847,21 @@ config_setup() {
     # Yazi
     run mkdir -p "$HOME/.config/yazi"
     if [[ -d "$DOTFILES_DIR/config/yazi" ]]; then
-        run ln -sfv "$DOTFILES_DIR/config/yazi/yazi.toml" "$HOME/.config/yazi/yazi.toml"
-        run ln -sfv "$DOTFILES_DIR/config/yazi/keymap.toml" "$HOME/.config/yazi/keymap.toml"
+        ensure_symlink_tree "$DOTFILES_DIR/config/yazi" "$HOME/.config/yazi"
     else
         log_warn "Yazi config not found, skipping..."
+    fi
+
+    # Nicotine+
+    run mkdir -p "$HOME/.config/nicotine"
+    if [[ -f "$DOTFILES_DIR/config/nicotine/config" ]]; then
+        ensure_symlink "$DOTFILES_DIR/config/nicotine/config" "$HOME/.config/nicotine/config"
+    fi
+
+    # uv receipt
+    run mkdir -p "$HOME/.config/uv"
+    if [[ -f "$DOTFILES_DIR/config/uv/uv-receipt.json" ]]; then
+        ensure_symlink "$DOTFILES_DIR/config/uv/uv-receipt.json" "$HOME/.config/uv/uv-receipt.json"
     fi
 
     return 0
@@ -621,8 +871,7 @@ mackup_setup() {
     log_info "Setting up Mackup for app settings backup..."
 
     if [[ -f "$DOTFILES_DIR/.mackup.cfg" ]]; then
-        run rm -f "$HOME/.mackup.cfg"
-        run ln -sfv "$DOTFILES_DIR/.mackup.cfg" "$HOME/.mackup.cfg"
+        ensure_symlink "$DOTFILES_DIR/.mackup.cfg" "$HOME/.mackup.cfg"
     else
         log_warn ".mackup.cfg not found in dotfiles"
     fi
@@ -646,7 +895,12 @@ vscode_setup() {
     fi
 
     # Extensions (parallel install with xargs)
-    if command -v code &> /dev/null; then
+    local code_bin="code"
+    if ! command -v "$code_bin" &> /dev/null && [[ -x "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" ]]; then
+        code_bin="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+    fi
+
+    if command -v "$code_bin" &> /dev/null || [[ -x "$code_bin" ]]; then
         if [[ -f "$DOTFILES_DIR/vscode/extensions.txt" ]]; then
             local ext_count
             ext_count=$(wc -l < "$DOTFILES_DIR/vscode/extensions.txt" | tr -d ' ')
@@ -654,7 +908,7 @@ vscode_setup() {
             if $DRY_RUN; then
                 echo -e "${YELLOW}[DRY-RUN]${NC} Would install $ext_count extensions"
             else
-                xargs -P4 -I{} code --install-extension {} --force 2>/dev/null \
+                xargs -P4 -I{} "$code_bin" --install-extension {} --force 2>/dev/null \
                     < "$DOTFILES_DIR/vscode/extensions.txt" \
                     || log_warn "Some VS Code extensions failed to install"
             fi
@@ -687,7 +941,12 @@ cursor_setup() {
     fi
 
     # Extensions (parallel install with xargs)
-    if command -v cursor &> /dev/null; then
+    local cursor_bin="cursor"
+    if ! command -v "$cursor_bin" &> /dev/null && [[ -x "/Applications/Cursor.app/Contents/Resources/app/bin/cursor" ]]; then
+        cursor_bin="/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
+    fi
+
+    if command -v "$cursor_bin" &> /dev/null || [[ -x "$cursor_bin" ]]; then
         if [[ -f "$DOTFILES_DIR/cursor/extensions.txt" ]]; then
             local ext_count
             ext_count=$(wc -l < "$DOTFILES_DIR/cursor/extensions.txt" | tr -d ' ')
@@ -695,7 +954,7 @@ cursor_setup() {
             if $DRY_RUN; then
                 echo -e "${YELLOW}[DRY-RUN]${NC} Would install $ext_count extensions"
             else
-                xargs -P4 -I{} cursor --install-extension {} --force 2>/dev/null \
+                xargs -P4 -I{} "$cursor_bin" --install-extension {} --force 2>/dev/null \
                     < "$DOTFILES_DIR/cursor/extensions.txt" \
                     || log_warn "Some Cursor extensions failed to install"
             fi
@@ -950,6 +1209,26 @@ macos_defaults_setup() {
     return 0
 }
 
+post_install_validation() {
+    if [[ "$INSTALL_VALIDATE" != "true" ]]; then
+        log_info "Skipping post-install validation (INSTALL_VALIDATE=false)"
+        return 0
+    fi
+
+    if [[ ! -f "$DOTFILES_DIR/scripts/validate.sh" ]]; then
+        log_warn "Validation script not found, skipping post-install validation"
+        return 0
+    fi
+
+    log_info "Running post-install validation..."
+    if $DRY_RUN; then
+        echo -e "${YELLOW}[DRY-RUN]${NC} bash $DOTFILES_DIR/scripts/validate.sh"
+        return 0
+    fi
+
+    bash "$DOTFILES_DIR/scripts/validate.sh" || return 1
+}
+
 # ============================================================================
 # Main Execution
 # ============================================================================
@@ -969,35 +1248,42 @@ main() {
         echo -e "${YELLOW}>>> DRY-RUN MODE: No changes will be made <<<${NC}"
     fi
 
+    preflight_checks || return 1
     setup_sudo_session || log_warn "Could not establish sudo session upfront; privileged steps may require manual intervention"
 
     # ── Phase 1: System defaults (sequential) ────────────────────
-    log_phase "1/5" "System defaults"
+    log_phase "1/6" "System defaults"
     run_setup macos_defaults_setup "macOS preferences" || true
 
     # ── Phase 2: Prerequisites (sequential) ──────────────────────
-    log_phase "2/5" "Prerequisites"
+    log_phase "2/6" "Prerequisites"
     run_setup xcode_cl_tools "Xcode command line tools" || true
     run_setup brew_setup "Homebrew packages" || true
 
     # ── Phase 3: Configuration (instant, sequential) ─────────────
-    log_phase "3/5" "Configuration"
+    log_phase "3/6" "Configuration"
     run_setup secrets_setup "Decrypt secrets" || true
+    run_setup zsh_setup "Shell defaults" || true
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
 
     # ── Phase 4: App setup (parallel) ────────────────────────────
-    log_phase "4/5" "App setup (parallel)"
+    log_phase "4/6" "App setup (parallel)"
+    run_setup_bg vscode_setup "VS Code"
     run_setup_bg cursor_setup "Cursor"
     run_setup_bg ai_tools_setup "AI coding tools"
     run_setup_bg autocommit_setup "Dotfiles auto-backup agent"
     wait_phase
 
     # ── Phase 5: Final setup (sequential) ────────────────────────
-    log_phase "5/5" "Final setup"
+    log_phase "5/6" "Final setup"
     run_setup claude_setup "Claude Code configuration" || true
     run_setup mackup_setup "Mackup app settings backup" || true
     run_setup dock_setup "Dock configuration" || true
+
+    # ── Phase 6: Validation (sequential) ─────────────────────────
+    log_phase "6/6" "Validation"
+    run_setup post_install_validation "Post-install validation" || true
 
     # ── Summary ──────────────────────────────────────────────────
     local elapsed=$(( SECONDS - start_time ))
@@ -1019,6 +1305,10 @@ main() {
     fi
 
     echo -e "${DIM}Elapsed: ${minutes}m ${seconds}s${NC}"
+
+    if [[ -n "$BACKUP_DIR" ]]; then
+        echo -e "${DIM}Backups: ${BACKUP_DIR}${NC}"
+    fi
 
     if $DRY_RUN; then
         echo ""

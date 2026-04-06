@@ -33,7 +33,8 @@ validate_shell() {
         add_result "ok" ".zsh_plugins.txt" "Antidote plugins list exists" false
 
         # Count plugins
-        local plugin_count=$(grep -v "^#" "$HOME/.zsh_plugins.txt" | grep -v "^$" | wc -l | tr -d ' ')
+        local plugin_count
+        plugin_count=$(grep -cve '^#' -e '^$' "$HOME/.zsh_plugins.txt" | tr -d ' ')
         log_info "Found $plugin_count plugins defined"
     else
         log_error ".zsh_plugins.txt missing"
@@ -41,14 +42,14 @@ validate_shell() {
         ((errors++))
     fi
 
-    # Check if .zsh_plugins.zsh (compiled) exists
+    # Compiled antidote bundle is optional. This setup loads directly from
+    # antidote at shell startup and treats the compiled file as an optimization.
     if [[ -f "$HOME/.zsh_plugins.zsh" ]]; then
         log_success ".zsh_plugins.zsh (compiled) exists"
         add_result "ok" ".zsh_plugins.zsh" "Compiled plugins file exists" false
     else
-        log_warn ".zsh_plugins.zsh not found (run: antidote bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.zsh)"
-        add_result "warn" ".zsh_plugins.zsh" "Compiled plugins file not found" true
-        ((warnings++))
+        log_info ".zsh_plugins.zsh not found; direct antidote loading is enabled"
+        add_result "ok" ".zsh_plugins.zsh" "Compiled plugins file is optional for this setup" false
     fi
 
     # Check key plugins are in the list

@@ -56,6 +56,12 @@ EXPECTED_SYMLINKS=(
     "$HOME/.config/nvim/init.lua:config/nvim/init.lua"
     "$HOME/.config/nvim/lazy-lock.json:config/nvim/lazy-lock.json"
 
+    # Nicotine+
+    "$HOME/.config/nicotine/config:config/nicotine/config"
+
+    # uv
+    "$HOME/.config/uv/uv-receipt.json:config/uv/uv-receipt.json"
+
     # Yazi
     "$HOME/.config/yazi/yazi.toml:config/yazi/yazi.toml"
     "$HOME/.config/yazi/keymap.toml:config/yazi/keymap.toml"
@@ -68,6 +74,33 @@ EXPECTED_SYMLINKS=(
     "$HOME/Library/Application Support/Cursor/User/keybindings.json:cursor/keybindings.json"
 )
 
+EXPECTED_SYMLINK_DIRS=(
+    "$HOME/.config/ghostty/shaders:config/ghostty/shaders"
+    "$HOME/.config/ghostty/themes:config/ghostty/themes"
+    "$HOME/.config/helix/themes:config/helix/themes"
+    "$HOME/.config/zellij/layouts:config/zellij/layouts"
+)
+
+build_expected_symlink_entries() {
+    local entries=("${EXPECTED_SYMLINKS[@]}")
+    local entry target_dir source_dir source_file relative_path
+
+    for entry in "${EXPECTED_SYMLINK_DIRS[@]}"; do
+        target_dir="${entry%%:*}"
+        source_dir="${entry##*:}"
+        source_dir="$DOTFILES_DIR/$source_dir"
+
+        [[ -d "$source_dir" ]] || continue
+
+        while IFS= read -r source_file; do
+            relative_path="${source_file#"$source_dir"/}"
+            entries+=("$target_dir/$relative_path:${source_file#"$DOTFILES_DIR"/}")
+        done < <(find "$source_dir" -type f | sort)
+    done
+
+    printf '%s\n' "${entries[@]}"
+}
+
 # ============================================================================
 # Validation Functions
 # ============================================================================
@@ -78,7 +111,7 @@ validate_symlinks() {
     local errors=0
     local warnings=0
 
-    for entry in "${EXPECTED_SYMLINKS[@]}"; do
+    while IFS= read -r entry; do
         local target="${entry%%:*}"
         local source_rel="${entry##*:}"
         local source_abs="$DOTFILES_DIR/$source_rel"
@@ -108,12 +141,16 @@ validate_symlinks() {
         fi
 
         # Check if symlink points to correct location
-        local current_target=$(readlink "$target")
+        local current_target
+        current_target=$(readlink "$target")
 
         # Handle both absolute and relative paths
         if [[ "$current_target" != "$source_abs" ]]; then
             # Also check if it's a relative path that resolves correctly
-            local resolved_target=$(cd "$(dirname "$target")" && cd "$(dirname "$current_target")" 2>/dev/null && pwd)/$(basename "$current_target")
+            local resolved_base
+            local resolved_target
+            resolved_base=$(cd "$(dirname "$target")" && cd "$(dirname "$current_target")" 2>/dev/null && pwd)
+            resolved_target="${resolved_base}/$(basename "$current_target")"
 
             if [[ "$resolved_target" != "$source_abs" ]] && [[ "$current_target" != "$source_abs" ]]; then
                 log_error "Wrong target: $target -> $current_target (should be $source_abs)"
@@ -125,7 +162,7 @@ validate_symlinks() {
 
         log_success "OK: $target"
         add_result "ok" "$target" "Correctly linked to $source_rel" false
-    done
+    done < <(build_expected_symlink_entries)
 
     return $errors
 }
@@ -140,7 +177,7 @@ fix_symlinks() {
     local fixed=0
     local failed=0
 
-    for entry in "${EXPECTED_SYMLINKS[@]}"; do
+    while IFS= read -r entry; do
         local target="${entry%%:*}"
         local source_rel="${entry##*:}"
         local source_abs="$DOTFILES_DIR/$source_rel"
@@ -159,7 +196,8 @@ fix_symlinks() {
             needs_fix=true
         elif [[ "$(readlink "$target")" != "$source_abs" ]]; then
             # Check for path mismatch
-            local current=$(readlink "$target")
+            local current
+            current=$(readlink "$target")
             if [[ "$current" != "$source_abs" ]]; then
                 needs_fix=true
             fi
@@ -184,7 +222,7 @@ fix_symlinks() {
                 ((failed++))
             fi
         fi
-    done
+    done < <(build_expected_symlink_entries)
 
     if [[ $fixed -gt 0 ]]; then
         log_success "Fixed $fixed symlink(s)"
