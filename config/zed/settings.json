@@ -6,6 +6,7 @@
 // To see all of Zed's default settings without changing your
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
+
 {
   /* Duplicated key auto-commented: "agent": {
     "dock": "left",
@@ -20,17 +21,17 @@
       "settings": {
         "typescript": {
           "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
+            "enabled": "always",
+          },
         },
         "javascript": {
           "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
-        }
+            "enabled": "always",
+          },
+        },
       },
-      "enable_lsp_tasks": true
-    }
+      "enable_lsp_tasks": true,
+    },
   },
   "ssh_connections": [
     {
@@ -39,17 +40,13 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/blueberry"
-          ]
+          "paths": ["/home/blueberry"],
         },
         {
-          "paths": [
-            "/home/blueberry/openclaw-config"
-          ]
-        }
-      ]
-    }
+          "paths": ["/home/blueberry/openclaw-config"],
+        },
+      ],
+    },
   ],
   "tab_bar": {
     "show_pinned_tabs_in_separate_row": false,
@@ -137,21 +134,24 @@
     "show_branch_icon": true,
   },
   "agent_servers": {
-    "claude": {
-      "favorite_models": [],
-      "default_config_options": {},
-      "favorite_config_option_values": {},
-    },
+    "claude-acp": {
+      "type": "registry"
+    }
   },
+
   "agent": {
-    "button": true,
-    "play_sound_when_agent_done": true,
-    "dock": "left",
     "default_model": {
-      "enable_thinking": true,
       "provider": "anthropic",
-      "model": "claude-opus-4-6-1m-context-thinking-latest",
+      "model": "claude-sonnet-4-6-latest",
+      "enable_thinking": true,
+      "effort": "high",
     },
+    "commit_message_model": {
+      "provider": "anthropic",
+      "model": "claude-3-5-haiku",
+    },
+    "favorite_models": [],
+    "model_parameters": [],
   },
   "vim_mode": false,
   "soft_wrap": "editor_width",

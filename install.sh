@@ -1105,6 +1105,30 @@ ai_tools_setup() {
         log_info "OpenAI Codex already installed"
     fi
 
+    # OpenLogs CLI
+    if ! command -v openlogs &> /dev/null; then
+        if command -v npm &> /dev/null; then
+            log_info "Installing OpenLogs..."
+            run npm i -g openlogs || log_warn "OpenLogs installation failed"
+        else
+            log_warn "npm not found, skipping OpenLogs installation"
+        fi
+    else
+        log_info "OpenLogs already installed"
+    fi
+
+    # Agent Browser CLI
+    if ! command -v agent-browser &> /dev/null; then
+        if command -v npm &> /dev/null; then
+            log_info "Installing agent-browser..."
+            run npm i -g agent-browser || log_warn "agent-browser installation failed"
+        else
+            log_warn "npm not found, skipping agent-browser installation"
+        fi
+    else
+        log_info "agent-browser already installed"
+    fi
+
     return 0
 }
 
