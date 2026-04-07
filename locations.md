@@ -77,6 +77,17 @@ A complete mapping of every backed-up config to its macOS source location.
 |--------|---------------|---------------|
 | Dock apps | (managed by dockutil) | `dock/dock-apps.txt` |
 
+## macOS Preferences
+
+| Config | macOS Location | Dotfiles Path |
+|--------|---------------|---------------|
+| Desktop & Dock pane | `~/Library/Preferences/com.apple.dock.plist` | `macos/preferences/com.apple.dock.plist` |
+| Desktop & Dock extras | `~/Library/Preferences/com.apple.WindowManager.plist` | `macos/preferences/com.apple.WindowManager.plist` |
+| Trackpad | `~/Library/Preferences/com.apple.AppleMultitouchTrackpad.plist` | `macos/preferences/com.apple.AppleMultitouchTrackpad.plist` |
+| Bluetooth trackpad | `~/Library/Preferences/com.apple.driver.AppleBluetoothMultitouch.trackpad.plist` | `macos/preferences/com.apple.driver.AppleBluetoothMultitouch.trackpad.plist` |
+| Keyboard shortcuts | `~/Library/Preferences/com.apple.symbolichotkeys.plist` | `macos/preferences/com.apple.symbolichotkeys.plist` |
+| Key repeat | `NSGlobalDomain` | `macos/preferences/keyboard.defaults.sh` |
+
 ## Intentionally Not Tracked
 
 These common `~/.config/` directories exist but are deliberately excluded:

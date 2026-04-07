@@ -1329,6 +1329,33 @@ macos_defaults_setup() {
         log_warn ".macos file not found, skipping..."
     fi
 
+    local macos_prefs_dir="$DOTFILES_DIR/macos/preferences"
+    if [[ -d "$macos_prefs_dir" ]]; then
+        log_info "Importing tracked macOS preference domains..."
+
+        local pref_file domain
+        for pref_file in \
+            "$macos_prefs_dir/com.apple.dock.plist" \
+            "$macos_prefs_dir/com.apple.WindowManager.plist" \
+            "$macos_prefs_dir/com.apple.AppleMultitouchTrackpad.plist" \
+            "$macos_prefs_dir/com.apple.driver.AppleBluetoothMultitouch.trackpad.plist" \
+            "$macos_prefs_dir/com.apple.symbolichotkeys.plist"; do
+            [[ -f "$pref_file" ]] || continue
+            domain=$(basename "$pref_file" .plist)
+            run defaults import "$domain" "$pref_file"
+        done
+
+        if [[ -f "$macos_prefs_dir/keyboard.defaults.sh" ]]; then
+            # shellcheck source=/dev/null
+            run source "$macos_prefs_dir/keyboard.defaults.sh"
+        fi
+
+        if ! $DRY_RUN; then
+            killall Dock 2>/dev/null || true
+            killall SystemUIServer 2>/dev/null || true
+        fi
+    fi
+
     return 0
 }
 

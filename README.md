@@ -18,6 +18,7 @@ This repo currently manages:
 - VS Code and Cursor settings plus extension lists
 - Claude Code config, hooks, shared agent skills, and agent docs
 - Dock layout and macOS defaults
+- Backed-up macOS preference domains for Dock/Desktop, trackpad, key repeat, and keyboard shortcuts
 - Optional secrets restore from `secrets/secrets.yaml` through `sops`
 - Validation and backup workflows for keeping the repo in sync with the machine
 
@@ -181,6 +182,7 @@ The current install flow covers:
 - Dock preferences and app list
 - IINA as the default handler for common audio/video types
 - macOS defaults via `.macos`
+- Tracked macOS preference exports under `macos/preferences/`
 - Optional secrets decryption via `sops`
 - Validation after restore
 
@@ -286,6 +288,8 @@ Uninstall the autocommit launchd agent:
   Claude Code config, hooks, plugins, and agent docs
 - `agents/`
   Shared skills and other reusable agent assets
+- `macos/preferences/`
+  Exported macOS preference domains restored by the installer
 
 ## Shared Skills Layout
 

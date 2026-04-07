@@ -143,6 +143,92 @@ sync_configs() {
 }
 
 # ============================================================================
+# sync_macos_preferences — Export tracked macOS preference domains
+# ============================================================================
+
+sync_macos_preferences() {
+    local dry_run="${1:-false}"
+    local changed=0
+    local prefs_root="${DOTFILES_DIR:?DOTFILES_DIR must be set}/macos/preferences"
+    local tmp_file dest rel_dest domain
+
+    export_domain() {
+        domain="$1"
+        rel_dest="$2"
+        dest="$DOTFILES_DIR/$rel_dest"
+        tmp_file=$(mktemp)
+
+        if ! defaults export "$domain" "$tmp_file" &>/dev/null; then
+            rm -f "$tmp_file"
+            log_warn "Could not export macOS domain, skipping: $domain"
+            return 0
+        fi
+
+        if [[ -f "$dest" ]] && diff -q "$tmp_file" "$dest" &>/dev/null; then
+            rm -f "$tmp_file"
+            return 0
+        fi
+
+        if [[ "$dry_run" == "true" ]]; then
+            if [[ -f "$dest" ]]; then
+                log_info "[DRY-RUN] Would update macOS prefs: $rel_dest"
+            else
+                log_info "[DRY-RUN] Would create macOS prefs: $rel_dest"
+            fi
+            rm -f "$tmp_file"
+        else
+            mkdir -p "$(dirname "$dest")"
+            mv "$tmp_file" "$dest"
+            log_success "Synced macOS prefs: $rel_dest"
+        fi
+
+        ((changed++)) || true
+    }
+
+    export_domain "com.apple.dock" "macos/preferences/com.apple.dock.plist"
+    export_domain "com.apple.WindowManager" "macos/preferences/com.apple.WindowManager.plist"
+    export_domain "com.apple.AppleMultitouchTrackpad" "macos/preferences/com.apple.AppleMultitouchTrackpad.plist"
+    export_domain "com.apple.driver.AppleBluetoothMultitouch.trackpad" "macos/preferences/com.apple.driver.AppleBluetoothMultitouch.trackpad.plist"
+    export_domain "com.apple.symbolichotkeys" "macos/preferences/com.apple.symbolichotkeys.plist"
+
+    dest="$prefs_root/keyboard.defaults.sh"
+    tmp_file=$(mktemp)
+    cat > "$tmp_file" <<EOF
+#!/usr/bin/env bash
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool $( [[ "$(defaults read NSGlobalDomain ApplePressAndHoldEnabled 2>/dev/null || echo 0)" == "1" ]] && echo true || echo false )
+defaults write NSGlobalDomain KeyRepeat -int $(defaults read NSGlobalDomain KeyRepeat 2>/dev/null || echo 2)
+defaults write NSGlobalDomain InitialKeyRepeat -int $(defaults read NSGlobalDomain InitialKeyRepeat 2>/dev/null || echo 15)
+EOF
+
+    if [[ -f "$dest" ]] && diff -q "$tmp_file" "$dest" &>/dev/null; then
+        rm -f "$tmp_file"
+    else
+        if [[ "$dry_run" == "true" ]]; then
+            if [[ -f "$dest" ]]; then
+                log_info "[DRY-RUN] Would update macOS prefs: macos/preferences/keyboard.defaults.sh"
+            else
+                log_info "[DRY-RUN] Would create macOS prefs: macos/preferences/keyboard.defaults.sh"
+            fi
+            rm -f "$tmp_file"
+        else
+            mkdir -p "$prefs_root"
+            mv "$tmp_file" "$dest"
+            chmod +x "$dest"
+            log_success "Synced macOS prefs: macos/preferences/keyboard.defaults.sh"
+        fi
+        ((changed++)) || true
+    fi
+
+    if (( changed == 0 )); then
+        log_info "Tracked macOS preferences are up to date"
+    else
+        log_info "$changed macOS preference item(s) synced"
+    fi
+
+    return 0
+}
+
+# ============================================================================
 # sync_claude_configs — Sync Claude Code configuration into dotfiles
 # ============================================================================
 # Mirrors the logic from claude/backup.sh: copies files from ~/.claude/

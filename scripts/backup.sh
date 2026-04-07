@@ -102,6 +102,10 @@ step_sync_configs() {
     echo ""
     gum_log "info" "Syncing Claude Code configs..."
     sync_claude_configs "$DRY_RUN"
+
+    echo ""
+    gum_log "info" "Syncing macOS preferences..."
+    sync_macos_preferences "$DRY_RUN"
 }
 
 # ============================================================================
