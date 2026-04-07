@@ -16,7 +16,7 @@ This repo currently manages:
 - Git, SSH, tmux, npm, ignore, and Mackup config
 - App config under `config/` for tools like Zed, Ghostty, Helix, Neovim, Yazi, Zellij, aichat, GitHub CLI, Atuin, Karabiner, Nicotine+, `uv`, and Choosy
 - VS Code and Cursor settings plus extension lists
-- Claude Code config, hooks, skills, and agent docs
+- Claude Code config, hooks, shared agent skills, and agent docs
 - Dock layout and macOS defaults
 - Optional secrets restore from `secrets/secrets.yaml` through `sops`
 - Validation and backup workflows for keeping the repo in sync with the machine
@@ -177,7 +177,7 @@ The current install flow covers:
 - Choosy as the default browser for `http`, `https`, and common HTML document types
 - VS Code settings plus extension install attempts
 - Cursor settings, keybindings, and extension install attempts
-- Claude Code config, hooks, skills, and plugin metadata
+- Claude Code config, hooks, shared agent skills, and plugin metadata
 - Dock preferences and app list
 - IINA as the default handler for common audio/video types
 - macOS defaults via `.macos`
@@ -283,7 +283,28 @@ Uninstall the autocommit launchd agent:
 - `zsh/`, `vscode/`, `cursor/`, `ssh/`, `dock/`
   Managed config inputs for the installer
 - `claude/`
-  Claude Code config, hooks, skills, plugins, and agent docs
+  Claude Code config, hooks, plugins, and agent docs
+- `agents/`
+  Shared skills and other reusable agent assets
+
+## Shared Skills Layout
+
+Shared cross-agent skills use a three-layer model:
+
+- Dotfiles repo source of truth: `agents/skills/`
+- Machine-wide canonical install path: `~/.agents/skills/`
+- Agent-specific mirrors:
+  `~/.claude/skills/<name>` and `~/.codex/skills/<name>` are symlinks to `~/.agents/skills/<name>`
+
+This keeps one real copy of each shared skill on disk while making the same skill visible to both Claude and Codex. Codex built-ins continue to live alongside this in:
+
+- `~/.codex/skills/.system/` and other Codex-managed paths
+
+Backup behavior with this layout:
+
+- `scripts/backup.sh` syncs the canonical shared skill store from `~/.agents/skills/` back into `agents/skills/`
+- The mirrored symlinks in `~/.claude/skills/` and `~/.codex/skills/` are not backed up separately
+- `install.sh` restores shared skills to `~/.agents/skills/` first, then recreates the Claude and Codex symlinks
 - `scripts/`
   Installer helpers, validation, backup, and automation scripts
 - `secrets/`

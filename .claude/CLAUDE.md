@@ -6,7 +6,8 @@ Personal macOS dotfiles managed with symlinks (restore) and file copies (backup)
 
 - `zsh/` — Zsh shell configuration
 - `config/` — `~/.config/` app configs (zed, ghostty, aichat, gh, zellij, helix, nvim, yazi)
-- `claude/` — Claude Code configuration backup (CLAUDE.md, settings.json, hooks, skills, plugins)
+- `claude/` — Claude Code configuration backup (CLAUDE.md, settings.json, hooks, plugins)
+- `agents/` — shared cross-agent skills and reusable agent assets
 - `vscode/` — VS Code settings and extensions
 - `cursor/` — Cursor settings, keybindings, and extensions
 - `scripts/` — Maintenance scripts
@@ -43,7 +44,7 @@ See `locations.md` for a complete mapping of all config files and their system/d
 
 - All symlink targets are defined in `scripts/lib/symlinks.sh` (EXPECTED_SYMLINKS array)
 - Config directories mirror `~/.config/` structure under `config/`
-- Claude configs are copied (not symlinked) because `~/.claude/` doesn't support external symlinks well
+- Claude config files are copied into `~/.claude/`, but shared agent skills are canonicalized in `~/.agents/skills/` and mirrored into `~/.claude/skills/` and `~/.codex/skills/`
 - The Brewfile is the source of truth for packages — `brew bundle` handles install, `scripts/backup.sh` handles discovery
 
 ## Do NOT

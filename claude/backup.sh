@@ -1,13 +1,14 @@
 #!/bin/bash
-# Backup Claude config from ~/.claude and ~/.agents to dotfiles
+# Backup Claude config and shared agent skills from ~/.claude and ~/.agents to dotfiles
 #
 # Usage: ./backup.sh
 #
 # Thin wrapper around the shared backup-config library.
 # Called directly and also by the SessionEnd hook in settings.json.
 #
-# Source of truth: ~/.claude/ and ~/.agents/skills/
-# Backup location: dotfiles/claude/
+# Source of truth: ~/.claude/ for Claude-specific config and ~/.agents/skills/
+# for all shared cross-agent skills mirrored into Claude and Codex
+# Backup location: dotfiles/claude/ and dotfiles/agents/skills/
 
 set -e
 

@@ -146,11 +146,15 @@ sync_configs() {
 # sync_claude_configs — Sync Claude Code configuration into dotfiles
 # ============================================================================
 # Mirrors the logic from claude/backup.sh: copies files from ~/.claude/
-# and ~/.agents/skills/ into the dotfiles claude/ directory.
+# and the canonical shared skill store at ~/.agents/skills/ into the
+# dotfiles claude/ directory. Shared skill mirrors under ~/.codex/skills/
+# and ~/.claude/skills/ are intentionally not backed up because they are
+# symlink views of ~/.agents/skills/.
 
 sync_claude_configs() {
     local dry_run="${1:-false}"
     local claude_dest="${DOTFILES_DIR:?DOTFILES_DIR must be set}/claude"
+    local agents_dest_root="${DOTFILES_DIR:?DOTFILES_DIR must be set}/agents/skills"
     local changed=0
 
     # --- Individual config files ---
@@ -266,32 +270,10 @@ sync_claude_configs() {
         done
     fi
 
-    # --- Personal skills (non-symlink dirs in ~/.claude/skills/) ---
-
-    if [[ -d "$HOME/.claude/skills" ]]; then
-        local skills_dest="$claude_dest/skills"
-        local skill_dir skill_name
-
-        for skill_dir in "$HOME/.claude/skills"/*/; do
-            [[ -d "$skill_dir" ]] || continue
-            skill_name=$(basename "$skill_dir")
-            [[ -L "${skill_dir%/}" ]] && continue
-
-            if [[ "$dry_run" == "true" ]]; then
-                log_info "[DRY-RUN] Would rsync skill: $skill_name"
-            else
-                mkdir -p "$skills_dest/$skill_name"
-                rsync -a --delete "$skill_dir" "$skills_dest/$skill_name/"
-                log_success "Synced skill: $skill_name"
-            fi
-            ((changed++)) || true
-        done
-    fi
-
-    # --- Community skills from ~/.agents/skills/ ---
+    # --- Shared agent skills from ~/.agents/skills/ ---
 
     if [[ -d "$HOME/.agents/skills" ]]; then
-        local agents_dest="$claude_dest/agents-skills"
+        local agents_dest="$agents_dest_root"
         local skill_dir skill_name
 
         for skill_dir in "$HOME/.agents/skills"/*/; do

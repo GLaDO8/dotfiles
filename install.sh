@@ -1137,6 +1137,7 @@ claude_setup() {
 
     # Create directories
     run mkdir -p "$HOME/.claude/skills"
+    run mkdir -p "$HOME/.codex/skills"
     run mkdir -p "$HOME/.claude/hooks"
     run mkdir -p "$HOME/.claude/agent-docs"
     run mkdir -p "$HOME/.claude/rules"
@@ -1207,23 +1208,10 @@ claude_setup() {
         fi
     fi
 
-    # Copy personal skills
-    if [[ -d "$DOTFILES_DIR/claude/skills" ]]; then
-        log_info "Copying personal skills to ~/.claude/skills/..."
-        for skill_dir in "$DOTFILES_DIR/claude/skills"/*/; do
-            if [[ -d "$skill_dir" ]]; then
-                skill_name=$(basename "$skill_dir")
-                log_info "  - $skill_name"
-                run rm -rf "$HOME/.claude/skills/$skill_name"
-                run cp -R "$skill_dir" "$HOME/.claude/skills/$skill_name"
-            fi
-        done
-    fi
-
-    # Copy community skills
-    if [[ -d "$DOTFILES_DIR/claude/agents-skills" ]]; then
-        log_info "Copying community skills to ~/.agents/skills/..."
-        for skill_dir in "$DOTFILES_DIR/claude/agents-skills"/*/; do
+    # Copy shared agent skills into the canonical machine-wide store
+    if [[ -d "$DOTFILES_DIR/agents/skills" ]]; then
+        log_info "Copying shared agent skills to ~/.agents/skills/..."
+        for skill_dir in "$DOTFILES_DIR/agents/skills"/*/; do
             if [[ -d "$skill_dir" ]]; then
                 skill_name=$(basename "$skill_dir")
                 log_info "  - $skill_name"
@@ -1233,14 +1221,13 @@ claude_setup() {
         done
     fi
 
-    # Create symlinks for community skills
-    log_info "Creating community skill symlinks in ~/.claude/skills/..."
+    # Mirror shared agent skills into Claude and Codex.
+    log_info "Creating shared skill symlinks in ~/.claude/skills/ and ~/.codex/skills/..."
     for skill_dir in "$HOME/.agents/skills"/*/; do
         if [[ -d "$skill_dir" ]]; then
             skill_name=$(basename "$skill_dir")
-            if [[ ! -e "$HOME/.claude/skills/$skill_name" ]]; then
-                run ln -sv "../../.agents/skills/$skill_name" "$HOME/.claude/skills/$skill_name"
-            fi
+            ensure_symlink "$skill_dir" "$HOME/.claude/skills/$skill_name"
+            ensure_symlink "$skill_dir" "$HOME/.codex/skills/$skill_name"
         fi
     done
 
