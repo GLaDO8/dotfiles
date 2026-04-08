@@ -12,6 +12,10 @@ validate_shell() {
 
     local errors=0
     local warnings=0
+    local atuin_data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/atuin"
+    local atuin_session="$atuin_data_dir/session"
+    local atuin_key="$atuin_data_dir/key"
+    local atuin_cache="$HOME/.cache/zsh-inits/atuin.zsh"
 
     # Check if antidote is installed (via Homebrew)
     # Note: antidote is a zsh function, not a binary, so we check brew list
@@ -88,6 +92,35 @@ validate_shell() {
         log_warn "Default shell is not zsh: $SHELL"
         add_result "warn" "default-shell" "Default shell is $SHELL, not zsh" false
         ((warnings++))
+    fi
+
+    if [[ -f "$HOME/.config/atuin/config.toml" ]] || [[ -L "$HOME/.config/atuin/config.toml" ]]; then
+        if command_exists atuin; then
+            log_success "Atuin CLI is installed"
+            add_result "ok" "atuin" "Atuin CLI is installed" false
+        else
+            log_error "Atuin config exists but atuin is not installed"
+            add_result "error" "atuin" "Atuin config exists but the CLI is missing" false
+            ((errors++))
+        fi
+
+        if [[ -s "$atuin_cache" ]]; then
+            log_success "Cached Atuin shell init exists"
+            add_result "ok" "atuin-cache" "Cached Atuin shell init exists" false
+        else
+            log_warn "Cached Atuin shell init is missing or empty"
+            add_result "warn" "atuin-cache" "Run zsh-refresh-cache to regenerate Atuin shell init" false
+            ((warnings++))
+        fi
+
+        if [[ -s "$atuin_session" ]] && [[ -s "$atuin_key" ]]; then
+            log_success "Atuin account sync state is present"
+            add_result "ok" "atuin-sync" "Atuin session and encryption key exist" false
+        else
+            log_warn "Atuin is not signed in for sync on this machine"
+            add_result "warn" "atuin-sync" "Run atuin register or atuin login, then atuin sync" false
+            ((warnings++))
+        fi
     fi
 
     return $errors

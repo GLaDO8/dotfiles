@@ -44,7 +44,7 @@ See `locations.md` for a complete mapping of all config files and their system/d
 
 - All symlink targets are defined in `scripts/lib/symlinks.sh` (EXPECTED_SYMLINKS array)
 - Config directories mirror `~/.config/` structure under `config/`
-- Claude config files are copied into `~/.claude/`, but shared agent skills are canonicalized in `~/.agents/skills/` and mirrored into `~/.claude/skills/` and `~/.codex/skills/`
+- Claude config files are copied into `~/.claude/`, Codex prompt files into `~/.codex/`, shared agent docs are canonicalized in `~/.agents/agent-docs/` and mirrored into `~/.claude/agent-docs` and `~/.codex/agent-docs`, and shared agent skills are canonicalized in `~/.agents/skills/` and mirrored into `~/.claude/skills/` and `~/.codex/skills/`
 - The Brewfile is the source of truth for packages — `brew bundle` handles install, `scripts/backup.sh` handles discovery
 
 ## Do NOT

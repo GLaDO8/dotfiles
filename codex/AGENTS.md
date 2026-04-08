@@ -1,10 +1,10 @@
-Global rules and conventions. Detailed instructions live in `~/.agents/agent-docs/` and are loaded on demand. Read the relevant file before making changes.
+Global rules and conventions. Detailed instructions live in `~/.agents/agent-docs/` and are loaded on demand — read the relevant file when a trigger matches.
 
 ## On-Demand Instructions
 Before starting any task, ALWAYS identify which docs below are relevant and read them first. Load the full context before making changes.
 
 `~/.agents/agent-docs/how-to-plan.md` - (For when planning, entering plan mode, or for non-trivial tasks (3+ steps))
-`~/.agents/agent-docs/statusline.md` - (Claude-specific: for modifying statusline.sh, context-tracker.sh, or the statusline visual design)
+`~/.agents/agent-docs/statusline.md` - (For when modifying statusline.sh, context-tracker.sh, or the statusline visual design)
 `~/.agents/agent-docs/cli-tools.md` - (For when doing code refactoring, benchmarking, diffing, or config file processing via Bash)
 
 ## SUBAGENTS

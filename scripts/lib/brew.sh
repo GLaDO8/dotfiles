@@ -63,7 +63,7 @@ validate_brew() {
     done < <(brew list --cask 2>/dev/null)
 
     # Check critical formulas
-    local critical_formulas=("git" "gh" "node" "fzf" "zoxide" "eza" "tmux" "aichat" "python" "zsh")
+    local critical_formulas=("git" "gh" "node" "fzf" "zoxide" "eza" "tmux" "aichat" "atuin" "python" "zsh")
 
     for formula in "${critical_formulas[@]}"; do
         if printf '%s\n' "${installed_formulas[@]}" | grep -qx "$formula"; then

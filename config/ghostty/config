@@ -2,7 +2,7 @@
 
 # FONTS
 font-family = TX-02
-font-size = 15
+font-size = 16
 font-thicken=true
 font-thicken-strength=50
 adjust-cell-height=8

@@ -229,18 +229,22 @@ EOF
 }
 
 # ============================================================================
-# sync_claude_configs — Sync Claude Code configuration into dotfiles
+# sync_claude_configs — Sync Claude/Codex configuration into dotfiles
 # ============================================================================
-# Mirrors the logic from claude/backup.sh: copies files from ~/.claude/
-# and the canonical shared skill store at ~/.agents/skills/ into the
-# dotfiles claude/ directory. Shared skill mirrors under ~/.codex/skills/
-# and ~/.claude/skills/ are intentionally not backed up because they are
-# symlink views of ~/.agents/skills/.
+# Mirrors the logic from claude/backup.sh: copies files from ~/.claude/,
+# shared agent docs from ~/.agents/agent-docs/, shared skills from
+# ~/.agents/skills/, and Codex prompt files from ~/.codex/ into the
+# dotfiles repo. Mirrored views under ~/.claude/agent-docs,
+# ~/.codex/agent-docs, ~/.claude/skills/, and ~/.codex/skills/
+# are intentionally not backed up because they are symlink views of the
+# canonical ~/.agents stores.
 
 sync_claude_configs() {
     local dry_run="${1:-false}"
     local claude_dest="${DOTFILES_DIR:?DOTFILES_DIR must be set}/claude"
-    local agents_dest_root="${DOTFILES_DIR:?DOTFILES_DIR must be set}/agents/skills"
+    local agents_skills_dest_root="${DOTFILES_DIR:?DOTFILES_DIR must be set}/agents/skills"
+    local agent_docs_dest_root="${DOTFILES_DIR:?DOTFILES_DIR must be set}/agents/agent-docs"
+    local codex_dest="${DOTFILES_DIR:?DOTFILES_DIR must be set}/codex"
     local changed=0
 
     # --- Individual config files ---
@@ -301,16 +305,26 @@ sync_claude_configs() {
         ((changed++)) || true
     fi
 
-    # --- Agent-docs directory ---
+    # --- Shared agent-docs directory ---
 
-    if [[ -d "$HOME/.claude/agent-docs" ]]; then
-        local agentdocs_dest="$claude_dest/agent-docs"
+    if [[ -d "$HOME/.agents/agent-docs" ]]; then
+        local agentdocs_dest="$agent_docs_dest_root"
         if [[ "$dry_run" == "true" ]]; then
-            log_info "[DRY-RUN] Would rsync agent-docs/"
+            log_info "[DRY-RUN] Would rsync shared agent-docs/"
+        else
+            mkdir -p "$agentdocs_dest"
+            rsync -a --delete "$HOME/.agents/agent-docs/" "$agentdocs_dest/"
+            log_success "Synced shared agent-docs/"
+        fi
+        ((changed++)) || true
+    elif [[ -d "$HOME/.claude/agent-docs" ]]; then
+        local agentdocs_dest="$agent_docs_dest_root"
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "[DRY-RUN] Would rsync shared agent-docs from Claude fallback/"
         else
             mkdir -p "$agentdocs_dest"
             rsync -a --delete "$HOME/.claude/agent-docs/" "$agentdocs_dest/"
-            log_success "Synced agent-docs/"
+            log_success "Synced shared agent-docs from Claude fallback/"
         fi
         ((changed++)) || true
     fi
@@ -359,7 +373,7 @@ sync_claude_configs() {
     # --- Shared agent skills from ~/.agents/skills/ ---
 
     if [[ -d "$HOME/.agents/skills" ]]; then
-        local agents_dest="$agents_dest_root"
+        local agents_dest="$agents_skills_dest_root"
         local skill_dir skill_name
 
         for skill_dir in "$HOME/.agents/skills"/*/; do
@@ -378,14 +392,45 @@ sync_claude_configs() {
         done
     fi
 
+    # --- Codex config files ---
+
+    local codex_srcs=(
+        "$HOME/.codex/AGENTS.md"
+        "$HOME/.codex/RTK.md"
+    )
+    local codex_dests=(
+        "$codex_dest/AGENTS.md"
+        "$codex_dest/RTK.md"
+    )
+
+    for i in "${!codex_srcs[@]}"; do
+        local src="${codex_srcs[$i]}"
+        local dest="${codex_dests[$i]}"
+
+        [[ -f "$src" ]] || continue
+
+        if [[ -f "$dest" ]] && diff -q "$src" "$dest" &>/dev/null; then
+            continue
+        fi
+
+        if [[ "$dry_run" == "true" ]]; then
+            log_info "[DRY-RUN] Would sync: $(basename "$src")"
+        else
+            mkdir -p "$(dirname "$dest")"
+            cp "$src" "$dest"
+            log_success "Synced: $(basename "$src")"
+        fi
+        ((changed++)) || true
+    done
+
     # --- Summary ---
 
     if (( changed == 0 )); then
-        log_info "All Claude configs are up to date"
+        log_info "All agent configs are up to date"
     else
         local action="synced"
         [[ "$dry_run" == "true" ]] && action="would be synced"
-        log_info "$changed Claude config item(s) $action"
+        log_info "$changed agent config item(s) $action"
     fi
 
     return 0

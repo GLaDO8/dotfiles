@@ -15,8 +15,9 @@ This repo currently manages:
 - Shell dotfiles like `.zshrc`, `.zsh_plugins.txt`, `.bash_profile`, `.bashrc`
 - Git, SSH, tmux, npm, ignore, and Mackup config
 - App config under `config/` for tools like Zed, Ghostty, Helix, Neovim, Yazi, Zellij, aichat, GitHub CLI, Atuin, Karabiner, Nicotine+, `uv`, and Choosy
+- Atuin CLI installation and shell integration, with validation for local account sync state
 - VS Code and Cursor settings plus extension lists
-- Claude Code config, hooks, shared agent skills, and agent docs
+- Claude Code config, Codex prompt config, shared agent skills, and shared agent docs
 - Dock layout and macOS defaults
 - Backed-up macOS preference domains for Dock/Desktop, trackpad, key repeat, and keyboard shortcuts
 - Optional secrets restore from `secrets/secrets.yaml` through `sops`
@@ -178,13 +179,32 @@ The current install flow covers:
 - Choosy as the default browser for `http`, `https`, and common HTML document types
 - VS Code settings plus extension install attempts
 - Cursor settings, keybindings, and extension install attempts
-- Claude Code config, hooks, shared agent skills, and plugin metadata
+- Claude Code config, Codex prompt config, shared agent skills, shared agent docs, and plugin metadata
 - Dock preferences and app list
 - IINA as the default handler for common audio/video types
 - macOS defaults via `.macos`
 - Tracked macOS preference exports under `macos/preferences/`
 - Optional secrets decryption via `sops`
 - Validation after restore
+
+## Atuin Notes
+
+`install.sh` restores Atuin in three parts:
+
+- installs the `atuin` CLI from the [Brewfile](/Users/shreyasgupta/local-documents/dotfiles/Brewfile)
+- symlinks the tracked Atuin config at [config/atuin/config.toml](/Users/shreyasgupta/local-documents/dotfiles/config/atuin/config.toml)
+- regenerates the cached shell init script under `~/.cache/zsh-inits/atuin.zsh`
+
+The encrypted Atuin history database, key, and session are intentionally not committed into this repo. The portable backup path for shell history is Atuin account sync, not Git-tracking the local SQLite database or encryption material.
+
+After a fresh restore on a new machine, complete account sync with:
+
+```bash
+atuin login
+atuin sync
+```
+
+Validation will warn if Atuin is installed but the local sync session or key is missing.
 
 ## What Is Not Covered Yet
 
@@ -285,30 +305,35 @@ Uninstall the autocommit launchd agent:
 - `zsh/`, `vscode/`, `cursor/`, `ssh/`, `dock/`
   Managed config inputs for the installer
 - `claude/`
-  Claude Code config, hooks, plugins, and agent docs
+  Claude Code config, hooks, and plugins
+- `codex/`
+  Codex-specific prompt entry files
 - `agents/`
-  Shared skills and other reusable agent assets
+  Shared skills, agent docs, and other reusable agent assets
 - `macos/preferences/`
   Exported macOS preference domains restored by the installer
 
-## Shared Skills Layout
+## Shared Agent Assets Layout
 
-Shared cross-agent skills use a three-layer model:
+Shared cross-agent assets use a three-layer model:
 
-- Dotfiles repo source of truth: `agents/skills/`
-- Machine-wide canonical install path: `~/.agents/skills/`
+- Dotfiles repo source of truth:
+  `agents/skills/` and `agents/agent-docs/`
+- Machine-wide canonical install path:
+  `~/.agents/skills/` and `~/.agents/agent-docs/`
 - Agent-specific mirrors:
   `~/.claude/skills/<name>` and `~/.codex/skills/<name>` are symlinks to `~/.agents/skills/<name>`
+  `~/.claude/agent-docs` and `~/.codex/agent-docs` are symlinks to `~/.agents/agent-docs`
 
-This keeps one real copy of each shared skill on disk while making the same skill visible to both Claude and Codex. Codex built-ins continue to live alongside this in:
+This keeps one real copy of each shared asset on disk while making the same docs and skills visible to both Claude and Codex. Codex built-ins continue to live alongside this in:
 
 - `~/.codex/skills/.system/` and other Codex-managed paths
 
 Backup behavior with this layout:
 
-- `scripts/backup.sh` syncs the canonical shared skill store from `~/.agents/skills/` back into `agents/skills/`
-- The mirrored symlinks in `~/.claude/skills/` and `~/.codex/skills/` are not backed up separately
-- `install.sh` restores shared skills to `~/.agents/skills/` first, then recreates the Claude and Codex symlinks
+- `scripts/backup.sh` syncs the canonical shared stores from `~/.agents/skills/` and `~/.agents/agent-docs/` back into `agents/`
+- The mirrored symlinks in `~/.claude/` and `~/.codex/` are not backed up separately
+- `install.sh` restores shared assets to `~/.agents/` first, then recreates the Claude and Codex symlinks
 - `scripts/`
   Installer helpers, validation, backup, and automation scripts
 - `secrets/`

@@ -57,10 +57,15 @@ A complete mapping of every backed-up config to its macOS source location.
 | Config | macOS Location | Dotfiles Path |
 |--------|---------------|---------------|
 | CLAUDE.md | `~/.claude/CLAUDE.md` | `claude/CLAUDE.md` |
+| Codex AGENTS.md | `~/.codex/AGENTS.md` | `codex/AGENTS.md` |
+| Codex RTK.md | `~/.codex/RTK.md` | `codex/RTK.md` |
 | settings.json | `~/.claude/settings.json` | `claude/settings.json` |
 | statusline-command.sh | `~/.claude/statusline-command.sh` | `claude/statusline-command.sh` |
 | hooks | `~/.claude/hooks/` | `claude/hooks/` |
 | plugins | `~/.claude/plugins/` | `claude/plugins/` |
+| shared agent docs (canonical) | `~/.agents/agent-docs/` | `agents/agent-docs/` |
+| shared agent-docs mirror in Claude | `~/.claude/agent-docs` | symlink to `~/.agents/agent-docs` |
+| shared agent-docs mirror in Codex | `~/.codex/agent-docs` | symlink to `~/.agents/agent-docs` |
 | shared agent skills (canonical) | `~/.agents/skills/` | `agents/skills/` |
 | shared skill mirror in Claude | `~/.claude/skills/<name>` | symlink to `~/.agents/skills/<name>` |
 | shared skill mirror in Codex | `~/.codex/skills/<name>` | symlink to `~/.agents/skills/<name>` |

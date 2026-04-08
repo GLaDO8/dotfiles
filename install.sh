@@ -714,6 +714,39 @@ zsh_setup() {
     return 0
 }
 
+refresh_shell_tool_cache() {
+    log_info "Refreshing cached shell tool init scripts..."
+
+    local cache_dir="$HOME/.cache/zsh-inits"
+    run mkdir -p "$cache_dir"
+
+    if command -v zoxide &>/dev/null; then
+        run zoxide init zsh > "$cache_dir/zoxide.zsh"
+    else
+        log_warn "zoxide not found, skipping cached zoxide init"
+    fi
+
+    if command -v direnv &>/dev/null; then
+        run direnv hook zsh > "$cache_dir/direnv.zsh"
+    else
+        log_warn "direnv not found, skipping cached direnv init"
+    fi
+
+    if command -v fzf &>/dev/null; then
+        run fzf --zsh > "$cache_dir/fzf.zsh"
+    else
+        log_warn "fzf not found, skipping cached fzf init"
+    fi
+
+    if command -v atuin &>/dev/null; then
+        run atuin init zsh > "$cache_dir/atuin.zsh"
+    else
+        log_warn "atuin not found, skipping cached atuin init"
+    fi
+
+    return 0
+}
+
 dotfile_setup() {
     log_info "Setting up shell dotfiles..."
 
@@ -1136,12 +1169,14 @@ claude_setup() {
     log_info "Setting up Claude Code configuration..."
 
     # Create directories
+    run mkdir -p "$HOME/.claude"
+    run mkdir -p "$HOME/.codex"
     run mkdir -p "$HOME/.claude/skills"
     run mkdir -p "$HOME/.codex/skills"
     run mkdir -p "$HOME/.claude/hooks"
-    run mkdir -p "$HOME/.claude/agent-docs"
     run mkdir -p "$HOME/.claude/rules"
     run mkdir -p "$HOME/.agents/skills"
+    run mkdir -p "$HOME/.agents/agent-docs"
 
     # Remove existing files/symlinks (clean slate)
     run rm -f "$HOME/.claude/CLAUDE.md"
@@ -1151,6 +1186,10 @@ claude_setup() {
     run rm -f "$HOME/.claude/statusline.sh"
     run rm -f "$HOME/.claude/statusline.conf"
     run rm -f "$HOME/.claude/sl-toggle.sh"
+    run rm -f "$HOME/.codex/AGENTS.md"
+    run rm -f "$HOME/.codex/RTK.md"
+    run rm -rf "$HOME/.claude/agent-docs"
+    run rm -rf "$HOME/.codex/agent-docs"
 
     # Copy config files from backup (full parity with backup-config.sh)
     if [[ -d "$DOTFILES_DIR/claude" ]]; then
@@ -1175,6 +1214,17 @@ claude_setup() {
         log_warn "Claude backup directory not found, skipping config copy..."
     fi
 
+    if [[ -d "$DOTFILES_DIR/codex" ]]; then
+        log_info "Copying Codex config files..."
+        local codex_files=(
+            "AGENTS.md"
+            "RTK.md"
+        )
+        for f in "${codex_files[@]}"; do
+            [[ -f "$DOTFILES_DIR/codex/$f" ]] && run cp "$DOTFILES_DIR/codex/$f" "$HOME/.codex/"
+        done
+    fi
+
     # Copy hooks
     if [[ -d "$DOTFILES_DIR/claude/hooks" ]]; then
         log_info "Copying hooks to ~/.claude/hooks/..."
@@ -1188,11 +1238,11 @@ claude_setup() {
         done
     fi
 
-    # Copy agent-docs
-    if [[ -d "$DOTFILES_DIR/claude/agent-docs" ]]; then
-        log_info "Syncing agent-docs to ~/.claude/agent-docs/..."
+    # Copy shared agent-docs into the canonical machine-wide store
+    if [[ -d "$DOTFILES_DIR/agents/agent-docs" ]]; then
+        log_info "Syncing shared agent-docs to ~/.agents/agent-docs/..."
         if ! $DRY_RUN; then
-            rsync -a --delete "$DOTFILES_DIR/claude/agent-docs/" "$HOME/.claude/agent-docs/"
+            rsync -a --delete "$DOTFILES_DIR/agents/agent-docs/" "$HOME/.agents/agent-docs/"
         else
             echo -e "${YELLOW}[DRY-RUN]${NC} rsync agent-docs/"
         fi
@@ -1230,6 +1280,10 @@ claude_setup() {
             ensure_symlink "$skill_dir" "$HOME/.codex/skills/$skill_name"
         fi
     done
+
+    log_info "Creating shared agent-docs symlinks in ~/.claude/agent-docs and ~/.codex/agent-docs..."
+    ensure_symlink "$HOME/.agents/agent-docs" "$HOME/.claude/agent-docs"
+    ensure_symlink "$HOME/.agents/agent-docs" "$HOME/.codex/agent-docs"
 
     # Copy plugins list
     if [[ -f "$DOTFILES_DIR/claude/plugins/installed_plugins.json" ]]; then
@@ -1416,6 +1470,7 @@ main() {
     run_setup zsh_setup "Shell defaults" || true
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
+    run_setup refresh_shell_tool_cache "Shell init cache" || true
 
     # ── Phase 4: App setup (parallel) ────────────────────────────
     log_phase "4/6" "App setup (parallel)"
