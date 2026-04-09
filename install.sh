@@ -612,6 +612,10 @@ brew_setup() {
 
     load_brew_state
 
+    # Disable Homebrew analytics/telemetry
+    log_info "Disabling Homebrew analytics..."
+    run brew analytics off || log_warn "Failed to disable Homebrew analytics"
+
     # Make sure we're using the latest Homebrew
     log_info "Updating Homebrew..."
     run brew update || log_warn "brew update failed, continuing..."
@@ -755,6 +759,64 @@ dotfile_setup() {
     ensure_symlink "$DOTFILES_DIR/zsh/.zsh_plugins.txt" "$HOME/.zsh_plugins.txt"
     ensure_symlink "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
 
+    return 0
+}
+
+telemetry_setup() {
+    log_info "Disabling telemetry for all CLI tools..."
+
+    # Go - disable telemetry if go is installed
+    if command -v go &>/dev/null; then
+        log_info "Disabling Go telemetry..."
+        run go telemetry off || log_warn "Failed to disable Go telemetry"
+    fi
+
+    # GitHub CLI - disable telemetry if gh is installed
+    if command -v gh &>/dev/null; then
+        log_info "Disabling GitHub CLI telemetry..."
+        # Check if gh supports telemetry settings (newer versions)
+        if gh telemetry --help &>/dev/null 2>&1; then
+            run gh telemetry off || log_warn "Failed to disable gh telemetry"
+        fi
+        # Also set environment variable in shell config (already in .zshrc)
+    fi
+
+    # Bun - create bunfig.toml with telemetry disabled if bun is installed
+    if command -v bun &>/dev/null; then
+        log_info "Disabling Bun telemetry..."
+        if [[ ! -f "$HOME/.bunfig.toml" ]]; then
+            run cat > "$HOME/.bunfig.toml" << 'EOF'
+# Bun configuration
+telemetry = false
+EOF
+        else
+            log_info "Bun config already exists, skipping..."
+        fi
+    fi
+
+    # Deno - set environment variable (already in .zshrc)
+    if command -v deno &>/dev/null; then
+        log_info "Deno telemetry disabled via DENO_NO_UPDATE_CHECK=1"
+    fi
+
+    # uv - check if it has telemetry and disable
+    if command -v uv &>/dev/null; then
+        log_info "uv has no telemetry features"
+    fi
+
+    # pnpm - disable update checker (not telemetry, but similar)
+    if command -v pnpm &>/dev/null; then
+        log_info "Disabling pnpm update checker..."
+        run pnpm config set update-notifier false || log_warn "Failed to disable pnpm update notifier"
+    fi
+
+    # npm - disable update notifier
+    if command -v npm &>/dev/null; then
+        log_info "Disabling npm update notifier..."
+        run npm config set update-notifier false || log_warn "Failed to disable npm update notifier"
+    fi
+
+    log_success "Telemetry setup complete"
     return 0
 }
 
@@ -1162,6 +1224,18 @@ ai_tools_setup() {
         log_info "agent-browser already installed"
     fi
 
+    # Bun JavaScript runtime
+    if ! command -v bun &> /dev/null; then
+        log_info "Installing Bun..."
+        if $DRY_RUN; then
+            echo -e "${YELLOW}[DRY-RUN]${NC} curl -fsSL https://bun.sh/install | bash"
+        else
+            curl -fsSL https://bun.sh/install | bash || log_warn "Bun installation failed"
+        fi
+    else
+        log_info "Bun already installed"
+    fi
+
     return 0
 }
 
@@ -1470,6 +1544,7 @@ main() {
     run_setup zsh_setup "Shell defaults" || true
     run_setup dotfile_setup "Shell dotfiles" || true
     run_setup config_setup "App configurations" || true
+    run_setup telemetry_setup "Disable telemetry" || true
     run_setup refresh_shell_tool_cache "Shell init cache" || true
 
     # ── Phase 4: App setup (parallel) ────────────────────────────

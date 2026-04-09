@@ -134,12 +134,21 @@
     "show_branch_icon": true,
   },
   "agent_servers": {
+    "opencode": {
+      "favorite_config_option_values": {
+        "model": [
+          "opencode-go/kimi-k2.5"
+        ]
+      },
+      "type": "registry"
+    },
     "claude-acp": {
       "type": "registry"
     }
   },
 
   "agent": {
+    "dock": "left",
     "default_model": {
       "provider": "anthropic",
       "model": "claude-sonnet-4-6-latest",

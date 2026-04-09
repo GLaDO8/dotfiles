@@ -104,6 +104,11 @@
   "terminal.integrated.tabs.enabled": true,
   "telemetry.telemetryLevel": "off",
   "telemetry.enableCrashReporter": false,
+  "telemetry.enableTelemetry": false,
+  "workbench.enableExperiments": false,
+  "extensions.autoCheckUpdates": false,
+  "update.mode": "none",
+  "update.showReleaseNotes": false,
   "workbench.editorAssociations": {
     "*.ipynb": "jupyter.notebook.ipynb"
   },

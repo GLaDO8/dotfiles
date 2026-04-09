@@ -14,6 +14,33 @@ export NVM_DIR="$HOME/.nvm"
 export PNPM_HOME="$HOME/Library/pnpm"
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║  TELEMETRY - DISABLE ALL                                                ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+# Homebrew
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_GOOGLE_ANALYTICS=1
+# General opt-out (used by many tools)
+export DO_NOT_TRACK=1
+# Deno - disable update check (no telemetry, just update checks)
+export DENO_NO_UPDATE_CHECK=1
+# .NET CLI
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+# AWS SAM CLI
+export SAM_CLI_TELEMETRY=0
+# Azure CLI
+export AZURE_CORE_COLLECT_TELEMETRY=0
+# GCloud
+export CLOUDSDK_CORE_DISABLE_USAGE_REPORTING=true
+# Helm
+export HELM_DEBUG=false
+# Kubectl Krew
+export KREW_DISABLE_GITHUB_API=1
+# Volta
+export VOLTA_TELEMETRY_DISABLED=1
+# OpenAI Codex (uses DO_NOT_TRACK above, but being explicit)
+export CODEX_TELEMETRY=false
+
+# ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║  PATH (single declaration, no duplicates)                               ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 typeset -U path PATH

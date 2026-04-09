@@ -1,3 +1,11 @@
 {
-    "window.commandCenter": true
+	"window.commandCenter": true,
+	"telemetry.telemetryLevel": "off",
+	"telemetry.enableCrashReporter": false,
+	"telemetry.enableTelemetry": false,
+	"workbench.enableExperiments": false,
+	"extensions.autoCheckUpdates": false,
+	"update.mode": "none",
+	"update.showReleaseNotes": false,
+	"cursor.telemetry.enabled": false
 }
