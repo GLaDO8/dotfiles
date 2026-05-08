@@ -101,6 +101,16 @@
         "lastUpdated": "2026-03-20T09:10:13.500Z",
         "gitCommitSha": "8d34db2a66de9acecf8912d0962c9b6b5757da71"
       }
+    ],
+    "vercel-plugin@vercel": [
+      {
+        "scope": "user",
+        "installPath": "/Users/shreyasgupta/.claude/plugins/cache/vercel/vercel-plugin/6e1917f9b805",
+        "version": "0.32.5",
+        "installedAt": "2026-04-10T18:04:47.762Z",
+        "lastUpdated": "2026-04-10T18:04:47.762Z",
+        "gitCommitSha": "6e1917f9b805d5f4df3a95ea1c601867e48677c4"
+      }
     ]
   }
 }

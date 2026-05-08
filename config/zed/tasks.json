@@ -18,5 +18,13 @@
     "shell": "system",
     "reveal": "always",
     "hide": "never"
+  },
+  {
+    "label": "Open Ghostty Here",
+    "command": "open",
+    "args": ["-a", "Ghostty", "$ZED_WORKTREE_ROOT"],
+    "shell": "system",
+    "reveal": "always",
+    "hide": "never"
   }
 ]

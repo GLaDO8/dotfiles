@@ -257,6 +257,7 @@ sync_claude_configs() {
         "$HOME/.claude/statusline.conf"
         "$HOME/.claude/statusline-command.sh"
         "$HOME/.claude/sl-toggle.sh"
+        "$HOME/.claude/mcp.json"
     )
     local claude_dests=(
         "$claude_dest/CLAUDE.md"
@@ -266,6 +267,7 @@ sync_claude_configs() {
         "$claude_dest/statusline.conf"
         "$claude_dest/statusline-command.sh"
         "$claude_dest/sl-toggle.sh"
+        "$claude_dest/mcp.json"
     )
 
     local i
@@ -397,10 +399,14 @@ sync_claude_configs() {
     local codex_srcs=(
         "$HOME/.codex/AGENTS.md"
         "$HOME/.codex/RTK.md"
+        "$HOME/.codex/config.toml"
+        "$HOME/.codex/keybindings.json"
     )
     local codex_dests=(
         "$codex_dest/AGENTS.md"
         "$codex_dest/RTK.md"
+        "$codex_dest/config.toml"
+        "$codex_dest/keybindings.json"
     )
 
     for i in "${!codex_srcs[@]}"; do

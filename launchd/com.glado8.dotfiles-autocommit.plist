@@ -8,12 +8,12 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/bin/bash</string>
-		<string>/Users/shreyasgupta/dotfiles/scripts/dotfiles-autocommit.sh</string>
+		<string>/Users/shreyasgupta/local-documents/dotfiles/scripts/dotfiles-autocommit.sh</string>
 	</array>
 
 	<key>WatchPaths</key>
 	<array>
-		<string>/Users/shreyasgupta/dotfiles</string>
+		<string>/Users/shreyasgupta/local-documents/dotfiles</string>
 	</array>
 
 	<key>StartInterval</key>

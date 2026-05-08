@@ -1,54 +1,47 @@
 #!/bin/bash
-# PostToolUse hook: auto-format & lint edited files
-# Non-blocking: prints feedback for Claude to fix in subsequent edits
+# PostToolUse hook: format edited web files with repo-local Biome, then report checks.
+# Non-blocking: prints feedback for the agent, but never mutates via lint fixes.
+
+set -u
 
 input=$(cat)
-file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
+file_path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // .tool_input.path // empty' 2>/dev/null || true)
 [[ -z "$file_path" ]] && exit 0
+[[ -f "$file_path" ]] || exit 0
 
-cd "${CLAUDE_PROJECT_DIR:-$(pwd)}" || exit 0
+project_dir=${CLAUDE_PROJECT_DIR:-$(pwd)}
+cd "$project_dir" 2>/dev/null || exit 0
 
-has() { command -v "$1" &>/dev/null; }
+biome_bin() {
+  local repo_root
+  repo_root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+  if [[ -n "$repo_root" && -x "$repo_root/node_modules/.bin/biome" ]]; then
+    printf '%s\n' "$repo_root/node_modules/.bin/biome"
+    return 0
+  fi
 
-# Run lint; print errors as feedback but never block the edit
-lint() {
+  if [[ -x "./node_modules/.bin/biome" ]]; then
+    printf '%s\n' "./node_modules/.bin/biome"
+    return 0
+  fi
+
+  command -v biome 2>/dev/null || true
+}
+
+lint_feedback() {
   local result
   result=$("$@" 2>&1) || {
-    [[ -n "$result" ]] && printf '\nLint issues in %s:\n%s\n\n' "$file_path" "$(echo "$result" | head -20)" >&2
+    [[ -n "$result" ]] && printf '\nBiome issues in %s:\n%s\n\n' "$file_path" "$(printf '%s' "$result" | head -40)" >&2
   }
 }
 
-# Advisory: flag inline styles in component files (prefer Tailwind v4 utilities)
-check_inline_styles() {
-  local matches
-  matches=$(grep -nE 'style=(\{|")' "$file_path" 2>/dev/null | grep -v '^\s*//' | head -5)
-  [[ -n "$matches" ]] && printf '\nNote: Inline styles in %s (prefer Tailwind v4 utilities unless not supported):\n%s\n\n' "$file_path" "$matches" >&2
-}
-
 case "${file_path##*.}" in
-  ts|tsx|js|jsx|mjs|cjs)
-    has biome || exit 0
-    biome format --write "$file_path" 2>/dev/null
-    lint biome check --fix "$file_path"
+  ts|tsx|js|jsx|mjs|cjs|astro|json|jsonc|css)
+    biome_cmd=$(biome_bin)
+    [[ -n "$biome_cmd" ]] || exit 0
+    "$biome_cmd" format --write "$file_path" >/dev/null 2>&1 || true
+    lint_feedback "$biome_cmd" check "$file_path"
     ;;
-  py)
-    has ruff || exit 0
-    ruff format "$file_path" 2>/dev/null
-    lint ruff check --fix "$file_path"
-    ;;
-  rs)
-    has cargo || exit 0
-    lint cargo clippy --message-format=short -- -D warnings
-    ;;
-  go)
-    has gofmt && gofmt -w "$file_path" 2>/dev/null
-    has golangci-lint && lint golangci-lint run "$file_path"
-    ;;
-esac
-
-# Check for inline styles in web component files
-case "${file_path##*.}" in
-  tsx|jsx|astro) check_inline_styles ;;
 esac
 
 exit 0

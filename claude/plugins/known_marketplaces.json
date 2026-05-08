@@ -5,16 +5,7 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-03-31T06:06:38.553Z"
-  },
-  "every-marketplace": {
-    "source": {
-      "source": "git",
-      "url": "https://github.com/EveryInc/compound-engineering-plugin.git"
-    },
-    "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/every-marketplace",
-    "lastUpdated": "2026-03-31T06:18:19.558Z",
-    "autoUpdate": true
+    "lastUpdated": "2026-04-11T04:51:52.609Z"
   },
   "honcho": {
     "source": {
@@ -22,6 +13,14 @@
       "repo": "plastic-labs/claude-honcho"
     },
     "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/honcho",
-    "lastUpdated": "2026-03-29T14:42:08.779Z"
+    "lastUpdated": "2026-04-06T12:15:50.836Z"
+  },
+  "vercel": {
+    "source": {
+      "source": "github",
+      "repo": "vercel/vercel-plugin"
+    },
+    "installLocation": "/Users/shreyasgupta/.claude/plugins/marketplaces/vercel",
+    "lastUpdated": "2026-04-10T18:04:40.937Z"
   }
 }

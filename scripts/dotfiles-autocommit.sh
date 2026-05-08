@@ -9,7 +9,8 @@
 set -euo pipefail
 
 # === Configuration ===
-DOTFILES_DIR="$HOME/dotfiles"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 LOCK_FILE="/tmp/dotfiles-autocommit.lock"
 LOG_FILE="$HOME/Library/Logs/dotfiles-autocommit.log"
 LOG_MAX_BYTES=1048576  # 1MB
@@ -87,6 +88,16 @@ main() {
     trap release_lock EXIT
 
     cd "$DOTFILES_DIR"
+
+    # Sync live configs before committing
+    log "Syncing live configs..."
+    if [[ -x "$DOTFILES_DIR/scripts/backup.sh" ]]; then
+        if ! "$DOTFILES_DIR/scripts/backup.sh" --auto >> "$LOG_FILE" 2>&1; then
+            log "Config sync had issues, continuing anyway"
+        fi
+    else
+        log "Warning: backup.sh not found, skipping config sync"
+    fi
 
     # Check for uncommitted changes
     local has_changes=false

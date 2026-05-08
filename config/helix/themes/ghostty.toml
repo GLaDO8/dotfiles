@@ -1,0 +1,149 @@
+# Ghostty theme for Helix
+# NERV/EVA-01 inspired palette matching Ghostty terminal
+# Background synced with OpenCode
+
+# Syntax highlighting
+"type" = "cyan"
+"type.builtin" = "cyan"
+"type.enum.variant" = "bright_green"
+"constructor" = "red"
+"constant" = "red"
+"constant.builtin" = "red"
+"constant.character" = "orange"
+"constant.numeric" = "bright_green"
+"string" = "orange"
+"string.regexp" = "red"
+"string.special" = "orange"
+"string.special.path" = "cyan"
+"string.escape" = "purple"
+"comment" = { fg = "muted_green", modifiers = ["italic"] }
+"variable" = { fg = "foreground", modifiers = ["bold"] }
+"variable.parameter" = "light_green"
+"variable.builtin" = "foreground"
+"variable.other.member" = "light_green"
+"label" = "cyan"
+"punctuation" = "light_green"
+"punctuation.bracket" = "light_green"
+"punctuation.delimiter" = "light_green"
+"punctuation.special" = "orange"
+"keyword" = "purple"
+"keyword.control" = "purple"
+"keyword.control.return" = "purple"
+"keyword.control.conditional" = "purple"
+"keyword.control.repeat" = "purple"
+"keyword.control.import" = "purple"
+"keyword.control.exception" = "purple"
+"keyword.function" = "magenta"
+"keyword.operator" = "cyan"
+"keyword.directive" = "purple"
+"keyword.storage" = "purple"
+"operator" = "cyan"
+"function" = "bright_green"
+"function.builtin" = "bright_green"
+"function.method" = "bright_green"
+"function.macro" = "magenta"
+"tag" = "green"
+"tag.builtin" = "green"
+"namespace" = "purple"
+"attribute" = { fg = "purple", modifiers = ["italic"] }
+"boolean" = { fg = "bright_green", modifiers = ["italic"] }
+"number" = "bright_green"
+"markup.heading" = { fg = "purple", modifiers = ["bold"] }
+"markup.list" = "cyan"
+"markup.bold" = { fg = "foreground", modifiers = ["bold"] }
+"markup.italic" = { fg = "magenta", modifiers = ["italic"] }
+"markup.strikethrough" = { modifiers = ["crossed_out"] }
+"markup.raw.block" = "orange"
+"markup.raw.inline" = "orange"
+"markup.link.url" = { fg = "cyan", modifiers = ["underlined"] }
+"markup.link.text" = "light_green"
+"markup.link.label" = "purple"
+"markup.quote" = { fg = "muted_green", modifiers = ["italic"] }
+"diff.plus" = "green"
+"diff.minus" = "red"
+"diff.delta" = "orange"
+
+# Interface
+"ui.background" = { bg = "background" }
+"ui.cursor" = { fg = "background", bg = "cursor" }
+"ui.cursor.primary" = { fg = "background", bg = "cursor" }
+"ui.cursor.insert" = { fg = "background", bg = "cyan" }
+"ui.cursor.select" = { fg = "background", bg = "purple" }
+"ui.cursor.match" = { fg = "bright_red", modifiers = ["bold"] }
+"ui.cursorline" = { bg = "active_line" }
+"ui.linenr" = "line_number"
+"ui.linenr.selected" = { fg = "bright_green", modifiers = ["bold"] }
+"ui.statusline" = { fg = "foreground", bg = "statusbar" }
+"ui.statusline.normal" = { fg = "background", bg = "green" }
+"ui.statusline.insert" = { fg = "background", bg = "cyan" }
+"ui.statusline.select" = { fg = "background", bg = "purple" }
+"ui.statusline.inactive" = { fg = "muted", bg = "statusbar" }
+"ui.popup" = { fg = "foreground", bg = "elevated" }
+"ui.window" = "border"
+"ui.help" = { fg = "foreground", bg = "elevated" }
+"ui.text" = "foreground"
+"ui.text.focus" = { fg = "foreground", bg = "selection" }
+"ui.text.info" = "foreground"
+"ui.virtual.whitespace" = "line_number"
+"ui.virtual.ruler" = { bg = "active_line" }
+"ui.virtual.inlay-hint" = { fg = "muted" }
+"ui.virtual.jump-label" = { fg = "bright_red", modifiers = ["bold"] }
+"ui.menu" = { fg = "foreground", bg = "elevated" }
+"ui.menu.selected" = { fg = "foreground", bg = "selection" }
+"ui.menu.scroll" = { fg = "green", bg = "elevated" }
+"ui.selection" = { bg = "selection" }
+"ui.selection.primary" = { bg = "selection" }
+"ui.bufferline" = { fg = "muted", bg = "background" }
+"ui.bufferline.active" = { fg = "foreground", bg = "active_line" }
+"ui.bufferline.background" = { bg = "background" }
+"ui.debug" = { fg = "red" }
+"ui.highlight.frameline" = { bg = "search_match" }
+
+"warning" = "orange"
+"error" = { fg = "bright_red", modifiers = ["bold"] }
+"info" = { fg = "cyan", modifiers = ["bold"] }
+"hint" = { fg = "light_green" }
+"diagnostic.hint" = { underline = { color = "light_green", style = "curl" } }
+"diagnostic.info" = { underline = { color = "cyan", style = "curl" } }
+"diagnostic.warning" = { underline = { color = "orange", style = "curl" } }
+"diagnostic.error" = { underline = { color = "bright_red", style = "curl" } }
+"diagnostic.unnecessary" = { modifiers = ["dim"] }
+"diagnostic.deprecated" = { modifiers = ["crossed_out"] }
+
+"special" = "green"
+
+[palette]
+# Core surface colors - matching OpenCode background
+background = "#0a0a0a"
+elevated = "#12121a"
+statusbar = "#0a0a12"
+foreground = "#c8e0c8"
+muted = "#6a7a6a"
+muted_green = "#5a8a5a"
+
+# UI state colors
+active_line = "#1a1a25"
+selection = "#334433"
+search_match = "#3c291c"
+border = "#2a2a35"
+line_number = "#3a4a3a"
+
+# Ghostty NERV/EVA-01 palette
+green = "#44cc44"
+bright_green = "#66ff66"
+light_green = "#a0b8a0"
+cyan = "#33cccc"
+bright_cyan = "#66ffcc"
+purple = "#6633cc"
+bright_purple = "#9966ff"
+magenta = "#cc33ff"
+bright_magenta = "#ff66ff"
+red = "#ff3333"
+bright_red = "#ff6666"
+orange = "#ff9900"
+bright_orange = "#ffcc33"
+yellow = "#ffcc33"
+cursor = "#ff6600"
+
+# Dark variants
+dark_gray = "#333344"

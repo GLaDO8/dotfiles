@@ -1,0 +1,568 @@
+approvals_reviewer = "user"
+
+model = "gpt-5.5"
+model_reasoning_effort = "low"
+suppress_unstable_features_warning = true
+
+notify = ["/Users/shreyasgupta/.codex/plugins/cache/openai-bundled/computer-use/1.0.758/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+personality = "pragmatic"
+
+[projects."/Users/shreyasgupta/Documents"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/site-2.0"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/nerv-dashboard"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/voice-fourier"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/IKEA-Remix"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/d2c"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/.codex"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/co2"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Playground"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/boosts"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-04-19-are-chats-in-this-chat-space"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-04-19-karpathy-s-llm-wiki-is-an"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Library/Mobile Documents/iCloud~md~obsidian/Documents/llm-wiki"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/wisprflow-data"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/dotfriend"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-04-23-swiggy-has-launched-3-new-mcp"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/New project 2"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-04-30/safari-tabs-users-shreyasgupta-agents-skills"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-04-30/what-have-i-been-doing-very"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-05-04/is-it-possible-for-you-to"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/Documents/Codex/2026-05-04/codex-app-has-been-feeling-very"]
+trust_level = "trusted"
+
+[projects."/Users/shreyasgupta/local-documents/labeling"]
+trust_level = "trusted"
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = false
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = false
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = false
+
+[plugins."figma@openai-curated"]
+enabled = true
+
+[plugins."build-macos-apps@openai-curated"]
+enabled = true
+
+[plugins."browser-use@openai-bundled"]
+enabled = true
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+
+[mcp_servers.openaiDeveloperDocs.tools.fetch_openai_doc]
+approval_mode = "approve"
+
+[mcp_servers.openaiDeveloperDocs.tools.search_openai_docs]
+approval_mode = "approve"
+
+[mcp_servers.agentation]
+command = "npx"
+args = ["-y", "agentation-mcp", "server"]
+enabled = false
+
+[mcp_servers.paper]
+url = "http://127.0.0.1:29979/mcp"
+
+[mcp_servers.paper.tools.create_artboard]
+approval_mode = "approve"
+
+[mcp_servers.paper.tools.delete_nodes]
+approval_mode = "approve"
+
+[mcp_servers.paper.tools.duplicate_nodes]
+approval_mode = "approve"
+
+[mcp_servers.paper.tools.update_styles]
+approval_mode = "approve"
+
+[mcp_servers.paper.tools.write_html]
+approval_mode = "approve"
+
+[mcp_servers.motion]
+command = "npx"
+args = ["-y", "https://api.motion.dev/registry.tgz?package=motion-studio-mcp&version=latest"]
+
+[tui]
+status_line = ["context-usage", "five-hour-limit", "weekly-limit"]
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/vercel-react-native-skills/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/agent-device/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/agentation/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ankane-readme-writer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/andrew-kane-gem-writer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/backup/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ce-slack-research/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/claude-permissions-optimizer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/claudeception/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/cli-agent-readiness-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/dhh-rails-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/dhh-rails-style/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-primary-runtime/documents/26.423.10653/skills/documents/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/done/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/dspy-ruby/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/unified-web-design/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/ui-skills/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/todo-triage/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/todo-resolve/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/todo-create/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/test-xcode/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/sync-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.426.12240/skills/spreadsheets/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/smartcommit/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/slack-researcher/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/sl-toggle-cwd/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/sl-toggle-cost-session/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/sl-toggle-cost-project/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/sl/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/remotion-best-practices/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-primary-runtime/presentations/26.426.12240/skills/presentations/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/models/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/maintainability-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/lfg/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/kieran-rails-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/b066e4a0/skills/github/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/b066e4a0/skills/gh-fix-ci/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/git-worktree/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/b066e4a0/skills/gh-address-comments/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/git-history-analyzer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/b066e4a0/skills/yeet/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/git-commit/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/git-commit-push-pr/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/git-clean-gone-branches/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/gemini-imagegen/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/framework-docs-researcher/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-primary-runtime/documents/26.426.12240/skills/documents/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/deployment-verification-agent/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/data-migrations-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/data-migration-expert/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/data-integrity-guardian/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ce-work-beta/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ce-work/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/agent-native-architecture/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/agent-native-audit/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/agent-native-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/adversarial-review/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/adversarial-document-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/adversarial-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/api-contract-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/build/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ce-sessions/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ce-setup/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/changelog/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/deploy-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/design-lens-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/document-review/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/extract-ios-icons/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/figma/b066e4a0/skills/figma-create-new-file/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/figma/b066e4a0/skills/figma-code-connect-components/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/figma/b066e4a0/skills/figma-generate-library/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/kieran-python-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/pr-comment-resolver/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/previous-comments-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/proof/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/report-bug-ce/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/resolve-pr-feedback/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/session-historian/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/scope-guardian-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/supabase-postgres-best-practices/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/test-browser/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/testing-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/nia/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/bash-perf-patterns/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/ce-demo-reel/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/review/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/schema-drift-detector/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/openlogs-server-logs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/learnings-researcher/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/issue-intelligence-analyst/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/6807e4de/skills/yeet/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/6807e4de/skills/github/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/6807e4de/skills/gh-fix-ci/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/github/6807e4de/skills/gh-address-comments/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.agents/skills/find-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/plugins/cache/openai-curated/figma/6807e4de/skills/figma-code-connect-components/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/every-style-editor/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/design-iterator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/design-implementation-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/cli-readiness-reviewer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/shreyasgupta/.codex/skills/onboarding/SKILL.md"
+enabled = false
+
+[features]
+codex_hooks = true
+memories = true
+chronicle = true
+
+[marketplaces.openai-bundled]
+last_updated = "2026-05-06T05:57:26Z"
+source_type = "local"
+source = "/Users/shreyasgupta/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-05-06T06:07:47Z"
+source_type = "local"
+source = "/Users/shreyasgupta/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"

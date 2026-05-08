@@ -13,7 +13,8 @@ cursor-style-blink = true
 mouse-hide-while-typing = true
 
 # NERV/EVA-01 inspired palette
-background = #0a0a12
+# Background matches OpenCode
+background = #0a0a0a
 foreground = #c8e0c8
 
 # Greens (EVA-01 / MAGI displays)

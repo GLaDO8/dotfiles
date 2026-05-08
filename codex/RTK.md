@@ -1,29 +1,40 @@
-# RTK - Rust Token Killer
+# RTK - Rust Token Killer (Codex CLI)
 
-**Usage**: Token-optimized CLI proxy (60-90% savings on dev operations)
+**Usage**: Token-optimized CLI proxy for shell commands.
 
-## Meta Commands (always use rtk directly)
+## Rule
+
+Default to `rtk` for simple shell commands.
+
+Use direct shell commands instead of `rtk` for:
+- `find`
+- complex quoting
+- heredocs/herestrings
+- browser commands
+- commands where exact raw stdout/stderr/exit behavior matters
+- commands that previously failed because of `rtk` filtering or shell-shape handling
+
+Examples:
 
 ```bash
-rtk gain              # Show token savings analytics
-rtk gain --history    # Show command usage history with savings
-rtk discover          # Analyze Claude Code history for missed opportunities
-rtk proxy <cmd>       # Execute raw command without filtering (for debugging)
+rtk git status
+rtk cargo test
+rtk npm run build
+rtk pytest -q
 ```
 
-## Installation Verification
+## Meta Commands
 
 ```bash
-rtk --version         # Should show: rtk X.Y.Z
-rtk gain              # Should work (not "command not found")
-which rtk             # Verify correct binary
+rtk gain            # Token savings analytics
+rtk gain --history  # Recent command savings history
+rtk proxy <cmd>     # Run raw command without filtering
 ```
 
-⚠️ **Name collision**: If `rtk gain` fails, you may have reachingforthejack/rtk (Rust Type Kit) installed instead.
+## Verification
 
-## Hook-Based Usage
-
-All other commands are automatically rewritten by the installed RTK hook.
-Example: `git status` → `rtk git status` (transparent, 0 tokens overhead)
-
-Refer to AGENTS.md for full command reference.
+```bash
+rtk --version
+rtk gain
+which rtk
+```

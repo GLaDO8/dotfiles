@@ -1188,6 +1188,18 @@ ai_tools_setup() {
         log_info "Claude Code already installed"
     fi
 
+    # Bun JavaScript runtime (install first so npm is available)
+    if ! command -v bun &> /dev/null; then
+        log_info "Installing Bun..."
+        if $DRY_RUN; then
+            echo -e "${YELLOW}[DRY-RUN]${NC} curl -fsSL https://bun.sh/install | bash"
+        else
+            curl -fsSL https://bun.sh/install | bash || log_warn "Bun installation failed"
+        fi
+    else
+        log_info "Bun already installed"
+    fi
+
     # OpenAI Codex CLI
     if ! command -v codex &> /dev/null; then
         if command -v npm &> /dev/null; then
@@ -1224,16 +1236,16 @@ ai_tools_setup() {
         log_info "agent-browser already installed"
     fi
 
-    # Bun JavaScript runtime
-    if ! command -v bun &> /dev/null; then
-        log_info "Installing Bun..."
-        if $DRY_RUN; then
-            echo -e "${YELLOW}[DRY-RUN]${NC} curl -fsSL https://bun.sh/install | bash"
+    # Google Workspace CLI
+    if ! command -v gws &> /dev/null; then
+        if command -v npm &> /dev/null; then
+            log_info "Installing Google Workspace CLI..."
+            run npm i -g @googleworkspace/cli || log_warn "Google Workspace CLI installation failed"
         else
-            curl -fsSL https://bun.sh/install | bash || log_warn "Bun installation failed"
+            log_warn "npm not found, skipping Google Workspace CLI installation"
         fi
     else
-        log_info "Bun already installed"
+        log_info "Google Workspace CLI already installed"
     fi
 
     return 0

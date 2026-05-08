@@ -7,5 +7,10 @@
         "\u001b\r"
       ]
     }
+  },
+  {
+    "bindings": {
+      "ctrl-shift-a": "editor::WrapSelectionsInTag"
+    }
   }
 ]

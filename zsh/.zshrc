@@ -276,9 +276,29 @@ if command -v gcloud >/dev/null 2>&1; then
   [ -f "$HOME/GCP/google-cloud-sdk/path.zsh.inc" ] && . "$HOME/GCP/google-cloud-sdk/path.zsh.inc"
   [ -f "$HOME/GCP/google-cloud-sdk/completion.zsh.inc" ] && . "$HOME/GCP/google-cloud-sdk/completion.zsh.inc"
 fi
+alias zellij-codex='zellij --layout codex --session echo-codex'
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/shreyasgupta/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shreyasgupta/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/shreyasgupta/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shreyasgupta/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Biome Global Accessibility Linting
+export BIOME_GLOBAL_CONFIG="$HOME/.config/biome/biome.json"
+alias lint='biome lint --config-path=$HOME/.config/biome .'
+alias lint-fix='biome lint --config-path=$HOME/.config/biome --write .'
+alias lint-fix-unsafe='biome lint --config-path=$HOME/.config/biome --write --unsafe .'
+alias fmt='biome format --config-path=$HOME/.config/biome --write .'
+alias a11y-check='biome lint --config-path=$HOME/.config/biome --error-on-warnings .'
+
+# Function to check if current project has local biome config
+lint-smart() {
+    if [ -f "biome.json" ] || [ -f "biome.jsonc" ]; then
+        echo "Using local biome.json..."
+        biome lint "$@" .
+    else
+        echo "Using global a11y config..."
+        biome lint --config-path="$HOME/.config/biome" "$@" .
+    fi
+}

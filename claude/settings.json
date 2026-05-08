@@ -92,16 +92,6 @@
         ]
       },
       {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/lint-check.sh",
-            "timeout": 30
-          }
-        ]
-      },
-      {
         "matcher": "*",
         "hooks": [
           {
@@ -217,7 +207,8 @@
     "ralph-loop@claude-plugins-official": true,
     "supabase@claude-plugins-official": false,
     "honcho@honcho": true,
-    "honcho-dev@honcho": true
+    "honcho-dev@honcho": true,
+    "vercel-plugin@vercel": true
   },
   "extraKnownMarketplaces": {
     "honcho": {

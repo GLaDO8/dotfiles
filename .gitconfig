@@ -5,13 +5,14 @@
 [commit]
 	gpgsign = true
 [user]
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEih28/tn26DlL1gJjfz0Xlj8VxjzYMvZzdPr6o43QNm
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEwa/EkgO11I3RqkFrzJ/gfayi1vxabL8MAs3kGufgdT
 	name = GLaDO8
 	email = gshreyas@icloud.com
 [core]
 	pager = delta
 [init]
 	defaultBranch = main
+	templateDir = /Users/shreyasgupta/.config/git/templates
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [interactive]
