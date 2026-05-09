@@ -188,7 +188,7 @@
 		"git_gutter": "tracked_files"
 	},
 	"terminal": {
-		"dock": "bottom",
+		"dock": "left",
 		"font_size": 14.0,
 		"line_height": "standard",
 		"toolbar": {
